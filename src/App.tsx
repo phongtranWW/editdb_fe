@@ -11,6 +11,7 @@ import theme from "./theme/theme";
 import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import DiagramsPage from "./pages/DiagramsPage";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/diagrams"
+              element={
+                <ProtectedRoute>
+                  <DiagramsPage />
                 </ProtectedRoute>
               }
             />
