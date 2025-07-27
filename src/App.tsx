@@ -9,6 +9,8 @@ import { ConfigProvider } from "antd";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import theme from "./theme/theme";
 import AboutPage from "./pages/AboutPage";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./auth/ProtectedRoute";
 
 function App() {
   return (
@@ -21,6 +23,14 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/templates" element={<TemplatesPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </AuthProvider>
