@@ -14,7 +14,7 @@ import {
   type MenuProps,
 } from "antd";
 import { useNavigate } from "react-router";
-import useAuth from "../auth/useAuth";
+import useAuth from "../../auth/useAuth";
 const { Header } = Layout;
 
 export default function AppHeader() {
@@ -62,12 +62,11 @@ export default function AppHeader() {
   ];
 
   return (
-    <Header className="flex justify-between items-center py-0 px-4">
+    <Header className="flex justify-between items-center py-0 px-4 shadow-md">
       {/* Left side: Logo + Menu */}
       <div className="flex items-center space-x-4">
         <Image src="/logo.png" width={32} preview={false} />
         <Menu
-          theme="dark"
           mode="horizontal"
           selectedKeys={[location.pathname]}
           items={items}

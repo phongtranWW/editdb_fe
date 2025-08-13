@@ -1,5 +1,5 @@
 import { Content } from "antd/es/layout/layout";
-import AppHeader from "../Header";
+import AppHeader from "../headers/AppHeader";
 import { Layout } from "antd";
 import AppFooter from "../Footer";
 import { Outlet } from "react-router";

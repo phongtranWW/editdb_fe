@@ -12,6 +12,8 @@ import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import DiagramsPage from "./pages/DiagramsPage";
+import DiagramEditorPage from "./pages/DiagramEditorPage";
+import "@xyflow/react/dist/style.css";
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
               }
             />
           </Route>
+          <Route path="/diagrams/:id" element={<DiagramEditorPage />} />
         </Routes>
       </AuthProvider>
     </ConfigProvider>
