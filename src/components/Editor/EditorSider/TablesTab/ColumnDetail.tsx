@@ -5,11 +5,11 @@ import {
   KeyOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
-import EditableInput from "../../ui/EditableInput";
-import EditableSelection from "../../ui/EditableSelection";
-import EditableSwitch from "../../ui/EditableSwitch";
-import type { ColumnDto } from "../../../models/dtos/column-dto";
+import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
+import EditableInput from "../../../ui/EditableInput";
+import EditableSelection from "../../../ui/EditableSelection";
+import EditableSwitch from "../../../ui/EditableSwitch";
+import type { ColumnDto } from "../../../../models/dtos/column-dto";
 
 const { Text } = Typography;
 

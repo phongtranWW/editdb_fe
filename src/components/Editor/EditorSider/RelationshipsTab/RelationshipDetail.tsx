@@ -1,7 +1,7 @@
 import { Button, Flex, Popover, Space, Typography } from "antd";
-import EditableSelection from "../../ui/EditableSelection";
+import EditableSelection from "../../../ui/EditableSelection";
 import { DeleteOutlined } from "@ant-design/icons";
-import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
+import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
 import { useEffect, useState } from "react";
 const { Text } = Typography;
 

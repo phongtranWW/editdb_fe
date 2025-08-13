@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useAuth from "../auth/useAuth";
+import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 
 export default function ProtectedRoute({

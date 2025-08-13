@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
-import { AuthContext } from "./AuthContext";
-import { decodeJWT, isTokenValid } from "../utils/jwt";
+import { createContext, useEffect, useState } from "react";
 import type { User } from "../models/user";
+import { decodeJWT, isTokenValid } from "../utils/jwt";
 
-export default function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [user, setUser] = React.useState<User | null>(null);
+interface UserState {
+  user: User | null;
+  checkAuth: () => boolean;
+  login: (token: string) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<UserState | null>(null);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
   // Initialize auth state
   useEffect(() => {
     const savedToken = localStorage.getItem("access_token");
@@ -43,4 +47,6 @@ export default function AuthProvider({
       {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export default AuthContext;

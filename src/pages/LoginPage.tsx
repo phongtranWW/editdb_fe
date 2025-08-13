@@ -9,7 +9,7 @@ import {
   Image,
 } from "antd";
 import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons";
-import FormLayout from "../components/layouts/FormLayout";
+import FormLayout from "../components/Form/FormLayout";
 
 const { Title, Text, Link } = Typography;
 

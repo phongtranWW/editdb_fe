@@ -14,7 +14,7 @@ import {
   type MenuProps,
 } from "antd";
 import { useNavigate } from "react-router";
-import useAuth from "../../auth/useAuth";
+import useAuth from "../../hooks/useAuth";
 const { Header } = Layout;
 
 export default function AppHeader() {

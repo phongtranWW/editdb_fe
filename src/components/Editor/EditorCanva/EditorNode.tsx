@@ -1,16 +1,15 @@
-import { Card, List, Typography, Flex } from "antd";
-import type { ColumnDto } from "../../models/dtos/column-dto";
+import { Card, List, Typography, Flex, Tag } from "antd";
+import type { ColumnDto } from "../../../models/dtos/column-dto";
 import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
-import DataTypeTag from "./DataTypeTag";
 
 const { Text } = Typography;
 
-export type TableNodeProps = Node<{
+export type EditorNodeProps = Node<{
   name: string;
   columns: ColumnDto[];
 }>;
 
-export default function TableNode(props: NodeProps<TableNodeProps>) {
+export default function EditorNode(props: NodeProps<EditorNodeProps>) {
   const { name, columns } = props.data;
 
   return (
@@ -43,7 +42,7 @@ export default function TableNode(props: NodeProps<TableNodeProps>) {
               <Text strong className="text-sm text-gray-800">
                 {column.name}
               </Text>
-              <DataTypeTag type={column.type} />
+              <Tag color="blue">{column.type}</Tag>
             </Flex>
             <Handle
               type="source"

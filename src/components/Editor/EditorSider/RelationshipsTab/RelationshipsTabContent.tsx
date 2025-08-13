@@ -1,5 +1,5 @@
-import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
-import EditableInput from "../../ui/EditableInput";
+import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
+import EditableInput from "../../../ui/EditableInput";
 import CollapsableTabItem from "../CollapsableTabItem";
 import TabContainer from "../TabContainer";
 import { Flex, Space, Tag, Typography } from "antd";

@@ -32,7 +32,7 @@ const fileMenuItems = [
   { label: "Exit", key: "exit" },
 ];
 
-export default function DiagramEditorHeader() {
+export default function EditorHeader() {
   const {
     showMenu,
     showMiniMap,

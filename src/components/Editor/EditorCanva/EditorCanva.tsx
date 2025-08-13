@@ -12,15 +12,15 @@ import {
   type NodeChange,
 } from "@xyflow/react";
 import { useCallback, useEffect, useState } from "react";
-import TableNode from "./TableNode";
-import { useDiagramDetail } from "../../hooks/useDiagramDetail";
-import { useView } from "../../hooks/useView";
+import TableNode from "./EditorNode";
+import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
+import { useView } from "../../../hooks/useView";
 
 const nodeTypes = {
   tableNode: TableNode,
 };
 
-export function CanvaReactFlow() {
+export function EditorCanva() {
   const { tables, relationships } = useDiagramDetail();
   const { showMiniMap, showControls } = useView();
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -44,7 +44,7 @@ export function CanvaReactFlow() {
       target: relationship.toTable,
       targetHandle: `target-${relationship.toColumn}`,
       type: "step",
-      label: relationship.relationshipType,
+      label: relationship.type,
     }));
     setNodes(initialNodes);
     setEdges(initialEdges);

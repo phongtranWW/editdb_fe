@@ -1,8 +1,8 @@
 import { Button, Flex, List, Space, Tag, Typography } from "antd";
-import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
+import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
 import TabContainer from "../TabContainer";
 import CollapsableTabItem from "../CollapsableTabItem";
-import EditableInput from "../../ui/EditableInput";
+import EditableInput from "../../../ui/EditableInput";
 import ColumnDetail from "./ColumnDetail";
 import {
   BorderOutlined,
@@ -10,7 +10,7 @@ import {
   PlusOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import type { ColumnDto } from "../../../models/dtos/column-dto";
+import type { ColumnDto } from "../../../../models/dtos/column-dto";
 const { Text } = Typography;
 
 export default function TablesTabContent() {
