@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ProfileDto } from "../models/dtos/profile-dto";
+import type { ProfileDto } from "../models/profile";
 import { userService } from "../services/userService";
 
 export const useProfile = () => {

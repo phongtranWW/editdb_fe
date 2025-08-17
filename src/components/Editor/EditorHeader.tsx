@@ -1,9 +1,8 @@
 import {
+  BorderOutlined,
   CheckSquareOutlined,
-  CloseSquareOutlined,
   DownOutlined,
   EditFilled,
-  ShareAltOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -20,19 +19,31 @@ import {
 import { useView } from "../../hooks/useView";
 import { useDiagramDetail } from "../../hooks/useDiagramDetail";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { AlertUnsavedModal } from "./AlertUnsavedModal";
+import { AlertDeleteModal } from "./AlertDeleteModal";
+import EditableSelection from "../ui/EditableSelection";
+import { CheckOutlined, ShareAltOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
 const { Text } = Typography;
 const { TextArea } = Input;
 
-// Tách ra ngoài để tránh re-creation
 const fileMenuItems = [
   { label: "Save", key: "save" },
-  { label: "Delete Diagram", key: "delete" },
+  { label: "Delete", key: "delete" },
   { label: "Exit", key: "exit" },
 ];
 
+const exportMenuItems = [
+  { label: "Postgres", key: "postgres" },
+  { label: "MySQL", key: "mysql" },
+];
+
 export default function EditorHeader() {
+  const navigator = useNavigate();
+
+  // Hooks
   const {
     showMenu,
     showMiniMap,
@@ -41,9 +52,21 @@ export default function EditorHeader() {
     toggleShowMiniMap,
     toggleShowControls,
   } = useView();
-  const { name, description, updateInfo } = useDiagramDetail();
+  const {
+    name,
+    description,
+    updateInfo,
+    isSaved,
+    saveDiagram,
+    deleteDiagram,
+    visibility,
+    updateVisibility,
+  } = useDiagramDetail();
 
+  // States
   const [showInfo, setShowInfo] = useState(false);
+  const [showAlertUnsaved, setShowAlertUnsaved] = useState(false);
+  const [showAlertDelete, setShowAlertDelete] = useState(false);
   const [tempName, setTempName] = useState(name);
   const [tempDesc, setTempDesc] = useState(description);
 
@@ -51,19 +74,37 @@ export default function EditorHeader() {
     {
       label: "Menu",
       key: "menu",
-      icon: showMenu ? <CheckSquareOutlined /> : <CloseSquareOutlined />,
+      icon: showMenu ? <CheckSquareOutlined /> : <BorderOutlined />,
     },
     {
       label: "Mini Map",
       key: "minimap",
-      icon: showMiniMap ? <CheckSquareOutlined /> : <CloseSquareOutlined />,
+      icon: showMiniMap ? <CheckSquareOutlined /> : <BorderOutlined />,
     },
     {
       label: "Controls",
       key: "controls",
-      icon: showControls ? <CheckSquareOutlined /> : <CloseSquareOutlined />,
+      icon: showControls ? <CheckSquareOutlined /> : <BorderOutlined />,
     },
   ];
+
+  const handleFileMenuClick = ({ key }: { key: string }) => {
+    switch (key) {
+      case "save":
+        saveDiagram();
+        break;
+      case "delete":
+        setShowAlertDelete(true);
+        break;
+      case "exit":
+        if (!isSaved) {
+          setShowAlertUnsaved(true);
+        } else {
+          navigator("/");
+        }
+        break;
+    }
+  };
 
   const handleViewMenuClick = ({ key }: { key: string }) => {
     switch (key) {
@@ -109,7 +150,10 @@ export default function EditorHeader() {
 
       {/* Menus */}
       <div className="flex items-center space-x-4">
-        <Dropdown menu={{ items: fileMenuItems }} placement="bottomLeft">
+        <Dropdown
+          menu={{ items: fileMenuItems, onClick: handleFileMenuClick }}
+          placement="bottomLeft"
+        >
           <Button type="text">
             <Space>
               File <DownOutlined />
@@ -129,10 +173,10 @@ export default function EditorHeader() {
           </Button>
         </Dropdown>
 
-        <Dropdown menu={{ items: fileMenuItems }} placement="bottomLeft">
+        <Dropdown menu={{ items: exportMenuItems }} placement="bottomLeft">
           <Button type="text">
             <Space>
-              Help <DownOutlined />
+              Export <DownOutlined />
             </Space>
           </Button>
         </Dropdown>
@@ -140,8 +184,22 @@ export default function EditorHeader() {
 
       {/* Actions */}
       <div className="flex items-center space-x-4">
-        <Tag color="green">Saved at: 5:00 PM</Tag>
-        <Button icon={<ShareAltOutlined />}>Share</Button>
+        {isSaved ? (
+          <Tag color="green">Saved</Tag>
+        ) : (
+          <Tag color="red">Unsaved</Tag>
+        )}
+        <EditableSelection
+          initialValue={visibility || "PUBLIC"}
+          options={[
+            { label: "PUBLIC", value: "PUBLIC" },
+            { label: "PRIVATE", value: "PRIVATE" },
+          ]}
+          finishSelect={(visibility) => updateVisibility(visibility)}
+          className="w-24"
+          menuItemSelectedIcon={<CheckOutlined />}
+          suffixIcon={<ShareAltOutlined />}
+        />
       </div>
 
       {/* Edit Modal */}
@@ -166,6 +224,32 @@ export default function EditorHeader() {
           />
         </Space>
       </Modal>
+
+      {/* Alert Unsaved Modal */}
+      <AlertUnsavedModal
+        show={showAlertUnsaved}
+        onCancel={() => setShowAlertUnsaved(false)}
+        onSave={() => {
+          saveDiagram();
+          setShowAlertUnsaved(false);
+          navigator("/diagrams");
+        }}
+        onDonotSave={() => {
+          setShowAlertUnsaved(false);
+          navigator("/diagrams");
+        }}
+      />
+
+      {/* Alert Delete Modal */}
+      <AlertDeleteModal
+        show={showAlertDelete}
+        onCancel={() => setShowAlertDelete(false)}
+        onDelete={() => {
+          deleteDiagram();
+          setShowAlertDelete(false);
+          navigator("/diagrams");
+        }}
+      />
     </Header>
   );
 }

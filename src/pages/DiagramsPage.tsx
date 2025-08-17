@@ -22,7 +22,8 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import { useUserDiagrams } from "../hooks/useDiagrams";
-import type { DiagramDto } from "../models/dtos/diagram-dto";
+import type { SummaryDiagram } from "../models/summary-diagram";
+import { useNavigate } from "react-router";
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -36,6 +37,7 @@ export default function DiagramsPage() {
     deleteDiagram,
     createDiagram,
   } = useUserDiagrams();
+  const navigator = useNavigate();
 
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -61,7 +63,7 @@ export default function DiagramsPage() {
     await deleteDiagram(id);
   };
 
-  const renderDiagramCard = (diagram: DiagramDto) => (
+  const renderDiagramCard = (diagram: SummaryDiagram) => (
     <Card
       className="h-full hover:shadow-lg transition-shadow duration-200"
       actions={[
@@ -69,7 +71,7 @@ export default function DiagramsPage() {
           type="text"
           icon={<EditOutlined />}
           onClick={() => {
-            console.log("Edit diagram:", diagram.id);
+            navigator(`/diagrams/${diagram.id}`);
           }}
         >
           Edit

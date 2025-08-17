@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { DiagramDto } from "../models/dtos/diagram-dto";
+import type { DiagramDto } from "../models/summary-diagram";
 import { diagramService } from "../services/diagramService";
 
 export const useUserDiagrams = () => {

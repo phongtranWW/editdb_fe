@@ -7,7 +7,9 @@ interface EditableSelectionProps<T> {
   options: BaseOptionType[];
   finishSelect: (value: T) => void;
   className?: string;
-  size: "small" | "middle" | "large";
+  size?: "small" | "middle" | "large";
+  menuItemSelectedIcon?: React.ReactNode;
+  suffixIcon?: React.ReactNode;
 }
 
 export default function EditableSelection<T>({
@@ -16,6 +18,8 @@ export default function EditableSelection<T>({
   className,
   size,
   finishSelect,
+  menuItemSelectedIcon,
+  suffixIcon,
 }: EditableSelectionProps<T>) {
   const [value, setValue] = useState<T>(initialValue);
 
@@ -26,7 +30,9 @@ export default function EditableSelection<T>({
   return (
     <Select
       className={className}
-      size={size}
+      suffixIcon={suffixIcon}
+      menuItemSelectedIcon={menuItemSelectedIcon}
+      size={size || "middle"}
       value={value}
       options={options}
       onFocus={() => setValue(value)}

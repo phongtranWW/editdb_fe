@@ -10,7 +10,7 @@ import {
   PlusOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import type { ColumnDto } from "../../../../models/dtos/column-dto";
+import type { Column } from "../../../../models/column";
 const { Text } = Typography;
 
 export default function TablesTabContent() {
@@ -47,7 +47,7 @@ export default function TablesTabContent() {
             </Flex>
             <List
               dataSource={table.columns}
-              renderItem={(column: ColumnDto) => (
+              renderItem={(column: Column) => (
                 <ColumnDetail tableId={table.id} column={column}>
                   <List.Item className="cursor-pointer">
                     <Flex

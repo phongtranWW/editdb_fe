@@ -1,16 +1,19 @@
 import { Card, List, Typography, Flex, Tag } from "antd";
-import type { ColumnDto } from "../../../models/dtos/column-dto";
 import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
+import type { Column } from "../../../models/column";
 
 const { Text } = Typography;
 
-export type EditorNodeProps = Node<{
-  name: string;
-  columns: ColumnDto[];
-}>;
+type TableNode = Node<
+  {
+    name: string;
+    columns: Column[];
+  },
+  "table"
+>;
 
-export default function EditorNode(props: NodeProps<EditorNodeProps>) {
-  const { name, columns } = props.data;
+export default function EditorNode({ data }: NodeProps<TableNode>) {
+  const { name, columns } = data;
 
   return (
     <Card
@@ -32,23 +35,27 @@ export default function EditorNode(props: NodeProps<EditorNodeProps>) {
         dataSource={columns}
         renderItem={(column) => (
           <List.Item className="relative hover:bg-[#fff1e8] px-2 py-1 rounded-md transition-all duration-200">
+            {/* Handle trái */}
             <Handle
               type="target"
               position={Position.Left}
+              id={`target-${column.id}`}
               className="invisible"
-              id={`target-${column.name}`}
             />
+
             <Flex justify="space-between" align="center" className="w-full">
               <Text strong className="text-sm text-gray-800">
                 {column.name}
               </Text>
               <Tag color="blue">{column.type}</Tag>
             </Flex>
+
+            {/* Handle phải */}
             <Handle
               type="source"
               position={Position.Right}
+              id={`source-${column.id}`}
               className="invisible"
-              id={`source-${column.name}`}
             />
           </List.Item>
         )}

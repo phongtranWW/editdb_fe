@@ -1,9 +1,9 @@
-export interface ColumnDto {
+export interface Column {
   id: string;
   name: string;
   type: string;
   isPrimary: boolean;
   isUnique: boolean;
   isNullable: boolean;
-  default: string | null;
+  default?: string;
 }

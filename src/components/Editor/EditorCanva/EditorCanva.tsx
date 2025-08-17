@@ -1,34 +1,31 @@
 import {
-  applyEdgeChanges,
-  applyNodeChanges,
   Background,
   ConnectionMode,
   Controls,
   MiniMap,
   ReactFlow,
+  useEdgesState,
+  useNodesState,
   type Edge,
-  type EdgeChange,
   type Node,
-  type NodeChange,
 } from "@xyflow/react";
-import { useCallback, useEffect, useState } from "react";
-import TableNode from "./EditorNode";
+import { useEffect } from "react";
+import TableNode from "./TableNode";
 import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
 import { useView } from "../../../hooks/useView";
-
 const nodeTypes = {
   tableNode: TableNode,
 };
 
 export function EditorCanva() {
-  const { tables, relationships } = useDiagramDetail();
+  const { tables, relationships, updateTable } = useDiagramDetail();
   const { showMiniMap, showControls } = useView();
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   useEffect(() => {
     const initialNodes = tables.map((table) => ({
-      id: table.name,
+      id: table.id,
       type: "tableNode",
       position: table.position,
       data: {
@@ -43,29 +40,25 @@ export function EditorCanva() {
       sourceHandle: `source-${relationship.fromColumn}`,
       target: relationship.toTable,
       targetHandle: `target-${relationship.toColumn}`,
-      type: "step",
+      type: "smoothstep",
       label: relationship.type,
     }));
     setNodes(initialNodes);
     setEdges(initialEdges);
-  }, [tables, relationships]);
-
-  const onNodesChange = useCallback(
-    (changes: NodeChange[]) =>
-      setNodes((nds) => applyNodeChanges(changes, nds)),
-    []
-  );
-
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange[]) =>
-      setEdges((eds) => applyEdgeChanges(changes, eds)),
-    []
-  );
+  }, [tables, relationships, setNodes, setEdges]);
 
   return (
     <ReactFlow
       nodes={nodes}
       nodeTypes={nodeTypes}
+      onNodeDragStop={(_, node) => {
+        updateTable(node.id, {
+          position: {
+            x: node.position.x,
+            y: node.position.y,
+          },
+        });
+      }}
       onNodesChange={onNodesChange}
       edges={edges}
       onEdgesChange={onEdgesChange}

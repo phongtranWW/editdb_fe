@@ -1,4 +1,4 @@
-export interface RelationshipDto {
+export interface Relationship {
   id: string;
   name: string;
   fromTable: string;

@@ -11,9 +11,9 @@ import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagramsPage from "./pages/DiagramsPage";
-import DiagramEditorPage from "./pages/DiagramEditorPage";
 import "@xyflow/react/dist/style.css";
 import { AuthProvider } from "./context/AuthContext";
+import EditorPage from "./pages/EditorPage";
 
 function App() {
   return (
@@ -49,7 +49,14 @@ function App() {
           </Route>
 
           {/* Editor Layout */}
-          <Route path="/diagrams/:id" element={<DiagramEditorPage />} />
+          <Route
+            path="/diagrams/:id"
+            element={
+              <ProtectedRoute>
+                <EditorPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthProvider>
     </ConfigProvider>

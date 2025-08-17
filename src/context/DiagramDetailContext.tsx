@@ -1,155 +1,22 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import type { RelationshipDto } from "../models/dtos/relationship-dto";
-import type { TableDto } from "../models/dtos/table-dto";
-import type { DiagramDetailDto } from "../models/dtos/diagram-detail.dto";
+import type { Relationship } from "../models/relationship";
+import type { Table } from "../models/table";
 import { nanoid } from "nanoid";
-import type { ColumnDto } from "../models/dtos/column-dto";
-
-const mockDiagram: DiagramDetailDto = {
-  name: "Cosmic Schema",
-  description: "Schema mô phỏng hệ thống quản lý khám phá vũ trụ",
-  tables: [
-    {
-      id: nanoid(6),
-      name: "star_systems",
-      position: { x: 0, y: 0 },
-      columns: [
-        {
-          id: nanoid(6),
-          name: "id",
-          type: "UUID",
-          isPrimary: true,
-          isUnique: true,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "name",
-          type: "VARCHAR",
-          isPrimary: false,
-          isUnique: true,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "galaxy",
-          type: "VARCHAR",
-          isPrimary: false,
-          isUnique: false,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "discovered_at",
-          type: "TIMESTAMP",
-          isPrimary: false,
-          isUnique: false,
-          isNullable: true,
-          default: null,
-        },
-      ],
-    },
-    {
-      id: nanoid(6),
-      name: "planets",
-      position: { x: 350, y: 0 },
-      columns: [
-        {
-          id: nanoid(6),
-          name: "id",
-          type: "UUID",
-          isPrimary: true,
-          isUnique: true,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "name",
-          type: "VARCHAR",
-          isPrimary: false,
-          isUnique: true,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "type",
-          type: "VARCHAR",
-          isPrimary: false,
-          isUnique: false,
-          isNullable: false,
-          default: "terrestrial",
-        },
-        {
-          id: nanoid(6),
-          name: "star_system_id",
-          type: "UUID",
-          isPrimary: false,
-          isUnique: false,
-          isNullable: false,
-          default: null,
-        },
-        {
-          id: nanoid(6),
-          name: "has_life",
-          type: "BOOLEAN",
-          isPrimary: false,
-          isUnique: false,
-          isNullable: false,
-          default: null,
-        },
-      ],
-    },
-  ],
-  relationships: [
-    {
-      id: nanoid(6),
-      name: "system_planets",
-      fromTable: "star_systems",
-      fromColumn: "id",
-      toTable: "planets",
-      toColumn: "star_system_id",
-      type: "ONE-TO-MANY",
-    },
-    {
-      id: nanoid(6),
-      name: "planet_missions",
-      fromTable: "planets",
-      fromColumn: "id",
-      toTable: "missions",
-      toColumn: "planet_id",
-      type: "ONE-TO-MANY",
-    },
-    {
-      id: nanoid(6),
-      name: "planet_astronauts",
-      fromTable: "planets",
-      fromColumn: "id",
-      toTable: "astronauts",
-      toColumn: "planet_id",
-      type: "ONE-TO-MANY",
-    },
-    {
-      id: nanoid(6),
-      name: "spaceship_missions",
-      fromTable: "spaceships",
-      fromColumn: "id",
-      toTable: "missions",
-      toColumn: "spaceship_id",
-      type: "ONE-TO-MANY",
-    },
-  ],
-};
+import type { Column } from "../models/column";
+import { diagramService } from "../services/diagramService";
 
 interface DiagramDetailState {
+  isSaved: boolean;
   name: string;
   description: string;
-  tables: TableDto[];
-  relationships: RelationshipDto[];
+  tables: Table[];
+  relationships: Relationship[];
+  visibility: "PUBLIC" | "PRIVATE" | "SHARED";
+
+  // Actions
+  saveDiagram: () => void;
+  deleteDiagram: () => void;
+  updateVisibility: (visibility: "PUBLIC" | "PRIVATE" | "SHARED") => void;
 
   // Diagram actions
   updateInfo: (name: string, description: string) => void;
@@ -159,38 +26,68 @@ interface DiagramDetailState {
   getTableNames: () => { id: string; name: string }[];
   getColumnNames: (id: string) => { id: string; name: string }[];
   addTable: (name: string) => void;
-  updateTable: (id: string, payload: Partial<TableDto>) => void;
+  updateTable: (id: string, payload: Partial<Table>) => void;
   deleteTable: (id: string) => void;
   addColumn: (id: string, columnName: string) => void;
   updateColumn: (
     id: string,
     columnId: string,
-    payload: Partial<ColumnDto>
+    payload: Partial<Column>
   ) => void;
   deleteColumn: (id: string, columnId: string) => void;
 
   // Relationship actions
   addRelationship: (name: string) => void;
-  updateRelationship: (id: string, payload: Partial<RelationshipDto>) => void;
+  updateRelationship: (id: string, payload: Partial<Relationship>) => void;
   deleteRelationship: (id: string) => void;
 }
 
 const DiagramDetailContext = createContext<DiagramDetailState | null>(null);
 
 export const DiagramDetailProvider = ({
+  id,
   children,
 }: {
+  id: string;
   children: React.ReactNode;
 }) => {
+  const [isSaved, setIsSaved] = useState<boolean>(true);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [tables, setTables] = useState<TableDto[]>([]);
-  const [relationships, setRelationships] = useState<RelationshipDto[]>([]);
+  const [visibility, setVisibility] = useState<"PUBLIC" | "PRIVATE" | "SHARED">(
+    "PRIVATE"
+  );
+  const [tables, setTables] = useState<Table[]>([]);
+  const [relationships, setRelationships] = useState<Relationship[]>([]);
+
+  // Actions
+  const saveDiagram = useCallback(() => {
+    if (isSaved) return;
+    diagramService.updateDiagram(id, {
+      name,
+      description,
+      tables,
+      relationships,
+    });
+    setIsSaved(true);
+  }, [isSaved, id, name, description, tables, relationships]);
+
+  const deleteDiagram = useCallback(() => {
+    diagramService.deleteDiagram(id);
+  }, [id]);
+
+  const updateVisibility = useCallback(
+    (visibility: "PUBLIC" | "PRIVATE" | "SHARED") => {
+      diagramService.updateShareStatus(id, { visibility });
+    },
+    [id]
+  );
 
   // Diagram actions
   const updateInfo = useCallback((name: string, description: string) => {
     setName(name);
     setDescription(description);
+    setIsSaved(false);
   }, []);
 
   // Table actions
@@ -234,18 +131,21 @@ export const DiagramDetailProvider = ({
         },
       ];
     });
+    setIsSaved(false);
   }, []);
 
-  const updateTable = useCallback((id: string, payload: Partial<TableDto>) => {
+  const updateTable = useCallback((id: string, payload: Partial<Table>) => {
     setTables((prevTables) =>
       prevTables.map((table) =>
         table.id === id ? { ...table, ...payload } : table
       )
     );
+    setIsSaved(false);
   }, []);
 
   const deleteTable = useCallback((id: string) => {
     setTables((prevTables) => prevTables.filter((table) => table.id !== id));
+    setIsSaved(false);
   }, []);
 
   const addColumn = useCallback((id: string, columnName: string) => {
@@ -263,17 +163,17 @@ export const DiagramDetailProvider = ({
                   isPrimary: false,
                   isUnique: false,
                   isNullable: false,
-                  default: null,
                 },
               ],
             }
           : table
       )
     );
+    setIsSaved(false);
   }, []);
 
   const updateColumn = useCallback(
-    (id: string, columnId: string, payload: Partial<ColumnDto>) => {
+    (id: string, columnId: string, payload: Partial<Column>) => {
       setTables((prevTables) =>
         prevTables.map((table) =>
           table.id === id
@@ -286,6 +186,7 @@ export const DiagramDetailProvider = ({
             : table
         )
       );
+      setIsSaved(false);
     },
     []
   );
@@ -301,6 +202,7 @@ export const DiagramDetailProvider = ({
           : table
       )
     );
+    setIsSaved(false);
   }, []);
 
   // Relationship actions
@@ -319,10 +221,11 @@ export const DiagramDetailProvider = ({
         },
       ];
     });
+    setIsSaved(false);
   }, []);
 
   const updateRelationship = useCallback(
-    (id: string, payload: Partial<RelationshipDto>) => {
+    (id: string, payload: Partial<Relationship>) => {
       setRelationships((prevRelationships) =>
         prevRelationships.map((relationship) =>
           relationship.id === id
@@ -338,22 +241,35 @@ export const DiagramDetailProvider = ({
     setRelationships((prevRelationships) =>
       prevRelationships.filter((relationship) => relationship.id !== id)
     );
+    setIsSaved(false);
   }, []);
 
   useEffect(() => {
-    setName(mockDiagram.name);
-    setDescription(mockDiagram.description || "");
-    setTables(mockDiagram.tables);
-    setRelationships(mockDiagram.relationships);
-  }, []);
+    const fetchDiagramDetail = async () => {
+      const diagramDetail = await diagramService.getDiagramDetail(id);
+      if (!diagramDetail) return;
+      setName(diagramDetail.name);
+      setDescription(diagramDetail.description);
+      setVisibility(diagramDetail.visibility);
+      setTables(diagramDetail.tables);
+      setRelationships(diagramDetail.relationships);
+      setIsSaved(true);
+    };
+    fetchDiagramDetail();
+  }, [id]);
 
   return (
     <DiagramDetailContext.Provider
       value={{
+        isSaved,
         name,
         description,
         tables,
         relationships,
+        visibility,
+        saveDiagram,
+        deleteDiagram,
+        updateVisibility,
         updateInfo,
         getTableName,
         getTableNames,

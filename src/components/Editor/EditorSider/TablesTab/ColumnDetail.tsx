@@ -9,7 +9,7 @@ import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
 import EditableInput from "../../../ui/EditableInput";
 import EditableSelection from "../../../ui/EditableSelection";
 import EditableSwitch from "../../../ui/EditableSwitch";
-import type { ColumnDto } from "../../../../models/dtos/column-dto";
+import type { ColumnDto } from "../../../../models/column";
 
 const { Text } = Typography;
 
