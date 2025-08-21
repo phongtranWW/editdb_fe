@@ -34,12 +34,6 @@ export default function AppHeader() {
       label: "Templates",
       onClick: () => navigate("/templates"),
     },
-    {
-      key: "/about",
-      icon: <UserOutlined />,
-      label: "About",
-      onClick: () => navigate("/about"),
-    },
   ];
 
   const userMenu: MenuProps["items"] = [

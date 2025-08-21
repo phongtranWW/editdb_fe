@@ -8,6 +8,7 @@ import {
   updateDiagram,
   updateShareStatus,
 } from "../api/diagramApi";
+import type { ApiResponse } from "../models/api-response";
 import type { Diagram } from "../models/diagram";
 import type { Relationship } from "../models/relationship";
 import type { SummaryDiagram } from "../models/summary-diagram";
@@ -15,8 +16,13 @@ import type { Table } from "../models/table";
 
 export const diagramService = {
   // Public
-  async getPublicSummaryDiagrams(): Promise<SummaryDiagram[]> {
-    const response = await getPublicSummaryDiagrams();
+  async getPublicSummaryDiagrams(params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    sort?: "asc" | "desc";
+  }): Promise<ApiResponse<SummaryDiagram>> {
+    const response = await getPublicSummaryDiagrams(params);
     return response.data;
   },
 

@@ -4,8 +4,12 @@ import privateAxios from "./privateAxios";
 import publicAxios from "./publicAxios";
 
 // Public
-export const getPublicSummaryDiagrams = () =>
-  publicAxios.get("/public/diagrams");
+export const getPublicSummaryDiagrams = (params: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  sort?: "asc" | "desc";
+}) => publicAxios.get("/public/diagrams", { params });
 
 export const getPublicDiagram = (id: string) =>
   publicAxios.get(`/public/diagrams/${id}`);

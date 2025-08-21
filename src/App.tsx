@@ -2,18 +2,17 @@ import { Route } from "react-router";
 import { Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 import AppLayout from "./components/App/AppLayout";
-import TemplatesPage from "./pages/TemplatesPage";
 import LoginPage from "./pages/LoginPage";
 import { ConfigProvider } from "antd";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import theme from "./theme/theme";
-import AboutPage from "./pages/AboutPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DiagramsPage from "./pages/DiagramsPage";
 import "@xyflow/react/dist/style.css";
 import { AuthProvider } from "./context/AuthContext";
 import EditorPage from "./pages/EditorPage";
+import TemplatesPage from "./pages/TemplatesPage";
 
 function App() {
   return (
@@ -29,7 +28,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/templates" element={<TemplatesPage />} />
-            <Route path="/about" element={<AboutPage />} />
+
             <Route
               path="/profile"
               element={
