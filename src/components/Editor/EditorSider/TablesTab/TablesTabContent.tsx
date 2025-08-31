@@ -1,5 +1,4 @@
 import { Button, Flex, List, Space, Tag, Typography } from "antd";
-import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
 import TabContainer from "../TabContainer";
 import CollapsableTabItem from "../CollapsableTabItem";
 import EditableInput from "../../../ui/EditableInput";
@@ -10,22 +9,27 @@ import {
   PlusOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import type { Column } from "../../../../models/column";
+import { useDiagram } from "../../../../hooks/useDiagram";
+import { nanoid } from "nanoid";
+import { DATABASE } from "../../../../data/database";
+import type { DiagramColumn } from "../../../../models/diagram-column";
 const { Text } = Typography;
 
 export default function TablesTabContent() {
-  const { tables, addTable, updateTable, deleteTable, addColumn } =
-    useDiagramDetail();
-
+  const { state, dispatch } = useDiagram();
+  console.log("Rendering TableTabContent");
   return (
     <TabContainer
-      dataSource={tables}
+      dataSource={state.tables}
       renderItem={(table) => (
         <CollapsableTabItem
           label={table.name}
           key={table.id}
           deleteItem={() => {
-            deleteTable(table.id);
+            dispatch({
+              type: "DELETE_TABLE",
+              payload: table.id,
+            });
           }}
         >
           <Space size="small" className="w-full" direction="vertical">
@@ -41,13 +45,23 @@ export default function TablesTabContent() {
                 initialValue={table.name}
                 placeholder="Table name"
                 onFinish={(name) => {
-                  updateTable(table.id, { name });
+                  if (!name) {
+                    dispatch({
+                      type: "SET_ERROR",
+                      payload: "Table name cannot be empty",
+                    });
+                    return;
+                  }
+                  dispatch({
+                    type: "UPDATE_TABLE",
+                    payload: { id: table.id, partialTable: { name } },
+                  });
                 }}
               />
             </Flex>
             <List
               dataSource={table.columns}
-              renderItem={(column: Column) => (
+              renderItem={(column: DiagramColumn) => (
                 <ColumnDetail tableId={table.id} column={column}>
                   <List.Item className="cursor-pointer">
                     <Flex
@@ -99,17 +113,37 @@ export default function TablesTabContent() {
                 icon={<PlusOutlined />}
                 variant="text"
                 onClick={() =>
-                  addColumn(table.id, `column_${table.columns.length + 1}`)
+                  dispatch({
+                    type: "ADD_COLUMN",
+                    payload: {
+                      id: table.id,
+                      column: {
+                        id: nanoid(6),
+                        name: `column_${table.columns.length + 1}`,
+                        type: DATABASE[state.type]?.columnType[0],
+                        isPrimary: false,
+                        isUnique: false,
+                        isNullable: true,
+                      },
+                    },
+                  })
                 }
               >
-                Add
+                Add Column
               </Button>
             </Flex>
           </Space>
         </CollapsableTabItem>
       )}
       addItem={() => {
-        addTable(`table_${tables.length + 1}`);
+        dispatch({
+          type: "ADD_TABLE",
+          payload: {
+            id: nanoid(6),
+            name: `table_${state.tables.length + 1}`,
+            columns: [],
+          },
+        });
       }}
     />
   );

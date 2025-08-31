@@ -49,7 +49,6 @@ export default function EditableSwitch({
       variant={checked ? "solid" : "outlined"}
       onClick={() => {
         finish(!checked);
-        setChecked(!checked);
       }}
     >
       {icon}

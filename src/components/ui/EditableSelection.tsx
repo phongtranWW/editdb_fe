@@ -36,8 +36,7 @@ export default function EditableSelection<T>({
       value={value}
       options={options}
       onFocus={() => setValue(value)}
-      onBlur={() => finishSelect(value)}
-      onChange={(value) => setValue(value)}
+      onChange={(value) => finishSelect(value)}
     ></Select>
   );
 }

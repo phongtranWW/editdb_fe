@@ -1,5 +1,5 @@
 import { Button, Card, Flex, Image, Typography } from "antd";
-import type { SummaryDiagram } from "../../../models/summary-diagram";
+import type { SummaryDiagram } from "../../../services/diagrams/dtos/summary-diagram-dto";
 import { CopyOutlined } from "@ant-design/icons";
 const { Text, Paragraph } = Typography;
 

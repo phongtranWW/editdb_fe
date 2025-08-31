@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { ProfileDto } from "../models/profile";
 import { userService } from "../services/userService";
+import type { Profile } from "../models/profile";
 
 export const useProfile = () => {
-  const [profile, setProfile] = useState<ProfileDto | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

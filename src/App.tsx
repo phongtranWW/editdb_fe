@@ -8,7 +8,6 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 import theme from "./theme/theme";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import DiagramsPage from "./pages/DiagramsPage";
 import "@xyflow/react/dist/style.css";
 import { AuthProvider } from "./context/AuthContext";
 import EditorPage from "./pages/EditorPage";
@@ -28,20 +27,11 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/templates" element={<TemplatesPage />} />
-
             <Route
               path="/profile"
               element={
                 <ProtectedRoute>
                   <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/diagrams"
-              element={
-                <ProtectedRoute>
-                  <DiagramsPage />
                 </ProtectedRoute>
               }
             />
@@ -55,7 +45,9 @@ function App() {
                 <EditorPage />
               </ProtectedRoute>
             }
-          />
+          ></Route>
+
+          <Route path="*" element={<div>404</div>} />
         </Routes>
       </AuthProvider>
     </ConfigProvider>

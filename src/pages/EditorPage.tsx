@@ -1,22 +1,19 @@
-import { useNavigate, useParams } from "react-router";
-import DiagramEditorLayout from "../components/Editor/EditorLayout";
-import { DiagramDetailProvider } from "../context/DiagramDetailContext";
-import { ViewProvider } from "../context/ViewContext";
+import { DiagramProvider } from "../context/DiagramContext/context";
+import { ReactFlowProvider } from "@xyflow/react";
+import { ViewProvider } from "../context/ViewContext/context";
+import WorkSpace from "../components/Editor/WorkSpace";
+import { IssuesProvider } from "../context/IssuesContext";
 
 export default function EditorPage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  if (!id) {
-    navigate("/");
-    return null;
-  }
-
   return (
     <ViewProvider>
-      <DiagramDetailProvider id={id}>
-        <DiagramEditorLayout />
-      </DiagramDetailProvider>
+      <DiagramProvider>
+        <IssuesProvider>
+          <ReactFlowProvider>
+            <WorkSpace />
+          </ReactFlowProvider>
+        </IssuesProvider>
+      </DiagramProvider>
     </ViewProvider>
   );
 }

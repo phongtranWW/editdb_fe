@@ -1,5 +1,5 @@
-import type { Relationship } from "../models/relationship";
-import type { Table } from "../models/table";
+import type { Relationship } from "../services/diagrams/dtos/relationship-dto";
+import type { Table } from "../services/diagrams/dtos/table-dto";
 import privateAxios from "./privateAxios";
 import publicAxios from "./publicAxios";
 

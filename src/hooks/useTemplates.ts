@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import type { SummaryDiagram } from "../models/summary-diagram";
-import { diagramService } from "../services/diagramService";
+import type { SummaryDiagram } from "../services/diagrams/dtos/summary-diagram-dto";
+import { diagramService } from "../services/diagrams/diagramService";
 
 export function useTemplates() {
   const [diagrams, setDiagrams] = useState<SummaryDiagram[]>([]);

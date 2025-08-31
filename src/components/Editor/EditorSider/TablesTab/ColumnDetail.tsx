@@ -5,17 +5,18 @@ import {
   KeyOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import { useDiagramDetail } from "../../../../hooks/useDiagramDetail";
 import EditableInput from "../../../ui/EditableInput";
 import EditableSelection from "../../../ui/EditableSelection";
 import EditableSwitch from "../../../ui/EditableSwitch";
-import type { ColumnDto } from "../../../../models/column";
+import { useDiagram } from "../../../../hooks/useDiagram";
+import { DATABASE } from "../../../../data/database";
+import type { DiagramColumn } from "../../../../models/diagram-column";
 
 const { Text } = Typography;
 
 interface ColumnDetailProps {
   tableId: string;
-  column: ColumnDto;
+  column: DiagramColumn;
   children: React.ReactNode;
 }
 
@@ -33,7 +34,7 @@ export default function ColumnDetail({
     type,
     default: defaultValue,
   } = column;
-  const { deleteColumn, updateColumn } = useDiagramDetail();
+  const { dispatch, state } = useDiagram();
 
   return (
     <Popover
@@ -45,28 +46,67 @@ export default function ColumnDetail({
             <Space size="small" className="w-full">
               <EditableInput
                 initialValue={name}
-                onFinish={(name) => updateColumn(tableId, columnId, { name })}
+                onFinish={(name) => {
+                  if (!name) {
+                    dispatch({
+                      type: "SET_ERROR",
+                      payload: "Column name cannot be empty",
+                    });
+                    return;
+                  }
+                  dispatch({
+                    type: "UPDATE_COLUMN",
+                    payload: { id: tableId, columnId, partialColumn: { name } },
+                  });
+                }}
                 placeholder="Column Name"
               />
               <EditableSwitch
                 initialValue={isPrimary}
                 finish={(isPrimary) =>
-                  updateColumn(tableId, columnId, { isPrimary })
+                  dispatch({
+                    type: "UPDATE_COLUMN",
+                    payload: {
+                      id: tableId,
+                      columnId,
+                      partialColumn: {
+                        isPrimary,
+                        isUnique: isPrimary ? false : undefined,
+                        isNullable: isPrimary ? false : undefined,
+                      },
+                    },
+                  })
                 }
                 icon={<KeyOutlined size={8} />}
               />
               <EditableSwitch
                 initialValue={isUnique}
-                finish={(isUnique) =>
-                  updateColumn(tableId, columnId, { isUnique })
-                }
+                finish={(isUnique) => {
+                  if (isPrimary) return;
+                  dispatch({
+                    type: "UPDATE_COLUMN",
+                    payload: {
+                      id: tableId,
+                      columnId,
+                      partialColumn: { isUnique },
+                    },
+                  });
+                }}
                 icon={<QuestionOutlined size={8} />}
               />
               <EditableSwitch
                 initialValue={isNullable}
-                finish={(isNullable) =>
-                  updateColumn(tableId, columnId, { isNullable })
-                }
+                finish={(isNullable) => {
+                  if (isPrimary) return;
+                  dispatch({
+                    type: "UPDATE_COLUMN",
+                    payload: {
+                      id: tableId,
+                      columnId,
+                      partialColumn: { isNullable },
+                    },
+                  });
+                }}
                 icon={<BorderOutlined size={8} />}
               />
             </Space>
@@ -77,15 +117,16 @@ export default function ColumnDetail({
               className="!w-full"
               size="small"
               initialValue={type}
-              options={[
-                { value: "INT", label: "INT" },
-                { value: "VARCHAR", label: "VARCHAR" },
-                { value: "TEXT", label: "TEXT" },
-                { value: "FLOAT", label: "FLOAT" },
-                { value: "DATE", label: "DATE" },
-                { value: "BOOLEAN", label: "BOOLEAN" },
-              ]}
-              finishSelect={(type) => updateColumn(tableId, columnId, { type })}
+              options={DATABASE[state.type].columnType.map((t) => ({
+                label: t,
+                value: t,
+              }))}
+              finishSelect={(type) =>
+                dispatch({
+                  type: "UPDATE_COLUMN",
+                  payload: { id: tableId, columnId, partialColumn: { type } },
+                })
+              }
             />
           </Space>
           <Space direction="vertical" size="small" className="w-full">
@@ -93,7 +134,14 @@ export default function ColumnDetail({
             <EditableInput
               initialValue={defaultValue || ""}
               onFinish={(defaultValue) =>
-                updateColumn(tableId, columnId, { default: defaultValue })
+                dispatch({
+                  type: "UPDATE_COLUMN",
+                  payload: {
+                    id: tableId,
+                    columnId,
+                    partialColumn: { default: defaultValue },
+                  },
+                })
               }
               placeholder="Default value"
             />
@@ -105,7 +153,12 @@ export default function ColumnDetail({
               icon={<DeleteOutlined />}
               size="small"
               variant="solid"
-              onClick={() => deleteColumn(tableId, columnId)}
+              onClick={() =>
+                dispatch({
+                  type: "DELETE_COLUMN",
+                  payload: { id: tableId, columnId },
+                })
+              }
             >
               Delete
             </Button>

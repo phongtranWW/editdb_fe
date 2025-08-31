@@ -1,5 +1,6 @@
 import {
   Background,
+  ConnectionLineType,
   ConnectionMode,
   Controls,
   MiniMap,
@@ -10,64 +11,107 @@ import {
   type Node,
 } from "@xyflow/react";
 import { useEffect } from "react";
-import TableNode from "./TableNode";
-import { useDiagramDetail } from "../../../hooks/useDiagramDetail";
+import { useDiagram } from "../../../hooks/useDiagram";
 import { useView } from "../../../hooks/useView";
+import EditorNode from "./EditorNode";
+import { EditorEdge } from "./EditorEdge";
+import { generateNodePosition } from "../../../utils/generateNodePosition";
+
 const nodeTypes = {
-  tableNode: TableNode,
+  tableNode: EditorNode,
+};
+
+const edgeTypes = {
+  relationshipEdge: EditorEdge,
 };
 
 export function EditorCanva() {
-  const { tables, relationships, updateTable } = useDiagramDetail();
-  const { showMiniMap, showControls } = useView();
+  const {
+    state: { showMiniMap, showControls },
+  } = useView();
+  const {
+    state: { tables, relationships },
+  } = useDiagram();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   useEffect(() => {
-    const initialNodes = tables.map((table) => ({
-      id: table.id,
-      type: "tableNode",
-      position: table.position,
-      data: {
-        name: table.name,
-        columns: table.columns,
-      },
-    }));
+    setNodes((currentNodes) => {
+      const nodeMap = new Map(currentNodes.map((node) => [node.id, node]));
+      return tables.map((table, index) => {
+        const existingNode = nodeMap.get(table.id);
 
-    const initialEdges = relationships.map((relationship) => ({
-      id: relationship.name,
-      source: relationship.fromTable,
-      sourceHandle: `source-${relationship.fromColumn}`,
-      target: relationship.toTable,
-      targetHandle: `target-${relationship.toColumn}`,
-      type: "smoothstep",
-      label: relationship.type,
-    }));
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-  }, [tables, relationships, setNodes, setEdges]);
+        return {
+          id: table.id,
+          type: "tableNode",
+          position:
+            existingNode?.position || generateNodePosition(index, currentNodes),
+          data: {
+            name: table.name,
+            columns: table.columns,
+          },
+          ...(existingNode && {
+            selected: existingNode.selected,
+            dragging: existingNode.dragging,
+          }),
+        };
+      });
+    });
+  }, [tables, setNodes]);
+
+  useEffect(() => {
+    const newEdges = relationships.map(
+      (relationship) =>
+        ({
+          id: relationship.id,
+          source: relationship.fromTable,
+          sourceHandle: relationship.fromColumn,
+          target: relationship.toTable,
+          targetHandle: relationship.toColumn,
+          type: "relationshipEdge",
+          label: relationship.name,
+          data: {
+            type: relationship.type,
+          },
+        } as Edge)
+    );
+    setEdges(newEdges);
+  }, [relationships, setEdges]);
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      nodeTypes={nodeTypes}
-      onNodeDragStop={(_, node) => {
-        updateTable(node.id, {
-          position: {
-            x: node.position.x,
-            y: node.position.y,
-          },
-        });
-      }}
-      onNodesChange={onNodesChange}
-      edges={edges}
-      onEdgesChange={onEdgesChange}
-      connectionMode={ConnectionMode.Loose}
-      fitView
-    >
-      <Background />
-      {showControls && <Controls />}
-      {showMiniMap && <MiniMap />}
-    </ReactFlow>
+    <>
+      <svg style={{ position: "absolute", width: 0, height: 0, zIndex: -1 }}>
+        <defs>
+          <marker
+            id="many-marker"
+            markerWidth="10"
+            markerHeight="10"
+            refX="5"
+            refY="6"
+            markerUnits="strokeWidth"
+            orient="auto-start-reverse"
+          >
+            <line x1="0" y1="6" x2="8" y2="2" stroke="#b1b1b7" />
+            <line x1="0" y1="6" x2="8" y2="6" stroke="#b1b1b7" />
+            <line x1="0" y1="6" x2="8" y2="10" stroke="#b1b1b7" />
+          </marker>
+        </defs>
+      </svg>
+      <ReactFlow
+        nodes={nodes}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        connectionMode={ConnectionMode.Loose}
+        connectionLineType={ConnectionLineType.Straight}
+        fitView
+      >
+        <Background />
+        {showControls && <Controls />}
+        {showMiniMap && <MiniMap />}
+      </ReactFlow>
+    </>
   );
 }
