@@ -1,4 +1,4 @@
-import { Button, Image, Layout, Tag, Typography } from "antd";
+import { Button, Image, Layout, Typography } from "antd";
 import EditableSelection from "../../ui/EditableSelection";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../hooks/useDiagram";
@@ -6,6 +6,7 @@ import FileDropDown from "./FileDropDown";
 import ViewDropDown from "./ViewDropDown";
 import { DATABASE } from "../../../data/database";
 import { DatabaseType } from "../../../data/constants";
+import { SavedStatus } from "./SavedStatus";
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -41,7 +42,7 @@ export default function EditorHeader() {
 
       {/* Actions */}
       <div className="flex items-center !space-x-4">
-        <Tag color="green">Saved</Tag>
+        <SavedStatus />
         <Button icon={<ShareAltOutlined />}>Share</Button>
         <EditableSelection
           initialValue={DATABASE[type]?.name}

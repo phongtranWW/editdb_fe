@@ -1,10 +1,10 @@
 import type { DiagramAction, DiagramState } from "./types";
 
 export const initialDiagramState: DiagramState = {
+  id: "",
   type: "",
   loading: false,
   name: "",
-  error: null,
   tables: [],
   relationships: [],
 };
@@ -14,21 +14,16 @@ export function diagramReducer(
   action: DiagramAction
 ): DiagramState {
   switch (action.type) {
+    case "SET_ID":
+      return { ...state, id: action.payload };
     case "SET_LOADING":
       return { ...state, loading: action.payload };
     case "SET_NAME":
       return { ...state, name: action.payload };
-    case "SET_ERROR":
-      return { ...state, error: action.payload };
-    case "SET_DIAGRAM":
-      return {
-        ...state,
-        type: action.payload.type,
-        name: action.payload.name,
-        tables: action.payload.tables,
-        relationships: action.payload.relationships,
-        loading: false,
-      };
+    case "SET_TABLES":
+      return { ...state, tables: action.payload };
+    case "SET_RELATIONSHIPS":
+      return { ...state, relationships: action.payload };
     case "ADD_TABLE":
       return {
         ...state,
@@ -48,7 +43,6 @@ export function diagramReducer(
         ...state,
         tables: state.tables.filter((t) => t.id !== action.payload),
       };
-
     case "ADD_COLUMN":
       return {
         ...state,

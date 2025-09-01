@@ -1,6 +1,7 @@
 import { Tag, Typography } from "antd";
 import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import type { DiagramColumn } from "../../../models/diagram-column";
+import { KeyOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
@@ -43,6 +44,7 @@ export default function EditorNode({ data }: NodeProps<TableNode>) {
               <div className="flex-1 flex items-center justify-between min-w-0 mx-2">
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
                   <Text className="!text-sm !font-medium !text-gray-800 truncate flex-1">
+                    {column.isPrimary && <KeyOutlined className="mr-1" />}
                     {column.name}
                   </Text>
                 </div>

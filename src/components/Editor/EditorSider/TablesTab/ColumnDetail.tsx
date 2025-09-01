@@ -25,15 +25,7 @@ export default function ColumnDetail({
   column,
   children,
 }: ColumnDetailProps) {
-  const {
-    id: columnId,
-    name,
-    isPrimary,
-    isUnique,
-    isNullable,
-    type,
-    default: defaultValue,
-  } = column;
+  const { id: columnId, name, isPrimary, isUnique, isNullable, type } = column;
   const { dispatch, state } = useDiagram();
 
   return (
@@ -47,13 +39,6 @@ export default function ColumnDetail({
               <EditableInput
                 initialValue={name}
                 onFinish={(name) => {
-                  if (!name) {
-                    dispatch({
-                      type: "SET_ERROR",
-                      payload: "Column name cannot be empty",
-                    });
-                    return;
-                  }
                   dispatch({
                     type: "UPDATE_COLUMN",
                     payload: { id: tableId, columnId, partialColumn: { name } },
@@ -71,8 +56,6 @@ export default function ColumnDetail({
                       columnId,
                       partialColumn: {
                         isPrimary,
-                        isUnique: isPrimary ? false : undefined,
-                        isNullable: isPrimary ? false : undefined,
                       },
                     },
                   })
@@ -82,7 +65,6 @@ export default function ColumnDetail({
               <EditableSwitch
                 initialValue={isUnique}
                 finish={(isUnique) => {
-                  if (isPrimary) return;
                   dispatch({
                     type: "UPDATE_COLUMN",
                     payload: {
@@ -97,7 +79,6 @@ export default function ColumnDetail({
               <EditableSwitch
                 initialValue={isNullable}
                 finish={(isNullable) => {
-                  if (isPrimary) return;
                   dispatch({
                     type: "UPDATE_COLUMN",
                     payload: {
@@ -127,23 +108,6 @@ export default function ColumnDetail({
                   payload: { id: tableId, columnId, partialColumn: { type } },
                 })
               }
-            />
-          </Space>
-          <Space direction="vertical" size="small" className="w-full">
-            <Text className="text-xs font-medium">Default value:</Text>
-            <EditableInput
-              initialValue={defaultValue || ""}
-              onFinish={(defaultValue) =>
-                dispatch({
-                  type: "UPDATE_COLUMN",
-                  payload: {
-                    id: tableId,
-                    columnId,
-                    partialColumn: { default: defaultValue },
-                  },
-                })
-              }
-              placeholder="Default value"
             />
           </Space>
           <Space direction="vertical" size="small" className="w-full">

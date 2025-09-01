@@ -10,6 +10,7 @@ import type { Exporter } from "../../../utils/sql-export/exporter";
 import { DatabaseType } from "../../../data/constants";
 import { useIssues } from "../../../hooks/useIssues";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
+import { useAction } from "../../../hooks/useAction";
 
 export default function FileDropDown() {
   const { exportImage } = useImageExporter();
@@ -18,6 +19,7 @@ export default function FileDropDown() {
     dispatch,
   } = useDiagram();
   const { hasNoError } = useIssues();
+  const { saveAction } = useAction();
 
   // State
   const [previewSQL, setPreviewSQL] = useState<{
@@ -80,9 +82,9 @@ export default function FileDropDown() {
   const fileMenuItems: MenuProps["items"] = useMemo(
     () => [
       {
-        label: "Save (coming soon)",
+        label: "Save",
         key: "save",
-        disabled: true,
+        onClick: () => saveAction(),
       },
       {
         label: "Export as",
@@ -121,7 +123,13 @@ export default function FileDropDown() {
         disabled: true,
       },
     ],
-    [handleExportPng, handleExportJpg, handleExportSvg, handleExportSQL]
+    [
+      handleExportPng,
+      handleExportJpg,
+      handleExportSvg,
+      handleExportSQL,
+      saveAction,
+    ]
   );
 
   // ============= RENDER ============

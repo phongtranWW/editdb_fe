@@ -1,4 +1,4 @@
-import type { RelationshipType } from "../../../types/relationship-type";
+import type { RelationshipType } from "../../../../types/relationship-type";
 
 export interface RelationshipDto {
   id: string;

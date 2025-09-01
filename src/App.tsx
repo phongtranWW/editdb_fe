@@ -6,12 +6,10 @@ import LoginPage from "./pages/LoginPage";
 import { ConfigProvider } from "antd";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import theme from "./theme/theme";
-import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "@xyflow/react/dist/style.css";
 import { AuthProvider } from "./context/AuthContext";
 import EditorPage from "./pages/EditorPage";
-import TemplatesPage from "./pages/TemplatesPage";
 
 function App() {
   return (
@@ -26,15 +24,6 @@ function App() {
           {/* App Layout */}
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
-            <Route path="/templates" element={<TemplatesPage />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            />
           </Route>
 
           {/* Editor Layout */}

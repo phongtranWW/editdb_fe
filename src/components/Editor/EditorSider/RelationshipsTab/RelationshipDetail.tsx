@@ -38,9 +38,6 @@ export default function RelationshipDetail({
     );
   }, [tables, relationship.toTable]);
 
-  console.log("fromColumns", relationship.fromColumn);
-  console.log("toColumns", relationship.toColumn);
-
   return (
     <Popover
       placement="right"
@@ -85,22 +82,6 @@ export default function RelationshipDetail({
                   label: c.name,
                 }))}
                 finishSelect={(value: string) => {
-                  if (relationship.toColumn) {
-                    const toColumnType = tables
-                      .find((t) => t.id === relationship.toTable)
-                      ?.columns.find((c) => c.id === relationship.toColumn);
-                    const fromColumnType = tables
-                      .find((t) => t.id === relationship.fromTable)
-                      ?.columns.find((c) => c.id === value);
-                    if (toColumnType?.type !== fromColumnType?.type) {
-                      dispatch({
-                        type: "SET_ERROR",
-                        payload:
-                          "Relationship to column must be same with relationship 'to column'",
-                      });
-                      return;
-                    }
-                  }
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -150,24 +131,6 @@ export default function RelationshipDetail({
                 initialValue={relationship.toColumn || ""}
                 options={toColumns.map((c) => ({ value: c.id, label: c.name }))}
                 finishSelect={(value: string) => {
-                  if (relationship.fromColumn) {
-                    const fromColumnType = tables
-                      .find((t) => t.id === relationship.fromTable)
-                      ?.columns.find(
-                        (c) => c.id === relationship.fromColumn
-                      )?.type;
-                    const toColumnType = tables
-                      .find((t) => t.id === relationship.toTable)
-                      ?.columns.find((c) => c.id === value)?.type;
-                    if (fromColumnType !== toColumnType) {
-                      dispatch({
-                        type: "SET_ERROR",
-                        payload:
-                          "Relationship to column must be same with relationship 'from column'",
-                      });
-                      return;
-                    }
-                  }
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {

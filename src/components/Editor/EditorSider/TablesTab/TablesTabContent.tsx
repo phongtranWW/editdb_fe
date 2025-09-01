@@ -17,7 +17,7 @@ const { Text } = Typography;
 
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
-  console.log("Rendering TableTabContent");
+
   return (
     <TabContainer
       dataSource={state.tables}
@@ -45,13 +45,6 @@ export default function TablesTabContent() {
                 initialValue={table.name}
                 placeholder="Table name"
                 onFinish={(name) => {
-                  if (!name) {
-                    dispatch({
-                      type: "SET_ERROR",
-                      payload: "Table name cannot be empty",
-                    });
-                    return;
-                  }
                   dispatch({
                     type: "UPDATE_TABLE",
                     payload: { id: table.id, partialTable: { name } },

@@ -4,27 +4,21 @@ import type { DiagramTable } from "../../models/diagram-table";
 import type { DatabaseType } from "../../types/database-type";
 
 export interface DiagramState {
+  id: string;
   type: DatabaseType;
   loading: boolean;
   name: string;
-  error: string | null;
   tables: DiagramTable[];
   relationships: DiagramRelationship[];
 }
 
 export type DiagramAction =
+  | { type: "SET_ID"; payload: string }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_NAME"; payload: string }
   | { type: "SET_ERROR"; payload: string | null }
-  | {
-      type: "SET_DIAGRAM";
-      payload: {
-        name: string;
-        type: DatabaseType;
-        tables: DiagramTable[];
-        relationships: DiagramRelationship[];
-      };
-    }
+  | { type: "SET_TABLES"; payload: DiagramTable[] }
+  | { type: "SET_RELATIONSHIPS"; payload: DiagramRelationship[] }
   | { type: "ADD_TABLE"; payload: DiagramTable }
   | {
       type: "UPDATE_TABLE";

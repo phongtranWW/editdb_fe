@@ -5,5 +5,4 @@ export interface DiagramColumn {
   isPrimary: boolean;
   isUnique: boolean;
   isNullable: boolean;
-  default?: string;
 }

@@ -5,5 +5,4 @@ export interface ColumnDto {
   isPrimary: boolean;
   isUnique: boolean;
   isNullable: boolean;
-  default?: string;
 }

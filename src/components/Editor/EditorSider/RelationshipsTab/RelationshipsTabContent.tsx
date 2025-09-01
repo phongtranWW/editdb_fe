@@ -6,6 +6,7 @@ import RelationshipDetail from "./RelationshipDetail";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
+import { RelationshipType } from "../../../../data/constants";
 
 const { Text } = Typography;
 
@@ -40,13 +41,6 @@ export default function RelationshipsTabContent() {
                   initialValue={relationship.name}
                   placeholder="Relationship name"
                   onFinish={(name) => {
-                    if (!name) {
-                      dispatch({
-                        type: "SET_ERROR",
-                        payload: "Relationship name is cannot be empty",
-                      });
-                      return;
-                    }
                     dispatch({
                       type: "UPDATE_RELATIONSHIP",
                       payload: {
@@ -95,7 +89,7 @@ export default function RelationshipsTabContent() {
           payload: {
             id: nanoid(6),
             name: `fk_relationship_${state.relationships.length + 1}`,
-            type: "ONE-TO-ONE",
+            type: RelationshipType.ONE_TO_ONE,
           },
         });
       }}
