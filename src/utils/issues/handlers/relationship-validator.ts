@@ -63,6 +63,94 @@ export class RelationshipValidator extends BaseIssueHandler {
         });
       }
     }
+
+    // Rule 5: Detect Cycles (stack-based DFS)
+    const adjacency = new Map<string, string[]>();
+    for (const r of context.relationships.values()) {
+      if (!r.fromTable || !r.toTable) continue;
+      if (!adjacency.has(r.fromTable)) adjacency.set(r.fromTable, []);
+      adjacency.get(r.fromTable)!.push(r.toTable);
+    }
+
+    const visited = new Set<string>();
+    const inStack = new Set<string>();
+
+    for (const node of adjacency.keys()) {
+      if (visited.has(node)) continue;
+
+      const stack: { table: string; index: number }[] = [];
+      stack.push({ table: node, index: 0 });
+
+      while (stack.length > 0) {
+        const top = stack[stack.length - 1];
+        const { table, index } = top;
+
+        if (!visited.has(table)) {
+          visited.add(table);
+          inStack.add(table);
+        }
+
+        const neighbors = adjacency.get(table) || [];
+        if (index < neighbors.length) {
+          // update current index
+          top.index++;
+          const next = neighbors[index];
+          if (!visited.has(next)) {
+            stack.push({ table: next, index: 0 });
+          } else if (inStack.has(next)) {
+            context.addIssue({
+              message: `Cycle detected involving table '${next}'`,
+              type: "ERROR",
+            });
+          }
+        } else {
+          // backtrack
+          inStack.delete(table);
+          stack.pop();
+        }
+      }
+    }
+
+    // Rule 6: Duplicate relationships
+    const seen = new Map<string, string>();
+    for (const r of context.relationships.values()) {
+      if (!r.fromTable || !r.toTable) continue;
+
+      const key = `${r.fromTable}->${r.toTable}:${r.type}`;
+      if (seen.has(key)) {
+        context.addIssue({
+          message: `Duplicate relationship '${r.name}' (same as '${seen.get(
+            key
+          )}')`,
+          type: "ERROR",
+        });
+      } else {
+        seen.set(key, r.name);
+      }
+
+      // Special case: A->B ONE_TO_MANY vs B->A MANY_TO_ONE
+      if (r.type === "ONE_TO_MANY") {
+        const reverseKey = `${r.toTable}->${r.fromTable}:MANY_TO_ONE`;
+        if (seen.has(reverseKey)) {
+          context.addIssue({
+            message: `Conflicting duplicate relationship '${
+              r.name
+            }' and '${seen.get(reverseKey)}' (ONE_TO_MANY vs MANY_TO_ONE)`,
+            type: "ERROR",
+          });
+        }
+      } else if (r.type === "MANY_TO_ONE") {
+        const reverseKey = `${r.toTable}->${r.fromTable}:ONE_TO_MANY`;
+        if (seen.has(reverseKey)) {
+          context.addIssue({
+            message: `Conflicting duplicate relationship '${
+              r.name
+            }' and '${seen.get(reverseKey)}' (MANY_TO_ONE vs ONE_TO_MANY)`,
+            type: "ERROR",
+          });
+        }
+      }
+    }
     super.handle(context);
   }
 }

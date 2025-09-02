@@ -1,4 +1,4 @@
-import { Button, Dropdown, Modal, Space, type MenuProps } from "antd";
+import { Button, Dropdown, message, Modal, Space, type MenuProps } from "antd";
 import { useImageExporter } from "../../../hooks/useImageExporter";
 import { DownOutlined } from "@ant-design/icons";
 import { useMemo, useCallback, useState } from "react";
@@ -16,8 +16,8 @@ export default function FileDropDown() {
   const { exportImage } = useImageExporter();
   const {
     state: { tables, relationships, type, name },
-    dispatch,
   } = useDiagram();
+  const [messageApi, contextHolder] = message.useMessage();
   const { hasNoError } = useIssues();
   const { saveAction } = useAction();
 
@@ -46,10 +46,7 @@ export default function FileDropDown() {
   // ============= SQL EXPORT ============
   const handleExportSQL = useCallback(() => {
     if (!hasNoError()) {
-      dispatch({
-        type: "SET_ERROR",
-        payload: `The diagram has issues.`,
-      });
+      messageApi.error("There are errors in the diagram");
       return;
     }
     let exporter: Exporter;
@@ -66,7 +63,7 @@ export default function FileDropDown() {
 
     const sql = exporter.export();
     setPreviewSQL({ show: true, sql });
-  }, [hasNoError, dispatch, tables, relationships, type, name]);
+  }, [hasNoError, tables, relationships, type, name, messageApi]);
 
   const handleDownloadSQL = useCallback(() => {
     const blob = new Blob([previewSQL.sql], { type: "text/sql" });
@@ -135,6 +132,7 @@ export default function FileDropDown() {
   // ============= RENDER ============
   return (
     <>
+      {contextHolder}
       <Dropdown menu={{ items: fileMenuItems }} placement="bottomLeft">
         <Button type="text">
           <Space>
@@ -142,7 +140,6 @@ export default function FileDropDown() {
           </Space>
         </Button>
       </Dropdown>
-
       <Modal
         className="!w-[1000px]"
         title="SQL Preview"
@@ -151,11 +148,15 @@ export default function FileDropDown() {
         onOk={handleDownloadSQL}
         okText="Download SQL"
         onCancel={() => setPreviewSQL({ show: false, sql: "" })}
+        styles={{
+          body: { maxHeight: "70vh", overflowY: "auto" },
+        }}
       >
         <ReactCodeMirror
           value={previewSQL.sql}
           extensions={[sql()]}
           editable={false}
+          className="!text-xs !border !rounded !max-h-[60vh] !overflow-y-auto"
         />
       </Modal>
     </>

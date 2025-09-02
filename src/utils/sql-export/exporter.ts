@@ -1,3 +1,4 @@
+import { RelationshipType } from "../../data/constants";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
 
@@ -14,7 +15,6 @@ export abstract class Exporter {
           isPrimary: boolean;
           isUnique: boolean;
           isNullable: boolean;
-          default?: string;
         }
       >;
     }
@@ -51,7 +51,6 @@ export abstract class Exporter {
                 isPrimary: c.isPrimary,
                 isUnique: c.isUnique,
                 isNullable: c.isNullable,
-                default: c.default,
               },
             ])
           ),
@@ -86,7 +85,7 @@ export abstract class Exporter {
     // ==========================
     ddl.push("-- Create database");
     if (this.name) {
-      ddl.push(`CREATE DATABASE ${this.name};`);
+      ddl.push(`CREATE DATABASE IF NOT EXISTS ${this.name};\n`);
     }
 
     // ==========================
@@ -94,29 +93,34 @@ export abstract class Exporter {
     // ==========================
     ddl.push("-- Create tables");
     for (const table of this.tables.values()) {
-      // ==========================
-      // CREATE COLUMNS
-      // ==========================
       const columns: string[] = [];
+
       for (const column of table.columns.values()) {
-        let draf = `${column.name} ${column.type}`;
-        if (!column.isNullable) draf = draf.concat(" NOT NULL");
-        if (column.isUnique && !column.isPrimary) draf = draf.concat(" UNIQUE");
-        columns.push(draf);
+        let line = `${column.name} ${column.type}`;
+        if (!column.isNullable) line += " NOT NULL";
+        if (column.isUnique && !column.isPrimary) line += " UNIQUE";
+        columns.push(line);
       }
 
-      const primaryColumns: string[] = [];
-      for (const column of table.columns.values()) {
-        if (column.isPrimary) primaryColumns.push(column.name);
+      const primaryCols = Array.from(table.columns.values())
+        .filter((c) => c.isPrimary)
+        .map((c) => c.name);
+
+      if (primaryCols.length > 0) {
+        columns.push(`PRIMARY KEY (${primaryCols.join(", ")})`);
       }
 
-      if (primaryColumns.length > 0) {
-        columns.push(`PRIMARY KEY (${primaryColumns.join(",")})`);
-      }
+      // format SQL block
+      const tableSQL = [
+        `CREATE TABLE ${table.name} (`,
+        ...columns.map((col, i) => {
+          const isLast = i === columns.length - 1;
+          return `  ${col}${isLast ? "" : ","}`;
+        }),
+        ");\n",
+      ].join("\n");
 
-      ddl.push(
-        `CREATE TABLE ${table.name} (\n` + `${columns.join(",\n")},\n` + ");"
-      );
+      ddl.push(tableSQL);
     }
 
     // ==========================
@@ -124,19 +128,39 @@ export abstract class Exporter {
     // ==========================
     ddl.push("-- Create relationships");
     for (const relationship of this.relationships.values()) {
-      const fromTableName = this.tables.get(relationship.fromTable || "");
-      const fromColumnName = fromTableName?.columns.get(
-        relationship.fromColumn || ""
-      );
-      const toTableName = this.tables.get(relationship.toTable || "");
-      const toColumnName = toTableName?.columns.get(
-        relationship.toColumn || ""
-      );
-      ddl.push(
-        `ALTER TABLE ${fromTableName?.name} 
-           ADD CONSTRAINT ${relationship.name} 
-           FOREIGN KEY (${fromColumnName?.name}) REFERENCES ${toTableName?.name} (${toColumnName?.name});`
-      );
+      const fromTable = this.tables.get(relationship.fromTable || "");
+      const fromCol = fromTable?.columns.get(relationship.fromColumn || "");
+      const toTable = this.tables.get(relationship.toTable || "");
+      const toCol = toTable?.columns.get(relationship.toColumn || "");
+
+      if (!fromTable || !fromCol || !toTable || !toCol) continue;
+
+      switch (relationship.type) {
+        case RelationshipType.ONE_TO_ONE:
+          ddl.push(
+            `ALTER TABLE ${fromTable.name}\n` +
+              `  ADD CONSTRAINT ${relationship.name}\n` +
+              `  FOREIGN KEY (${fromCol.name})\n` +
+              `  REFERENCES ${toTable.name} (${toCol.name});\n`
+          );
+          break;
+        case RelationshipType.ONE_TO_MANY:
+          ddl.push(
+            `ALTER TABLE ${toTable.name}\n` +
+              `  ADD CONSTRAINT ${relationship.name}\n` +
+              `  FOREIGN KEY (${toCol.name})\n` +
+              `  REFERENCES ${fromTable.name} (${fromCol.name});\n`
+          );
+          break;
+        case RelationshipType.MANY_TO_ONE:
+          ddl.push(
+            `ALTER TABLE ${fromTable.name}\n` +
+              `  ADD CONSTRAINT ${relationship.name}\n` +
+              `  FOREIGN KEY (${fromCol.name})\n` +
+              `  REFERENCES ${toTable.name} (${toCol.name});\n`
+          );
+          break;
+      }
     }
 
     return ddl.join("\n");
