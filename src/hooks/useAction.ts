@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useLayoutEffect } from "react";
 import ActionContext from "../context/ActionContext";
 import { useDiagram } from "./useDiagram";
 import { deleteDiagram, updateDiagram } from "../api/diagrams/diagramApi";
@@ -12,6 +12,11 @@ export const useAction = () => {
   const {
     state: { tables, relationships, type, name, id },
   } = useDiagram();
+
+  useLayoutEffect(() => {
+    if (!id) return;
+    setSaved(false);
+  }, [tables, relationships, type, name, setSaved, id]);
 
   const saveAction = useCallback(async () => {
     if (saved) return;
@@ -57,10 +62,6 @@ export const useAction = () => {
       setLoading(false);
     }
   }, [messageApi, id, setLoading]);
-
-  useEffect(() => {
-    setSaved(false);
-  }, [tables, relationships, type, name, setSaved]);
 
   return {
     saved: context.saved,

@@ -11,15 +11,19 @@ import { DatabaseType } from "../../../data/constants";
 import { useIssues } from "../../../hooks/useIssues";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 import { useAction } from "../../../hooks/useAction";
+import { useNavigate } from "react-router";
+import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
 
 export default function FileDropDown() {
+  const navigator = useNavigate();
   const { exportImage } = useImageExporter();
   const {
     state: { tables, relationships, type, name },
   } = useDiagram();
   const [messageApi, contextHolder] = message.useMessage();
   const { hasNoError } = useIssues();
-  const { saveAction } = useAction();
+  const { saved, saveAction } = useAction();
+  useUnsavedChangesWarning(!saved);
 
   // State
   const [previewSQL, setPreviewSQL] = useState<{
@@ -115,9 +119,11 @@ export default function FileDropDown() {
         disabled: true,
       },
       {
-        label: "Exit (coming soon)",
+        label: "Exit", // Removed "coming soon"
         key: "exit",
-        disabled: true,
+        onClick: () => {
+          navigator("/");
+        },
       },
     ],
     [
@@ -126,6 +132,7 @@ export default function FileDropDown() {
       handleExportSvg,
       handleExportSQL,
       saveAction,
+      navigator,
     ]
   );
 
@@ -140,6 +147,8 @@ export default function FileDropDown() {
           </Space>
         </Button>
       </Dropdown>
+
+      {/* SQL Preview Modal */}
       <Modal
         className="!w-[1000px]"
         title="SQL Preview"

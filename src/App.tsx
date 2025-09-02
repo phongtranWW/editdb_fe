@@ -1,43 +1,15 @@
-import { Route } from "react-router";
-import { Routes } from "react-router";
-import HomePage from "./pages/HomePage";
-import AppLayout from "./components/App/AppLayout";
-import LoginPage from "./pages/LoginPage";
+import { RouterProvider } from "react-router";
 import { ConfigProvider } from "antd";
-import AuthCallbackPage from "./pages/AuthCallbackPage";
 import theme from "./theme/theme";
-import ProtectedRoute from "./components/ProtectedRoute";
 import "@xyflow/react/dist/style.css";
 import { AuthProvider } from "./context/AuthContext";
-import EditorPage from "./pages/EditorPage";
+import { router } from "./router";
 
 function App() {
   return (
     <ConfigProvider theme={theme}>
       <AuthProvider>
-        <Routes>
-          <Route path="/auth/callback" element={<AuthCallbackPage />} />
-
-          {/* Form Layout */}
-          <Route path="/login" element={<LoginPage />} />
-
-          {/* App Layout */}
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<HomePage />} />
-          </Route>
-
-          {/* Editor Layout */}
-          <Route
-            path="/diagrams/:id"
-            element={
-              <ProtectedRoute>
-                <EditorPage />
-              </ProtectedRoute>
-            }
-          ></Route>
-
-          <Route path="*" element={<div>404</div>} />
-        </Routes>
+        <RouterProvider router={router} />
       </AuthProvider>
     </ConfigProvider>
   );
