@@ -13,3 +13,8 @@ export const IssueType = {
   ERROR: "ERROR",
   WARNING: "WARNING",
 };
+
+export const Sort = {
+  ASC: "asc",
+  DESC: "desc",
+};

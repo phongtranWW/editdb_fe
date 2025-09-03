@@ -43,11 +43,6 @@ export default function AppHeader() {
       onClick: () => navigate("/profile"),
     },
     {
-      key: "my-diagrams",
-      label: "My Diagrams",
-      onClick: () => navigate("/diagrams"),
-    },
-    {
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Logout",

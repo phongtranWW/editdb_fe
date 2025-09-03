@@ -5,6 +5,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 import EditorPage from "./pages/EditorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { createBrowserRouter } from "react-router";
+import ProfilePage from "./pages/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,14 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
