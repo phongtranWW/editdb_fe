@@ -17,7 +17,6 @@ export class IssueContext {
           isPrimary: boolean;
           isUnique: boolean;
           isNullable: boolean;
-          default?: string;
         }
       >;
     }
@@ -54,7 +53,6 @@ export class IssueContext {
                 isPrimary: c.isPrimary,
                 isUnique: c.isUnique,
                 isNullable: c.isNullable,
-                default: c.default,
               },
             ])
           ),
