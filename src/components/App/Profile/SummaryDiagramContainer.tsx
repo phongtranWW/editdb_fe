@@ -1,14 +1,4 @@
-import {
-  Button,
-  Flex,
-  Input,
-  List,
-  message,
-  Modal,
-  Select,
-  Space,
-  Typography,
-} from "antd";
+import { Button, Flex, Input, List, Select, Space, Typography } from "antd";
 import { useSummaryDiagrams } from "../../../hooks/useSummaryDiagrams";
 import {
   DeleteOutlined,
@@ -18,35 +8,18 @@ import {
 } from "@ant-design/icons";
 import { Sort } from "../../../data/constants";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
-import type { DatabaseType } from "../../../types/database-type";
+import { useState } from "react";
 import { DATABASE } from "../../../data/database";
+import CreateDiagramModal from "./CreateDiagramModal";
+import type { CreateDiagramDto } from "../../../api/diagrams/dtos/create-diagram-dto";
 
 const { Text } = Typography;
 
 export function SummaryDiagramContainer() {
   const navigator = useNavigate();
-  const {
-    data,
-    loading,
-    error,
-    params,
-    setParams,
-    deleteSDiagram,
-    createSDiagram,
-  } = useSummaryDiagrams();
+  const { data, loading, params, setParams, deleteSDiagram, createSDiagram } =
+    useSummaryDiagrams();
   const [showCreateDiagramModal, setShowCreateDiagramModal] = useState(false);
-  const [createSDiagramPayload, setCreateSDiagramPayload] = useState<{
-    name: string;
-    type: DatabaseType;
-  }>({ name: "", type: "MYSQL" });
-  const [messageApi, contextHolder] = message.useMessage();
-
-  useEffect(() => {
-    if (error) {
-      messageApi.error(error);
-    }
-  }, [error, messageApi]);
 
   return (
     <Flex
@@ -54,7 +27,6 @@ export function SummaryDiagramContainer() {
       justify="center"
       className="!w-full !rounded-lg !border-1 !border-gray-300"
     >
-      {contextHolder}
       <Flex vertical align="center" justify="start" className="!w-full">
         <Flex
           align="center"
@@ -139,46 +111,15 @@ export function SummaryDiagramContainer() {
           }}
         />
       </Flex>
-      <Modal
-        title="Create Diagram"
-        open={showCreateDiagramModal}
-        onCancel={() => setShowCreateDiagramModal(false)}
-        onOk={() => {
-          createSDiagram(createSDiagramPayload);
+      <CreateDiagramModal
+        loading={loading}
+        show={showCreateDiagramModal}
+        onClose={() => setShowCreateDiagramModal(false)}
+        onOk={(dto: CreateDiagramDto) => {
+          createSDiagram(dto);
           setShowCreateDiagramModal(false);
         }}
-      >
-        <Flex align="center" justify="space-between" gap={16}>
-          <Input
-            placeholder="Diagram name"
-            onChange={(e) => {
-              setCreateSDiagramPayload({
-                ...createSDiagramPayload,
-                name: e.target.value,
-              });
-            }}
-          />
-          <Select
-            defaultValue={"MYSQL"}
-            options={[
-              {
-                value: "MYSQL",
-                label: "MYSQL",
-              },
-              {
-                value: "POSTGRESQL",
-                label: "POSTGRESQL",
-              },
-            ]}
-            onChange={(type) => {
-              setCreateSDiagramPayload({
-                ...createSDiagramPayload,
-                type,
-              });
-            }}
-          />
-        </Flex>
-      </Modal>
+      />
     </Flex>
   );
 }

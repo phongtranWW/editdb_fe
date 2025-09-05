@@ -1,9 +1,10 @@
 import { createContext, useCallback, useEffect, useReducer } from "react";
 import { diagramReducer, initialDiagramState } from "./reducer";
 import type { DiagramAction, DiagramContextValue } from "./types";
-import { message } from "antd";
 import { getDiagram } from "../../api/diagrams/diagramApi";
 import { validateAction } from "./validateAction";
+import { useMessage } from "../../hooks/useMessage";
+import { handleApiError } from "../../utils/handleApiError";
 
 const DiagramContext = createContext<DiagramContextValue | null>(null);
 
@@ -14,19 +15,19 @@ export function DiagramProvider({
   id: string;
   children: React.ReactNode;
 }) {
-  const [messageApi, contextHolder] = message.useMessage();
+  const { error } = useMessage();
   const [state, dispatch] = useReducer(diagramReducer, initialDiagramState);
 
   const validatedDispatch = useCallback(
     (action: DiagramAction) => {
-      const error = validateAction(action);
-      if (error) {
-        messageApi.error(error);
+      const err = validateAction(action);
+      if (err) {
+        error(err);
         return;
       }
       dispatch(action);
     },
-    [messageApi]
+    [error]
   );
 
   useEffect(() => {
@@ -51,9 +52,7 @@ export function DiagramProvider({
         dispatch({ type: "SET_TYPE", payload: diagram.type });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
-        const errMsg =
-          error?.response?.data?.message || error?.message || String(error);
-        messageApi.error(`Error loading diagram: ${errMsg}`);
+        error(handleApiError(error, "Diagram"));
       } finally {
         if (mounted) dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -63,7 +62,7 @@ export function DiagramProvider({
     return () => {
       mounted = false;
     };
-  }, [id, messageApi]);
+  }, [id, error]);
 
   return (
     <DiagramContext.Provider
@@ -72,7 +71,6 @@ export function DiagramProvider({
         dispatch: validatedDispatch,
       }}
     >
-      {contextHolder}
       {children}
     </DiagramContext.Provider>
   );

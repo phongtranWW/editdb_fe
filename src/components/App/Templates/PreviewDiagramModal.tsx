@@ -2,12 +2,9 @@ import { Empty, Modal, Space, Typography } from "antd";
 import type { Diagram } from "../../../models/diagram";
 import { PreviewDiagram } from "../../UI/PreviewDiagram";
 import { DATABASE } from "../../../data/database";
-import { LoadingOutlined } from "@ant-design/icons";
-
 const { Text } = Typography;
 
 interface PreviewDiagramModalProps {
-  loading: boolean;
   show: boolean;
   diagram?: Diagram;
   onClose: () => void;
@@ -15,7 +12,6 @@ interface PreviewDiagramModalProps {
 }
 
 export default function PreviewDiagramModal({
-  loading,
   show,
   diagram,
   onClose,
@@ -31,7 +27,6 @@ export default function PreviewDiagramModal({
           {diagram?.type && (
             <img src={DATABASE[diagram?.type].image} width={24} />
           )}
-          {loading && <LoadingOutlined spin className="!text-[24px]" />}
         </Space>
       }
       open={show}

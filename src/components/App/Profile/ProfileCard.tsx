@@ -1,10 +1,31 @@
-import { Card, Flex, Image, Space, Tag, Typography } from "antd";
+import { Card, Flex, Image, Space, Tag, Typography, Skeleton } from "antd";
 import { useProfile } from "../../../hooks/useProfile";
 
 const { Text } = Typography;
 
 export function ProfileCard() {
-  const { profile } = useProfile();
+  const { profile, loading } = useProfile();
+
+  if (loading || !profile) {
+    return (
+      <Card className="!w-full !p-2 !border-1 !border-gray-300">
+        <Skeleton
+          active
+          avatar={{
+            size: 128,
+            shape: "circle",
+          }}
+          paragraph={{
+            rows: 2,
+            width: ["40%", "60%", "80%", "50%"],
+          }}
+          title={{
+            width: "30%",
+          }}
+        />
+      </Card>
+    );
+  }
 
   return (
     <Card className="!w-full !p-2 !border-1 !border-gray-300">

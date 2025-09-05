@@ -10,10 +10,12 @@ import PreviewDiagramModal from "./PreviewDiagramModal";
 import Meta from "antd/es/card/Meta";
 import { createDiagram } from "../../../api/diagrams/diagramApi";
 import { useNavigate } from "react-router";
+import { useMessage } from "../../../hooks/useMessage";
+import axios from "axios";
 
 export const TemplatesContainer = () => {
   const navigator = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const { error, loading, closeLoading, success } = useMessage();
   const [data, setData] = useState<ApiResponse<Template>>({
     data: [],
     total: 0,
@@ -56,8 +58,11 @@ export const TemplatesContainer = () => {
   }, [params]);
 
   const handleConfirm = useCallback(async () => {
-    if (!previewDiagram.diagram) return;
-    setLoading(true);
+    if (!previewDiagram.diagram) {
+      error("No diagram selected");
+      return;
+    }
+    loading("Creating diagram...");
     try {
       const diagram = await createDiagram({
         name: previewDiagram.diagram.name,
@@ -65,15 +70,34 @@ export const TemplatesContainer = () => {
         tables: previewDiagram.diagram.tables,
         relationships: previewDiagram.diagram.relationships,
       });
+      success("Diagram created successfully.");
       setPreviewDiagram({ show: false, diagram: undefined });
       navigator(`/diagrams/${diagram.id}`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        if (status === 400) {
+          error("Invalid data. Please check your diagram details.");
+        } else if (status === 401) {
+          error("You are not authorized. Please log in.");
+          navigator("/login");
+        } else {
+          error("Something went wrong. Please try again.");
+        }
+      } else {
+        error("Unexpected error occurred.");
+      }
     } finally {
-      setLoading(false);
+      closeLoading();
     }
-  }, [previewDiagram.diagram, navigator]);
+  }, [
+    previewDiagram.diagram,
+    navigator,
+    error,
+    loading,
+    closeLoading,
+    success,
+  ]);
 
   return (
     <Flex vertical align="center" justify="center" className="!w-full">
@@ -143,7 +167,6 @@ export const TemplatesContainer = () => {
         }}
       />
       <PreviewDiagramModal
-        loading={loading}
         show={previewDiagram.show}
         diagram={previewDiagram.diagram}
         onClose={() => setPreviewDiagram({ show: false, diagram: undefined })}
