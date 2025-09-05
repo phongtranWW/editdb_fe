@@ -5,8 +5,8 @@ import {
   type Edge,
   type EdgeProps,
 } from "@xyflow/react";
-import type { RelationshipType } from "../../../types/relationship-type";
-import { getEdgeParams } from "../../../utils/getEdgeParams";
+import type { RelationshipType } from "../../types/relationship-type";
+import { getEdgeParams } from "../../utils/getEdgeParams";
 
 type RelationshipEdge = Edge<
   {

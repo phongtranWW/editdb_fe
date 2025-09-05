@@ -1,6 +1,6 @@
 import { Tag, Typography } from "antd";
 import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
-import type { DiagramColumn } from "../../../models/diagram-column";
+import type { DiagramColumn } from "../../models/diagram-column";
 import { KeyOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;

@@ -6,6 +6,7 @@ import EditorPage from "./pages/EditorPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { createBrowserRouter } from "react-router";
 import ProfilePage from "./pages/ProfilePage";
+import TemplatesPage from "./pages/TemplatesPage";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/templates",
+        element: <TemplatesPage />,
       },
       {
         path: "/profile",

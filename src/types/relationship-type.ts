@@ -1,4 +1,3 @@
-import type { RelationshipType } from "../data/constants";
+import type { Relationship } from "../data/constants";
 
-export type RelationshipType =
-  (typeof RelationshipType)[keyof typeof RelationshipType];
+export type RelationshipType = (typeof Relationship)[keyof typeof Relationship];

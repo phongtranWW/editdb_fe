@@ -1,7 +1,7 @@
 import { Button, Flex, List, Space, Tag, Typography } from "antd";
 import TabContainer from "../TabContainer";
 import CollapsableTabItem from "../CollapsableTabItem";
-import EditableInput from "../../../ui/EditableInput";
+import EditableInput from "../../../UI/EditableInput";
 import ColumnDetail from "./ColumnDetail";
 import {
   BorderOutlined,

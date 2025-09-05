@@ -1,11 +1,11 @@
 import { Button, Image, Layout, Typography } from "antd";
-import EditableSelection from "../../ui/EditableSelection";
+import EditableSelection from "../../UI/EditableSelection";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../hooks/useDiagram";
 import FileDropDown from "./FileDropDown";
 import ViewDropDown from "./ViewDropDown";
 import { DATABASE } from "../../../data/database";
-import { DatabaseType } from "../../../data/constants";
+import { Database } from "../../../data/constants";
 import { SavedStatus } from "./SavedStatus";
 
 const { Header } = Layout;
@@ -46,7 +46,7 @@ export default function EditorHeader() {
         <Button icon={<ShareAltOutlined />}>Share</Button>
         <EditableSelection
           initialValue={DATABASE[type]?.name}
-          options={Object.values(DatabaseType).map((type) => ({
+          options={Object.values(Database).map((type) => ({
             label: DATABASE[type].name,
             value: type,
           }))}

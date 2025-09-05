@@ -1,4 +1,4 @@
-import EditableInput from "../../../ui/EditableInput";
+import EditableInput from "../../../UI/EditableInput";
 import CollapsableTabItem from "../CollapsableTabItem";
 import TabContainer from "../TabContainer";
 import { Flex, Space, Tag, Typography } from "antd";
@@ -6,7 +6,7 @@ import RelationshipDetail from "./RelationshipDetail";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
-import { RelationshipType } from "../../../../data/constants";
+import { Relationship } from "../../../../data/constants";
 
 const { Text } = Typography;
 
@@ -89,7 +89,7 @@ export default function RelationshipsTabContent() {
           payload: {
             id: nanoid(6),
             name: `fk_relationship_${state.relationships.length + 1}`,
-            type: RelationshipType.ONE_TO_ONE,
+            type: Relationship.ONE_TO_ONE,
           },
         });
       }}

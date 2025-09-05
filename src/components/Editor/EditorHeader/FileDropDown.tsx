@@ -7,7 +7,7 @@ import { PSQLExporter } from "../../../utils/sql-export/psql-exporter";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import type { Exporter } from "../../../utils/sql-export/exporter";
-import { DatabaseType } from "../../../data/constants";
+import { Database } from "../../../data/constants";
 import { useIssues } from "../../../hooks/useIssues";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 import { useAction } from "../../../hooks/useAction";
@@ -55,10 +55,10 @@ export default function FileDropDown() {
     }
     let exporter: Exporter;
     switch (type) {
-      case DatabaseType.POSTGRESQL:
+      case Database.POSTGRESQL:
         exporter = new PSQLExporter(tables, relationships, name);
         break;
-      case DatabaseType.MYSQL:
+      case Database.MYSQL:
         exporter = new MySQLExporter(tables, relationships, name);
         break;
       default:

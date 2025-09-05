@@ -5,9 +5,9 @@ import {
   KeyOutlined,
   QuestionOutlined,
 } from "@ant-design/icons";
-import EditableInput from "../../../ui/EditableInput";
-import EditableSelection from "../../../ui/EditableSelection";
-import EditableSwitch from "../../../ui/EditableSwitch";
+import EditableInput from "../../../UI/EditableInput";
+import EditableSelection from "../../../UI/EditableSelection";
+import EditableSwitch from "../../../UI/EditableSwitch";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import { DATABASE } from "../../../../data/database";
 import type { DiagramColumn } from "../../../../models/diagram-column";

@@ -1,9 +1,9 @@
-import { DatabaseType } from "./constants";
+import { Database } from "./constants";
 import mysqlImage from "../assets/mysql-icon.png";
 import postgresImage from "../assets/postgres-icon.png";
 
 export const DATABASE = {
-  [DatabaseType.POSTGRESQL]: {
+  [Database.POSTGRESQL]: {
     name: "POSTGRES",
     columnType: [
       // Numeric
@@ -40,7 +40,7 @@ export const DATABASE = {
     image: postgresImage,
   },
 
-  [DatabaseType.MYSQL]: {
+  [Database.MYSQL]: {
     name: "MYSQL",
     columnType: [
       // Numeric

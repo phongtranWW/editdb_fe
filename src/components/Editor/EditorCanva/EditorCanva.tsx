@@ -13,17 +13,8 @@ import {
 import { useEffect } from "react";
 import { useDiagram } from "../../../hooks/useDiagram";
 import { useView } from "../../../hooks/useView";
-import EditorNode from "./EditorNode";
-import { EditorEdge } from "./EditorEdge";
 import { generateNodePosition } from "../../../utils/generateNodePosition";
-
-const nodeTypes = {
-  tableNode: EditorNode,
-};
-
-const edgeTypes = {
-  relationshipEdge: EditorEdge,
-};
+import { edgeTypes, nodeTypes } from "../../../data/constants";
 
 export function EditorCanva() {
   const {

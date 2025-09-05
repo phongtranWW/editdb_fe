@@ -1,11 +1,11 @@
 import { Button, Flex, Popover, Space, Typography } from "antd";
-import EditableSelection from "../../../ui/EditableSelection";
+import EditableSelection from "../../../UI/EditableSelection";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
 import type { DiagramColumn } from "../../../../models/diagram-column";
-import { RelationshipType } from "../../../../data/constants";
+import { Relationship } from "../../../../data/constants";
 const { Text } = Typography;
 
 interface RelationshipDetailProps {
@@ -152,7 +152,7 @@ export default function RelationshipDetail({
               className="!w-full"
               size="small"
               initialValue={relationship.type}
-              options={Object.values(RelationshipType).map((t) => ({
+              options={Object.values(Relationship).map((t) => ({
                 value: t,
                 label: t,
               }))}

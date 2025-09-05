@@ -1,4 +1,4 @@
-import { RelationshipType } from "../../data/constants";
+import { Relationship } from "../../data/constants";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
 
@@ -136,7 +136,7 @@ export abstract class Exporter {
       if (!fromTable || !fromCol || !toTable || !toCol) continue;
 
       switch (relationship.type) {
-        case RelationshipType.ONE_TO_ONE:
+        case Relationship.ONE_TO_ONE:
           ddl.push(
             `ALTER TABLE ${fromTable.name}\n` +
               `  ADD CONSTRAINT ${relationship.name}\n` +
@@ -144,7 +144,7 @@ export abstract class Exporter {
               `  REFERENCES ${toTable.name} (${toCol.name});\n`
           );
           break;
-        case RelationshipType.ONE_TO_MANY:
+        case Relationship.ONE_TO_MANY:
           ddl.push(
             `ALTER TABLE ${toTable.name}\n` +
               `  ADD CONSTRAINT ${relationship.name}\n` +
@@ -152,7 +152,7 @@ export abstract class Exporter {
               `  REFERENCES ${fromTable.name} (${fromCol.name});\n`
           );
           break;
-        case RelationshipType.MANY_TO_ONE:
+        case Relationship.MANY_TO_ONE:
           ddl.push(
             `ALTER TABLE ${fromTable.name}\n` +
               `  ADD CONSTRAINT ${relationship.name}\n` +
