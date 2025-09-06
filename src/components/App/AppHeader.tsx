@@ -57,7 +57,13 @@ export default function AppHeader() {
     <Header className="flex justify-between items-center py-0 px-4 shadow-md">
       {/* Left side: Logo + Menu */}
       <div className="flex items-center space-x-4">
-        <Image src="/logo.png" width={32} preview={false} />
+        <Image
+          className="cursor-pointer"
+          src="/logo.png"
+          width={32}
+          preview={false}
+          onClick={() => navigate("/")}
+        />
         <Menu
           mode="horizontal"
           selectedKeys={[location.pathname]}
