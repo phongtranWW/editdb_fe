@@ -54,7 +54,7 @@ export default function AppHeader() {
   ];
 
   return (
-    <Header className="flex justify-between items-center py-0 px-4 shadow-md">
+    <Header className="flex justify-between items-center py-0 px-4 shadow-md z-0">
       {/* Left side: Logo + Menu */}
       <div className="flex items-center space-x-4">
         <Image
