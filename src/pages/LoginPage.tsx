@@ -1,120 +1,110 @@
-import {
-  Form,
-  Input,
-  Button,
-  Divider,
-  Checkbox,
-  Typography,
-  Space,
-  Image,
-} from "antd";
-import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons";
-import FormLayout from "../components/Form/FormLayout";
+import { Form, Input, Button, Divider, Typography, Image, Flex } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import GoogleLoginButton from "../components/Form/Login/GoogleLoginButton";
+import { useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
+import { useCallback } from "react";
+import type { LoginDto } from "../api/auth/dtos/login-dto";
 
-const { Title, Text, Link } = Typography;
+const { Text } = Typography;
 
 export default function LoginPage() {
-  const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
-  };
+  const navigator = useNavigate();
+
+  const { login } = useAuth();
+
+  const handleLocalLogin = useCallback(
+    async (values: LoginDto) => {
+      const success = await login(values);
+      if (success) {
+        navigator("/");
+      }
+    },
+    [login, navigator]
+  );
 
   return (
-    <FormLayout>
-      <div className="text-center mb-8">
+    <Flex vertical align="center" justify="center" className="!p-2" gap={16}>
+      <Flex vertical align="center" justify="center" gap={8}>
         {/* Header */}
-        <Image src="/logo.png" alt="Logo" width={64} />
-        <Title level={2} className="mb-2">
-          Welcome to EDITDB
-        </Title>
-      </div>
-
-      <Space direction="vertical" size="small" className="w-full">
-        {/* Google Login Button */}
-        <Button
-          size="large"
-          icon={<GoogleOutlined />}
-          className="w-full h-[44px]"
-          onClick={handleGoogleLogin}
+        <Image
+          className="cursor-pointer"
+          src="/logo.png"
+          alt="Logo"
+          width={32}
+          preview={false}
+          onClick={() => navigator("/")}
+        />
+        <Text className="!text-2xl !font-semibold !text-orange-400">
+          Welcome to EditDB
+        </Text>
+      </Flex>
+      <GoogleLoginButton />
+      <Divider size="small">or</Divider>
+      <Form
+        name="login"
+        layout="vertical"
+        autoComplete="off"
+        size="large"
+        className="w-full"
+        onFinish={handleLocalLogin}
+      >
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your email!",
+            },
+            {
+              type: "email",
+              message: "Email is not valid!",
+            },
+          ]}
         >
-          Login with Google
-        </Button>
-
-        {/* Divider */}
-        <Divider>or</Divider>
-
-        {/* Login Form */}
-        <Form name="login" layout="vertical" autoComplete="off" size="large">
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                message: "Please input your email!",
-              },
-              {
-                type: "email",
-                message: "Email is not valid!",
-              },
-            ]}
+          <Input
+            prefix={<MailOutlined className="!text-gray-400" />}
+            placeholder="Enter your email"
+            autoComplete="email"
+          />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your password!",
+            },
+          ]}
+        >
+          <Input.Password
+            prefix={<LockOutlined className="!text-gray-400" />}
+            placeholder="Enter your password"
+            autoComplete="current-password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            size="large"
           >
-            <Input
-              prefix={<UserOutlined className="text-gray-400" />}
-              placeholder="Enter your email"
-              autoComplete="email"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-              {
-                min: 6,
-                message: "Password must be at least 6 characters!",
-              },
-            ]}
-          >
-            <Input.Password
-              prefix={<LockOutlined className="text-gray-400" />}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-            />
-          </Form.Item>
-
-          {/* Remember me and Forgot password */}
-          <Form.Item>
-            <div className="flex items-center justify-between">
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-              <Link>Forgot password?</Link>
-            </div>
-          </Form.Item>
-
-          {/* Submit Button */}
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="w-full"
-              size="large"
-              style={{ height: "44px" }}
-            >
-              Login
-            </Button>
-          </Form.Item>
-        </Form>
-        <div className="text-center">
-          <Text type="secondary">
-            Don't have an account? <Link strong>Register now</Link>
-          </Text>
-        </div>
-      </Space>
-    </FormLayout>
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+      <Text>
+        Don't have an account?{" "}
+        <Text
+          className="!font-semibold !text-orange-400 !cursor-pointer"
+          onClick={() => navigator("/register")}
+        >
+          Register now
+        </Text>
+      </Text>
+    </Flex>
   );
 }

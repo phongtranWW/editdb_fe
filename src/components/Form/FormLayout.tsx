@@ -1,13 +1,12 @@
-import { Card } from "antd";
+import { Card, Flex } from "antd";
+import { Outlet } from "react-router";
 
-export default function FormLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function FormLayout() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg">{children}</Card>
-    </div>
+    <Flex className="!h-screen !w-full" justify="center" align="center">
+      <Card className="lg:w-1/3 md:w-1/2 w-full !m-4 shadow-lg">
+        <Outlet />
+      </Card>
+    </Flex>
   );
 }

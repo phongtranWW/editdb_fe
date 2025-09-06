@@ -7,9 +7,10 @@ export function handleApiError(err: unknown, context?: string) {
 
     switch (status) {
       case 400:
-        message = `Bad request. Please check your ${context || "request"}.`;
+        message = `Bad request: ${err.response?.data.message}`;
         break;
       case 401:
+        localStorage.removeItem("access_token");
         message = "You are not logged in.";
         break;
       case 403:

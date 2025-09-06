@@ -46,7 +46,10 @@ export default function AppHeader() {
       key: "logout",
       icon: <LogoutOutlined />,
       label: "Logout",
-      onClick: logout,
+      onClick: () => {
+        logout();
+        navigate("/");
+      },
     },
   ];
 

@@ -1,19 +1,16 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import type { User } from "../models/user";
 import { decodeJWT, isTokenValid } from "../utils/jwt";
 
-interface UserState {
+interface AuthContextValue {
   user: User | null;
-  checkAuth: () => boolean;
-  login: (token: string) => void;
-  logout: () => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-const AuthContext = createContext<UserState | null>(null);
+const AuthContext = createContext<AuthContextValue | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  // Initialize auth state
   useEffect(() => {
     const savedToken = localStorage.getItem("access_token");
     if (savedToken && isTokenValid(savedToken)) {
@@ -23,27 +20,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const login = (newToken: string) => {
-    localStorage.setItem("access_token", newToken);
-    setUser(decodeJWT(newToken));
-  };
-
-  const logout = () => {
-    localStorage.removeItem("access_token");
-    setUser(null);
-  };
-
-  const checkAuth = (): boolean => {
-    const currentToken = localStorage.getItem("access_token");
-    if (!currentToken || !isTokenValid(currentToken)) {
-      logout();
-      return false;
-    }
-    return true;
-  };
-
   return (
-    <AuthContext.Provider value={{ user, checkAuth, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

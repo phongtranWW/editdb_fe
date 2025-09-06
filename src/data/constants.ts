@@ -22,6 +22,11 @@ export const Sort = {
   DESC: "desc",
 };
 
+export const Role = {
+  USER: "user",
+  ADMIN: "admin",
+};
+
 export const nodeTypes = {
   tableNode: EditorNode,
 };

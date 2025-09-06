@@ -7,6 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { createBrowserRouter } from "react-router";
 import ProfilePage from "./pages/ProfilePage";
 import TemplatesPage from "./pages/TemplatesPage";
+import FormLayout from "./components/Form/FormLayout";
+import RegisterPage from "./pages/RegisterPage";
 
 export const router = createBrowserRouter([
   {
@@ -14,8 +16,17 @@ export const router = createBrowserRouter([
     element: <AuthCallbackPage />,
   },
   {
-    path: "/login",
-    element: <LoginPage />,
+    element: <FormLayout />,
+    children: [
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+    ],
   },
   {
     element: <AppLayout />,
