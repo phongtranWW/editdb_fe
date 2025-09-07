@@ -85,7 +85,7 @@ export abstract class Exporter {
     // ==========================
     ddl.push("-- Create database");
     if (this.name) {
-      ddl.push(`CREATE DATABASE IF NOT EXISTS ${this.name};\n`);
+      ddl.push(`CREATE DATABASE ${this.name};\n`);
     }
 
     // ==========================
