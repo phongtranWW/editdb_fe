@@ -31,7 +31,7 @@ export const PRODUCTS = {
     {
       id: nanoid(6),
       name: "price",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: false,

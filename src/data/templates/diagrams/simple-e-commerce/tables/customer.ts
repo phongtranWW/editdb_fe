@@ -39,7 +39,7 @@ export const CUSTOMERS = {
     {
       id: nanoid(6),
       name: "phone",
-      type: "VARCHAR(255)",
+      type: "VARCHAR(50)",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
