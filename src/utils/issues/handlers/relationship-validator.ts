@@ -116,7 +116,7 @@ export class RelationshipValidator extends BaseIssueHandler {
     for (const r of context.relationships.values()) {
       if (!r.fromTable || !r.toTable) continue;
 
-      const key = `${r.fromTable}->${r.toTable}:${r.type}`;
+      const key = `${r.fromTable}:${r.fromColumn}->${r.toTable}:${r.toColumn}(${r.type})`;
       if (seen.has(key)) {
         context.addIssue({
           message: `Duplicate relationship '${r.name}' (same as '${seen.get(
@@ -126,29 +126,6 @@ export class RelationshipValidator extends BaseIssueHandler {
         });
       } else {
         seen.set(key, r.name);
-      }
-
-      // Special case: A->B ONE_TO_MANY vs B->A MANY_TO_ONE
-      if (r.type === "ONE_TO_MANY") {
-        const reverseKey = `${r.toTable}->${r.fromTable}:MANY_TO_ONE`;
-        if (seen.has(reverseKey)) {
-          context.addIssue({
-            message: `Conflicting duplicate relationship '${
-              r.name
-            }' and '${seen.get(reverseKey)}' (ONE_TO_MANY vs MANY_TO_ONE)`,
-            type: "ERROR",
-          });
-        }
-      } else if (r.type === "MANY_TO_ONE") {
-        const reverseKey = `${r.toTable}->${r.fromTable}:ONE_TO_MANY`;
-        if (seen.has(reverseKey)) {
-          context.addIssue({
-            message: `Conflicting duplicate relationship '${
-              r.name
-            }' and '${seen.get(reverseKey)}' (MANY_TO_ONE vs ONE_TO_MANY)`,
-            type: "ERROR",
-          });
-        }
       }
     }
     super.handle(context);
