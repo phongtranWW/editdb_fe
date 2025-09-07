@@ -39,7 +39,7 @@ export const ACCOUNTS = {
     {
       id: nanoid(6),
       name: "balance",
-      type: "FLOAT",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,

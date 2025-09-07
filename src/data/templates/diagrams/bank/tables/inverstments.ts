@@ -31,7 +31,7 @@ export const INVESTMENTS = {
     {
       id: nanoid(6),
       name: "amount",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
@@ -39,7 +39,7 @@ export const INVESTMENTS = {
     {
       id: nanoid(6),
       name: "date",
-      type: "DATE",
+      type: "TIMESTAMP",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
@@ -47,7 +47,7 @@ export const INVESTMENTS = {
     {
       id: nanoid(6),
       name: "current_val",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,

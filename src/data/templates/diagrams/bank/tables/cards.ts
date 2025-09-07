@@ -39,7 +39,7 @@ export const CARDS = {
     {
       id: nanoid(6),
       name: "limit",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,

@@ -23,7 +23,7 @@ export const LOANS = {
     {
       id: nanoid(6),
       name: "amount",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
@@ -31,7 +31,7 @@ export const LOANS = {
     {
       id: nanoid(6),
       name: "rate",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,

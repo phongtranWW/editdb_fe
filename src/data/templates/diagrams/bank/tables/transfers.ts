@@ -39,7 +39,7 @@ export const TRANSFERS = {
     {
       id: nanoid(6),
       name: "amount",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
