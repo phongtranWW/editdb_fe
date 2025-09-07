@@ -31,7 +31,7 @@ export const POSTS = {
     {
       id: nanoid(6),
       name: "title",
-      type: "VARCHAR(200)",
+      type: "VARCHAR(255)",
       isPrimary: false,
       isUnique: false,
       isNullable: false,

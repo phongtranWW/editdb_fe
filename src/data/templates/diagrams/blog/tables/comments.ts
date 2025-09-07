@@ -23,7 +23,7 @@ export const COMMENTS = {
     {
       id: nanoid(6),
       name: "user_id",
-      type: "INTTEGER",
+      type: "INTEGER",
       isPrimary: false,
       isUnique: false,
       isNullable: false,
