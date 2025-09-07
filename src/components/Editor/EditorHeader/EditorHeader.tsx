@@ -7,11 +7,13 @@ import ViewDropDown from "./ViewDropDown";
 import { DATABASE } from "../../../data/database";
 import { Database } from "../../../data/constants";
 import { SavedStatus } from "./SavedStatus";
+import { useNavigate } from "react-router";
 
 const { Header } = Layout;
 const { Text } = Typography;
 
 export default function EditorHeader() {
+  const navigator = useNavigate();
   const {
     state: { type, name },
     dispatch,
@@ -21,7 +23,13 @@ export default function EditorHeader() {
     <Header className="flex justify-between items-center py-0 px-4 shadow-md z-10">
       {/* Logo + Title */}
       <div className="flex items-center space-x-4">
-        <Image src="/logo.png" width={32} preview={false} />
+        <Image
+          className="cursor-pointer"
+          src="/logo.png"
+          width={32}
+          preview={false}
+          onClick={() => navigator("/")}
+        />
         <Text
           copyable={false}
           className="font-medium !text-xl !m-0"

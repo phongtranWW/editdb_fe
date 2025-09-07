@@ -26,6 +26,7 @@ export const TemplatesContainer = () => {
   const [params, setParams] = useState<Params>({
     page: 1,
     limit: 8,
+    sort: Sort.ASC,
   });
   const [previewDiagram, setPreviewDiagram] = useState<{
     show: boolean;
