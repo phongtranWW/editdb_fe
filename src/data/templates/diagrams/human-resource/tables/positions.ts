@@ -23,7 +23,7 @@ export const POSITIONS = {
     {
       id: nanoid(6),
       name: "salary",
-      type: "DOUBLE PRECISION",
+      type: "NUMERIC",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
