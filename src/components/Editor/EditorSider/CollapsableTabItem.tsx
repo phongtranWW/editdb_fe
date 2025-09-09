@@ -1,26 +1,36 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Collapse, Popconfirm, Typography } from "antd";
-const { Text } = Typography;
+import { Button, Collapse, Popconfirm } from "antd";
+import DoubleClickInput from "../../UI/DoubleClickInput";
 
 interface CollapsableTabItemProps {
   label: string;
+  changeLabel: (label: string) => void;
   deleteItem: () => void;
   children: React.ReactNode;
 }
 
 export default function CollapsableTabItem({
   label,
+  changeLabel,
   deleteItem,
   children,
 }: CollapsableTabItemProps) {
   return (
     <Collapse
+      collapsible="icon"
       bordered={false}
       className="!rounded-none !shadow-none !border-b !border-gray-200"
       items={[
         {
           key: label,
-          label: <Text className="!text-base !font-bold">{label}</Text>,
+          label: (
+            <DoubleClickInput
+              initialValue={label}
+              placeholder="Table Name"
+              classes={{ root: "text-base font-bold !max-w-full`" }}
+              onFinish={changeLabel}
+            />
+          ),
           children,
           extra: (
             <Popconfirm

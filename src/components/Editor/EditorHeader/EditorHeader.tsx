@@ -1,4 +1,4 @@
-import { Button, Image, Layout, Typography } from "antd";
+import { Button, Image, Layout } from "antd";
 import EditableSelection from "../../UI/EditableSelection";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../hooks/useDiagram";
@@ -8,9 +8,9 @@ import { DATABASE } from "../../../data/database";
 import { Database } from "../../../data/constants";
 import { SavedStatus } from "./SavedStatus";
 import { useNavigate } from "react-router";
+import DoubleClickInput from "../../UI/DoubleClickInput";
 
 const { Header } = Layout;
-const { Text } = Typography;
 
 export default function EditorHeader() {
   const navigator = useNavigate();
@@ -21,31 +21,31 @@ export default function EditorHeader() {
 
   return (
     <Header className="flex justify-between items-center py-0 px-4 shadow-md z-10">
-      {/* Logo + Title */}
-      <div className="flex items-center space-x-4">
+      {/* Logo + Diagram Name + Menus */}
+      <div className="flex items-center space-x-2">
         <Image
           className="cursor-pointer"
           src="/logo.png"
-          width={32}
+          width={48}
           preview={false}
           onClick={() => navigator("/")}
         />
-        <Text
-          copyable={false}
-          className="font-medium !text-xl !m-0"
-          editable={{
-            tooltip: "Click to edit diagram name",
-            onChange: (value) => dispatch({ type: "SET_NAME", payload: value }),
-          }}
-        >
-          {name}
-        </Text>
-      </div>
-
-      {/* Menus */}
-      <div className="flex items-center space-x-4">
-        <FileDropDown />
-        <ViewDropDown />
+        <div className="flex flex-col">
+          <DoubleClickInput
+            initialValue={name}
+            onFinish={(name) => {
+              dispatch({ type: "SET_NAME", payload: name });
+            }}
+            placeholder="Diagram Name"
+            classes={{
+              root: "flex-1 text-lg font-semibold max-w-60 ml-2",
+            }}
+          />
+          <div className="flex">
+            <FileDropDown />
+            <ViewDropDown />
+          </div>
+        </div>
       </div>
 
       {/* Actions */}

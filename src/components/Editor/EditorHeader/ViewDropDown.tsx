@@ -1,9 +1,5 @@
-import {
-  BorderOutlined,
-  CheckSquareOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
-import { Button, Dropdown, Space, type MenuProps } from "antd";
+import { BorderOutlined, CheckSquareOutlined } from "@ant-design/icons";
+import { Button, Dropdown, type MenuProps } from "antd";
 import { useView } from "../../../hooks/useView";
 import { useMemo } from "react";
 
@@ -57,10 +53,8 @@ export default function ViewDropDown() {
 
   return (
     <Dropdown menu={{ items: viewMenuItems }} placement="bottomLeft">
-      <Button type="text">
-        <Space>
-          View <DownOutlined />
-        </Space>
+      <Button type="text" size="small">
+        View
       </Button>
     </Dropdown>
   );

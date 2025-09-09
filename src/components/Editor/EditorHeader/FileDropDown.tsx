@@ -1,6 +1,5 @@
-import { Button, Dropdown, message, Modal, Space, type MenuProps } from "antd";
+import { Button, Dropdown, message, Modal, type MenuProps } from "antd";
 import { useImageExporter } from "../../../hooks/useImageExporter";
-import { DownOutlined } from "@ant-design/icons";
 import { useMemo, useCallback, useState } from "react";
 import { useDiagram } from "../../../hooks/useDiagram";
 import { PSQLExporter } from "../../../utils/sql-export/psql-exporter";
@@ -141,10 +140,8 @@ export default function FileDropDown() {
     <>
       {contextHolder}
       <Dropdown menu={{ items: fileMenuItems }} placement="bottomLeft">
-        <Button type="text">
-          <Space>
-            File <DownOutlined />
-          </Space>
+        <Button type="text" size="small">
+          File
         </Button>
       </Dropdown>
 

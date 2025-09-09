@@ -1,4 +1,3 @@
-import EditableInput from "../../../UI/EditableInput";
 import CollapsableTabItem from "../CollapsableTabItem";
 import TabContainer from "../TabContainer";
 import { Flex, Space, Tag, Typography } from "antd";
@@ -20,6 +19,15 @@ export default function RelationshipsTabContent() {
         <CollapsableTabItem
           label={relationship.name}
           key={relationship.id}
+          changeLabel={(name) => {
+            dispatch({
+              type: "UPDATE_RELATIONSHIP",
+              payload: {
+                id: relationship.id,
+                partialRelationship: { name },
+              },
+            });
+          }}
           deleteItem={() =>
             dispatch({
               type: "DELETE_RELATIONSHIP",
@@ -29,28 +37,6 @@ export default function RelationshipsTabContent() {
         >
           <RelationshipDetail relationship={relationship}>
             <Space size="small" className="w-full" direction="vertical">
-              <Flex
-                align="center"
-                className="w-full"
-                justify="space-between"
-                gap={16}
-              >
-                <Text className="!text-xs">Name: </Text>
-                <EditableInput
-                  className="!flex-1"
-                  initialValue={relationship.name}
-                  placeholder="Relationship name"
-                  onFinish={(name) => {
-                    dispatch({
-                      type: "UPDATE_RELATIONSHIP",
-                      payload: {
-                        id: relationship.id,
-                        partialRelationship: { name },
-                      },
-                    });
-                  }}
-                />
-              </Flex>
               <Space size="small" className="w-full" direction="vertical">
                 <Flex align="center" className="w-full" justify="space-between">
                   <Text className="!text-sm !font-semibold">From:</Text>
