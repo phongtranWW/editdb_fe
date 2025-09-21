@@ -41,7 +41,10 @@ const theme = {
 
     Collapse: {
       headerBg: "#ffffff",
+      borderlessContentBg: "#ffffff",
       contentBg: "#ffffff",
+      contentPadding: 0,
+      borderlessContentPadding: 0,
     },
   },
 };

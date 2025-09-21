@@ -8,7 +8,6 @@ import { sql } from "@codemirror/lang-sql";
 import type { Exporter } from "../../../utils/sql-export/exporter";
 import { Database } from "../../../data/constants";
 import { useIssues } from "../../../hooks/useIssues";
-import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 import { useAction } from "../../../hooks/useAction";
 import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
@@ -34,17 +33,24 @@ export default function FileDropDown() {
   });
 
   // ============= IMAGE EXPORT ============
-  const handleExportPng = useCallback(() => {
-    exportImage({ format: "png", backgroundColor: "transparent" });
-  }, [exportImage]);
-
-  const handleExportJpg = useCallback(() => {
-    exportImage({ format: "jpeg" });
-  }, [exportImage]);
-
-  const handleExportSvg = useCallback(() => {
-    exportImage({ format: "svg" });
-  }, [exportImage]);
+  const handleExportImage = useCallback(
+    (type: string) => {
+      switch (type) {
+        case "png":
+          exportImage({ format: "png", backgroundColor: "transparent" });
+          break;
+        case "jpeg":
+          exportImage({ format: "jpeg" });
+          break;
+        case "svg":
+          exportImage({ format: "svg" });
+          break;
+        default:
+          break;
+      }
+    },
+    [exportImage]
+  );
 
   // ============= SQL EXPORT ============
   const handleExportSQL = useCallback(() => {
@@ -52,21 +58,30 @@ export default function FileDropDown() {
       messageApi.error("There are errors in the diagram");
       return;
     }
+
     let exporter: Exporter;
-    switch (type) {
-      case Database.POSTGRESQL:
-        exporter = new PSQLExporter(tables, relationships, name);
-        break;
-      case Database.MYSQL:
-        exporter = new MySQLExporter(tables, relationships, name);
-        break;
-      default:
-        return;
+
+    try {
+      switch (type) {
+        case Database.POSTGRESQL:
+          exporter = new PSQLExporter(tables, relationships);
+          break;
+        default:
+          messageApi.warning(`Unsupported database type: ${type}`);
+          return;
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        messageApi.error(err.message);
+      } else {
+        messageApi.error("Unexpected error occurred.");
+      }
+      return;
     }
 
     const sql = exporter.export();
     setPreviewSQL({ show: true, sql });
-  }, [hasNoError, tables, relationships, type, name, messageApi]);
+  }, [hasNoError, tables, relationships, type, messageApi]);
 
   const handleDownloadSQL = useCallback(() => {
     const blob = new Blob([previewSQL.sql], { type: "text/sql" });
@@ -93,17 +108,17 @@ export default function FileDropDown() {
           {
             key: "exportPng",
             label: "PNG",
-            onClick: handleExportPng,
+            onClick: () => handleExportImage("png"),
           },
           {
             key: "exportJpg",
             label: "JPG",
-            onClick: handleExportJpg,
+            onClick: () => handleExportImage("jpeg"),
           },
           {
             key: "exportSvg",
             label: "SVG",
-            onClick: handleExportSvg,
+            onClick: () => handleExportImage("svg"),
           },
         ],
       },
@@ -125,21 +140,18 @@ export default function FileDropDown() {
         },
       },
     ],
-    [
-      handleExportPng,
-      handleExportJpg,
-      handleExportSvg,
-      handleExportSQL,
-      saveAction,
-      navigator,
-    ]
+    [handleExportImage, handleExportSQL, saveAction, navigator]
   );
 
   // ============= RENDER ============
   return (
     <>
       {contextHolder}
-      <Dropdown menu={{ items: fileMenuItems }} placement="bottomLeft">
+      <Dropdown
+        menu={{ items: fileMenuItems }}
+        placement="bottomLeft"
+        trigger={["click"]}
+      >
         <Button type="text" size="small">
           File
         </Button>

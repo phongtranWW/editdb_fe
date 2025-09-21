@@ -1,11 +1,8 @@
 import { Button, Image, Layout } from "antd";
-import EditableSelection from "../../UI/EditableSelection";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../hooks/useDiagram";
 import FileDropDown from "./FileDropDown";
 import ViewDropDown from "./ViewDropDown";
-import { DATABASE } from "../../../data/database";
-import { Database } from "../../../data/constants";
 import { SavedStatus } from "./SavedStatus";
 import { useNavigate } from "react-router";
 import DoubleClickInput from "../../UI/DoubleClickInput";
@@ -15,7 +12,7 @@ const { Header } = Layout;
 export default function EditorHeader() {
   const navigator = useNavigate();
   const {
-    state: { type, name },
+    state: { name },
     dispatch,
   } = useDiagram();
 
@@ -52,7 +49,7 @@ export default function EditorHeader() {
       <div className="flex items-center !space-x-4">
         <SavedStatus />
         <Button icon={<ShareAltOutlined />}>Share</Button>
-        <EditableSelection
+        {/* <EditableSelection
           initialValue={DATABASE[type]?.name}
           options={Object.values(Database).map((type) => ({
             label: DATABASE[type].name,
@@ -61,7 +58,7 @@ export default function EditorHeader() {
           finishSelect={(value) => {
             dispatch({ type: "SET_TYPE", payload: value });
           }}
-        />
+        /> */}
       </div>
     </Header>
   );

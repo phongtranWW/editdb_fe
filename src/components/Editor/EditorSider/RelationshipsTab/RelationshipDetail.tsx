@@ -1,5 +1,4 @@
-import { Button, Flex, Popover, Space, Typography } from "antd";
-import EditableSelection from "../../../UI/EditableSelection";
+import { Button, Flex, Popover, Select, Space, Typography } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDiagram } from "../../../../hooks/useDiagram";
@@ -53,15 +52,15 @@ export default function RelationshipDetail({
               className="w-full"
               gap={8}
             >
-              <EditableSelection
+              <Select
                 className="!flex-2"
                 size="small"
-                initialValue={relationship.fromTable || ""}
+                value={relationship.fromTable || ""}
                 options={tables.map((t) => ({
                   value: t.id,
                   label: t.name,
                 }))}
-                finishSelect={(value: string) => {
+                onChange={(value: string) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -73,15 +72,15 @@ export default function RelationshipDetail({
                   });
                 }}
               />
-              <EditableSelection
+              <Select
                 className="!flex-1"
                 size="small"
-                initialValue={relationship.fromColumn || ""}
+                value={relationship.fromColumn || ""}
                 options={fromColumns.map((c) => ({
                   value: c.id,
                   label: c.name,
                 }))}
-                finishSelect={(value: string) => {
+                onChange={(value: string) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -105,15 +104,15 @@ export default function RelationshipDetail({
               className="w-full"
               gap={8}
             >
-              <EditableSelection
+              <Select
                 className="!flex-2"
                 size="small"
-                initialValue={relationship.toTable || ""}
+                value={relationship.toTable || ""}
                 options={tables.map((t) => ({
                   value: t.id,
                   label: t.name,
                 }))}
-                finishSelect={(value: string) => {
+                onChange={(value: string) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -125,12 +124,12 @@ export default function RelationshipDetail({
                   });
                 }}
               />
-              <EditableSelection
+              <Select
                 className="!flex-1"
                 size="small"
-                initialValue={relationship.toColumn || ""}
+                value={relationship.toColumn || ""}
                 options={toColumns.map((c) => ({ value: c.id, label: c.name }))}
-                finishSelect={(value: string) => {
+                onChange={(value: string) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -148,15 +147,15 @@ export default function RelationshipDetail({
           {/* Type */}
           <Space direction="vertical" size="small" className="w-full">
             <Text className="text-xs font-medium">Type:</Text>
-            <EditableSelection
+            <Select
               className="!w-full"
               size="small"
-              initialValue={relationship.type}
+              value={relationship.type}
               options={Object.values(Relationship).map((t) => ({
                 value: t,
                 label: t,
               }))}
-              finishSelect={(value) => {
+              onChange={(value: string) => {
                 dispatch({
                   type: "UPDATE_RELATIONSHIP",
                   payload: {

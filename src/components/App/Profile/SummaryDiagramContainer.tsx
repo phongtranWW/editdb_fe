@@ -25,7 +25,7 @@ import {
 import { Sort } from "../../../data/constants";
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { DATABASE } from "../../../data/database";
+import { DATABASE_INFO } from "../../../data/database-info";
 import CreateDiagramModal from "./CreateDiagramModal";
 import type { CreateDiagramDto } from "../../../api/diagrams/dtos/create-diagram-dto";
 
@@ -109,7 +109,7 @@ export function SummaryDiagramContainer() {
                   <Avatar
                     shape="square"
                     size={48}
-                    src={DATABASE[sD.type || "MYSQL"].image}
+                    src={DATABASE_INFO[sD.type].image}
                   />
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>

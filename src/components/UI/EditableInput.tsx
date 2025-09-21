@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 interface EditableInputProps {
   initialValue: string;
+  disabled?: boolean;
   placeholder?: string;
   className?: string;
   onFinish: (value: string) => void;
@@ -10,6 +11,7 @@ interface EditableInputProps {
 
 export default function EditableInput({
   initialValue,
+  disabled = false,
   placeholder,
   className,
   onFinish,
@@ -22,6 +24,7 @@ export default function EditableInput({
 
   return (
     <Input
+      disabled={disabled}
       className={className}
       placeholder={placeholder}
       size="small"

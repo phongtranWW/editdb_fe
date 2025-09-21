@@ -1,4 +1,4 @@
-import { DATABASE } from "../../../data/database";
+import { SUPPORTED_COLUMN_TYPES } from "../../../data/supported-column-types";
 import type { IssueContext } from "../issue-context";
 import { BaseIssueHandler } from "./base-issue-handler";
 
@@ -47,7 +47,9 @@ export class TableValidator extends BaseIssueHandler {
     // Rule 4: Each column must have correct type
     for (const table of context.tables.values()) {
       for (const column of table.columns.values()) {
-        const uniqueTypes = new Set<string>(DATABASE[context.type]?.columnType);
+        const uniqueTypes = new Set<string>(
+          Object.keys(SUPPORTED_COLUMN_TYPES[context.type])
+        );
         if (!uniqueTypes.has(column.type)) {
           context.addIssue({
             message: `Column '${column.name}' in table '${table.name}' has invalid type '${column.type}'`,

@@ -52,7 +52,11 @@ export default function ViewDropDown() {
   );
 
   return (
-    <Dropdown menu={{ items: viewMenuItems }} placement="bottomLeft">
+    <Dropdown
+      menu={{ items: viewMenuItems }}
+      placement="bottomLeft"
+      trigger={["click"]}
+    >
       <Button type="text" size="small">
         View
       </Button>

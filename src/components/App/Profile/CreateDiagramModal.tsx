@@ -7,7 +7,7 @@ import {
   DatabaseOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { DATABASE } from "../../../data/database";
+import { DATABASE_INFO } from "../../../data/database-info";
 
 const { Text, Title } = Typography;
 
@@ -56,13 +56,13 @@ export default function CreateDiagramModal({
     {
       value: Database.MYSQL,
       label: "MySQL",
-      icon: DATABASE[Database.MYSQL].image,
+      icon: DATABASE_INFO[Database.MYSQL].image,
       description: "Popular open-source relational database",
     },
     {
       value: Database.POSTGRESQL,
       label: "PostgreSQL",
-      icon: DATABASE[Database.POSTGRESQL].image,
+      icon: DATABASE_INFO[Database.POSTGRESQL].image,
       description: "Advanced open-source relational database",
     },
   ];

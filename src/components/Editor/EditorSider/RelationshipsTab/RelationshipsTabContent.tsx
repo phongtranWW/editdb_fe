@@ -36,7 +36,7 @@ export default function RelationshipsTabContent() {
           }
         >
           <RelationshipDetail relationship={relationship}>
-            <Space size="small" className="w-full" direction="vertical">
+            <Space size="small" className="w-full p-3" direction="vertical">
               <Space size="small" className="w-full" direction="vertical">
                 <Flex align="center" className="w-full" justify="space-between">
                   <Text className="!text-sm !font-semibold">From:</Text>

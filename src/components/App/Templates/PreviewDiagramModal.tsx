@@ -1,7 +1,7 @@
 import { Empty, Modal, Space, Typography, Button } from "antd";
 import type { Diagram } from "../../../models/diagram";
 import { PreviewDiagram } from "../../UI/PreviewDiagram";
-import { DATABASE } from "../../../data/database";
+import { DATABASE_INFO } from "../../../data/database-info";
 import { PlayCircleOutlined, EyeOutlined } from "@ant-design/icons";
 
 const { Text, Title } = Typography;
@@ -33,7 +33,7 @@ export default function PreviewDiagramModal({
               {diagram?.type && (
                 <div className="flex items-center gap-2 mt-1">
                   <img
-                    src={DATABASE[diagram?.type].image}
+                    src={DATABASE_INFO[diagram?.type].image}
                     width={20}
                     height={20}
                     alt={diagram?.type}

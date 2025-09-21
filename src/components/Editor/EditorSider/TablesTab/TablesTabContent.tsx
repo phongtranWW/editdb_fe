@@ -1,12 +1,12 @@
-import { Button, Flex, List, Space } from "antd";
+import { Button, Flex, List } from "antd";
 import TabContainer from "../TabContainer";
 import CollapsableTabItem from "../CollapsableTabItem";
 import { PlusOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
-import { DATABASE } from "../../../../data/database";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import ColumnItem from "./ColumnItem";
+import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
 
@@ -30,21 +30,21 @@ export default function TablesTabContent() {
             });
           }}
         >
-          <Space size="small" className="w-full" direction="vertical">
+          <Flex vertical justify="center" align="center" className="w-full">
             <List
+              size="small"
+              className="w-full"
               dataSource={table.columns}
-              renderItem={(column: DiagramColumn) => (
-                <List.Item className="cursor-pointer">
-                  <ColumnItem tableId={table.id} column={column} />
-                </List.Item>
+              renderItem={(column: DiagramColumn, index) => (
+                <ColumnItem tableId={table.id} column={column} index={index} />
               )}
             />
-            <Flex justify="end" align="center" className="w-full">
+            <Flex justify="end" align="center" className="w-full !px-4 !py-3">
               <Button
                 size="small"
                 color="cyan"
                 icon={<PlusOutlined />}
-                variant="text"
+                variant="filled"
                 onClick={() =>
                   dispatch({
                     type: "ADD_COLUMN",
@@ -53,7 +53,9 @@ export default function TablesTabContent() {
                       column: {
                         id: nanoid(6),
                         name: `column_${table.columns.length + 1}`,
-                        type: DATABASE[state.type]?.columnType[0],
+                        type: Object.keys(
+                          SUPPORTED_COLUMN_TYPES[state.type]
+                        )[0],
                         isPrimary: false,
                         isUnique: false,
                         isNullable: true,
@@ -65,7 +67,7 @@ export default function TablesTabContent() {
                 Add Column
               </Button>
             </Flex>
-          </Space>
+          </Flex>
         </CollapsableTabItem>
       )}
       addItem={() => {

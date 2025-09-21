@@ -1,21 +1,33 @@
-import { Button, Flex } from "antd";
+import { Button, Flex, Select } from "antd";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import { KeyOutlined, MoreOutlined } from "@ant-design/icons";
-import EditableSelection from "../../../UI/EditableSelection";
 import { useDiagram } from "../../../../hooks/useDiagram";
-import { DATABASE } from "../../../../data/database";
 import DoubleClickInput from "../../../UI/DoubleClickInput";
 import ColumnDetail from "./ColumnDetail";
+import clsx from "clsx";
+import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
 
 interface ColumnItemProps {
+  index: number;
   tableId: string;
   column: DiagramColumn;
 }
 
-export default function ColumnItem({ tableId, column }: ColumnItemProps) {
+export default function ColumnItem({
+  index,
+  tableId,
+  column,
+}: ColumnItemProps) {
   const { dispatch, state } = useDiagram();
   return (
-    <Flex justify="space-between" align="center" className="w-full p-0" gap={4}>
+    <Flex
+      justify="space-between"
+      align="center"
+      className={clsx("w-full !py-2 !px-4 hover:bg-gray-300 cursor-pointer", {
+        "bg-gray-100": index % 2 === 0,
+      })}
+      gap={4}
+    >
       <Flex className="w-1/2" gap={4}>
         {column.isPrimary && <KeyOutlined className="!text-yellow-400" />}
         <DoubleClickInput
@@ -36,25 +48,25 @@ export default function ColumnItem({ tableId, column }: ColumnItemProps) {
           }}
         />
       </Flex>
-      <EditableSelection
+      <Select
         className="flex-1"
         suffixIcon={null}
         size="small"
-        initialValue={column.type}
-        options={DATABASE[state.type].columnType.map((t) => ({
-          label: t,
-          value: t,
+        value={column.type}
+        options={Object.keys(SUPPORTED_COLUMN_TYPES[state.type]).map((key) => ({
+          value: key,
+          label: key,
         }))}
-        finishSelect={(type) =>
+        onChange={(value) => {
           dispatch({
             type: "UPDATE_COLUMN",
             payload: {
               id: tableId,
               columnId: column.id,
-              partialColumn: { type },
+              partialColumn: { type: value },
             },
-          })
-        }
+          });
+        }}
       />
       <ColumnDetail tableId={tableId} column={column}>
         <Button
