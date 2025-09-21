@@ -50,9 +50,8 @@ export function DiagramProvider({
         dispatch({ type: "SET_ID", payload: diagram.id });
         dispatch({ type: "SET_NAME", payload: diagram.name });
         dispatch({ type: "SET_TYPE", payload: diagram.type });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        error(handleApiError(error, "Diagram"));
+      } catch (err: unknown) {
+        error(handleApiError(err, "Diagram"));
       } finally {
         if (mounted) dispatch({ type: "SET_LOADING", payload: false });
       }
