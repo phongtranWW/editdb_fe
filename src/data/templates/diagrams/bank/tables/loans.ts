@@ -1,24 +1,27 @@
 import { nanoid } from "nanoid";
+import type { DiagramTable } from "../../../../../models/diagram-table";
 
-export const LOANS = {
+export const LOANS: DiagramTable = {
   id: nanoid(6),
   name: "loans",
   columns: [
     {
       id: nanoid(6),
       name: "id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "customer_id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -27,6 +30,7 @@ export const LOANS = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -35,6 +39,7 @@ export const LOANS = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -43,14 +48,16 @@ export const LOANS = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "status",
-      type: "VARCHAR(50)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

@@ -8,18 +8,20 @@ export const COURSES: DiagramTable = {
     {
       id: nanoid(6),
       name: "id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "title",
-      type: "VARCHAR(255)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -28,6 +30,7 @@ export const COURSES: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

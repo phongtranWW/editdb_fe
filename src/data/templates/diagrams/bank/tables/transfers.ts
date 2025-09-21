@@ -1,32 +1,36 @@
 import { nanoid } from "nanoid";
+import type { DiagramTable } from "../../../../../models/diagram-table";
 
-export const TRANSFERS = {
+export const TRANSFERS: DiagramTable = {
   id: nanoid(6),
   name: "transfers",
   columns: [
     {
       id: nanoid(6),
       name: "id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "from",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "to",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -35,6 +39,7 @@ export const TRANSFERS = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -43,6 +48,7 @@ export const TRANSFERS = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

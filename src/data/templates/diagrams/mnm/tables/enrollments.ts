@@ -8,18 +8,20 @@ export const ENROLLMENTS: DiagramTable = {
     {
       id: nanoid(6),
       name: "student_id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "course_id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -28,6 +30,7 @@ export const ENROLLMENTS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

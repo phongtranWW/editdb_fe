@@ -5,4 +5,6 @@ export interface ColumnDto {
   isPrimary: boolean;
   isUnique: boolean;
   isNullable: boolean;
+  isAutoIncrement: boolean;
+  defaultValue?: string;
 }

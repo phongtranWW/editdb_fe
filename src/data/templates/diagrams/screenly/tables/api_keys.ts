@@ -12,22 +12,25 @@ export const API_KEYS: DiagramTable = {
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "name",
-      type: "VARCHAR(255)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "key",
-      type: "VARCHAR(255)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -36,6 +39,7 @@ export const API_KEYS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -44,6 +48,7 @@ export const API_KEYS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -52,6 +57,7 @@ export const API_KEYS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

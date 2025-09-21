@@ -12,14 +12,16 @@ export const MIGRATIONS: DiagramTable = {
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "migration",
-      type: "VARCHAR(255)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -28,6 +30,7 @@ export const MIGRATIONS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
   ],
 };

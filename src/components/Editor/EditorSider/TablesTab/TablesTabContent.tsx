@@ -59,6 +59,7 @@ export default function TablesTabContent() {
                         isPrimary: false,
                         isUnique: false,
                         isNullable: true,
+                        isAutoIncrement: false,
                       },
                     },
                   })

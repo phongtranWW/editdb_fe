@@ -1,32 +1,36 @@
 import { nanoid } from "nanoid";
+import type { DiagramTable } from "../../../../../models/diagram-table";
 
-export const DEPARTMENTS = {
+export const DEPARTMENTS: DiagramTable = {
   id: nanoid(6),
   name: "departments",
   columns: [
     {
       id: nanoid(6),
       name: "id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
       name: "name",
-      type: "VARCHAR(255)",
+      type: "VARCHAR",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "chairperson",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

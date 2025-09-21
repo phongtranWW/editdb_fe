@@ -199,9 +199,6 @@ export default function ColumnDetail({
               >
                 <p className="text-sm font-medium text-start">Default:</p>
                 <EditableInput
-                  disabled={
-                    !SUPPORTED_COLUMN_TYPES[state.type][type]?.allowDefault
-                  }
                   className="!w-2/3"
                   initialValue={defaultValue || ""}
                   onFinish={(defaultValue) => {

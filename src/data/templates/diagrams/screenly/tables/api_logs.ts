@@ -12,6 +12,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: true,
       isUnique: true,
       isNullable: false,
+      isAutoIncrement: true,
     },
     {
       id: nanoid(6),
@@ -20,6 +21,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -28,6 +30,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -36,6 +39,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -44,6 +48,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
@@ -52,6 +57,7 @@ export const API_LOGS: DiagramTable = {
       isPrimary: false,
       isUnique: false,
       isNullable: true,
+      isAutoIncrement: false,
     },
   ],
 };

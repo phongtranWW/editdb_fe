@@ -7,18 +7,20 @@ export const RELATED_PRODUCTS = {
     {
       id: nanoid(6),
       name: "product_id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
     {
       id: nanoid(6),
       name: "related_id",
-      type: "INTEGER",
+      type: "INT",
       isPrimary: true,
       isUnique: false,
       isNullable: false,
+      isAutoIncrement: false,
     },
   ],
 };
