@@ -12,6 +12,7 @@ import { useAction } from "../../../hooks/useAction";
 import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
 import { useMessage } from "../../../hooks/useMessage";
+import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 
 export default function FileDropDown() {
   const { error } = useMessage();
@@ -66,6 +67,9 @@ export default function FileDropDown() {
       switch (type) {
         case Database.POSTGRESQL:
           exporter = new PSQLExporter(tables, relationships);
+          break;
+        case Database.MYSQL:
+          exporter = new MySQLExporter(tables, relationships);
           break;
         default:
           error(`Unsupported database type: ${type}`);
