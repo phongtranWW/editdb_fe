@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Flex } from "antd";
 import {
   CloseCircleOutlined,
   ExclamationCircleOutlined,
@@ -6,8 +6,6 @@ import {
 } from "@ant-design/icons";
 import type { Issue } from "../../../models/issue";
 import { IssueType } from "../../../data/constants";
-
-const { Text } = Typography;
 
 interface IssueItemProps {
   issue: Issue;
@@ -28,7 +26,7 @@ export function IssueItem({ issue }: IssueItemProps) {
   return (
     <Flex align="center" className="w-full space-x-2">
       {icon}
-      <Text className="!truncate !text-xs">{issue.message}</Text>
+      <p className="line-clamp-2 !text-xs">{issue.message}</p>
     </Flex>
   );
 }
