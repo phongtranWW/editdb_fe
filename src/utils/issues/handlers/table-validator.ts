@@ -59,6 +59,21 @@ export class TableValidator extends BaseIssueHandler {
       }
     }
 
+    // Rule 5: If default value exist, it must be valid
+    for (const table of context.tables.values()) {
+      for (const column of table.columns.values()) {
+        if (column.defaultValue !== null && column.defaultValue !== undefined) {
+          const type = SUPPORTED_COLUMN_TYPES[context.type][column.type];
+          if (!type.validate(column.defaultValue)) {
+            context.addIssue({
+              message: `Column '${column.name}' in table '${table.name}' has invalid default value '${column.defaultValue}'`,
+              type: "ERROR",
+            });
+          }
+        }
+      }
+    }
+
     // WARNING
     // Rule 1: Each table must have at least one primary key
     for (const table of context.tables.values()) {

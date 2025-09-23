@@ -1,37 +1,14 @@
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
 import type { Issue } from "../../models/issue";
+import type { RelationshipExporter } from "../../models/relationship-exporter";
+import type { TableExporter } from "../../models/table-exporter";
 import type { DatabaseType } from "../../types/database-type";
 
 export class IssueContext {
   issues: Issue[] = [];
-  tables: Map<
-    string,
-    {
-      name: string;
-      columns: Map<
-        string,
-        {
-          name: string;
-          type: string;
-          isPrimary: boolean;
-          isUnique: boolean;
-          isNullable: boolean;
-        }
-      >;
-    }
-  >;
-  relationships: Map<
-    string,
-    {
-      name: string;
-      fromTable?: string;
-      fromColumn?: string;
-      toTable?: string;
-      toColumn?: string;
-      type: string;
-    }
-  >;
+  tables: Map<string, TableExporter>;
+  relationships: Map<string, RelationshipExporter>;
   type: DatabaseType;
 
   constructor(
@@ -53,6 +30,8 @@ export class IssueContext {
                 isPrimary: c.isPrimary,
                 isUnique: c.isUnique,
                 isNullable: c.isNullable,
+                isAutoIncrement: c.isAutoIncrement,
+                defaultValue: c.defaultValue,
               },
             ])
           ),
@@ -64,10 +43,10 @@ export class IssueContext {
         r.id,
         {
           name: r.name,
-          fromTable: r.fromTable,
-          fromColumn: r.fromColumn,
-          toTable: r.toTable,
-          toColumn: r.toColumn,
+          fromTable: r.fromTable || "",
+          fromColumn: r.fromColumn || "",
+          toTable: r.toTable || "",
+          toColumn: r.toColumn || "",
           type: r.type,
         },
       ])

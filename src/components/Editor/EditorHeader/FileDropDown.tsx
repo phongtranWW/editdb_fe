@@ -1,4 +1,4 @@
-import { Button, Dropdown, message, Modal, type MenuProps } from "antd";
+import { Button, Dropdown, Modal, type MenuProps } from "antd";
 import { useImageExporter } from "../../../hooks/useImageExporter";
 import { useMemo, useCallback, useState } from "react";
 import { useDiagram } from "../../../hooks/useDiagram";
@@ -11,14 +11,15 @@ import { useIssues } from "../../../hooks/useIssues";
 import { useAction } from "../../../hooks/useAction";
 import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
+import { useMessage } from "../../../hooks/useMessage";
 
 export default function FileDropDown() {
+  const { error } = useMessage();
   const navigator = useNavigate();
   const { exportImage } = useImageExporter();
   const {
     state: { tables, relationships, type, name },
   } = useDiagram();
-  const [messageApi, contextHolder] = message.useMessage();
   const { hasNoError } = useIssues();
   const { saved, saveAction } = useAction();
   useUnsavedChangesWarning(!saved);
@@ -55,7 +56,7 @@ export default function FileDropDown() {
   // ============= SQL EXPORT ============
   const handleExportSQL = useCallback(() => {
     if (!hasNoError()) {
-      messageApi.error("There are errors in the diagram");
+      error("There are errors in the diagram");
       return;
     }
 
@@ -67,21 +68,21 @@ export default function FileDropDown() {
           exporter = new PSQLExporter(tables, relationships);
           break;
         default:
-          messageApi.warning(`Unsupported database type: ${type}`);
+          error(`Unsupported database type: ${type}`);
           return;
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        messageApi.error(err.message);
+        error(err.message);
       } else {
-        messageApi.error("Unexpected error occurred.");
+        error("Unexpected error occurred.");
       }
       return;
     }
 
     const sql = exporter.export();
     setPreviewSQL({ show: true, sql });
-  }, [hasNoError, tables, relationships, type, messageApi]);
+  }, [hasNoError, tables, relationships, type, error]);
 
   const handleDownloadSQL = useCallback(() => {
     const blob = new Blob([previewSQL.sql], { type: "text/sql" });
@@ -146,7 +147,6 @@ export default function FileDropDown() {
   // ============= RENDER ============
   return (
     <>
-      {contextHolder}
       <Dropdown
         menu={{ items: fileMenuItems }}
         placement="bottomLeft"

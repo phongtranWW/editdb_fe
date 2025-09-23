@@ -29,8 +29,8 @@ export class RelationshipValidator extends BaseIssueHandler {
 
     // Rule 3: Tables must exist
     for (const relationship of context.relationships.values()) {
-      const fromTable = context.tables.get(relationship.fromTable || "");
-      const toTable = context.tables.get(relationship.toTable || "");
+      const fromTable = context.tables.get(relationship.fromTable);
+      const toTable = context.tables.get(relationship.toTable);
       if (!fromTable || !toTable) {
         context.addIssue({
           message: `Table(s) does not exist in relationship '${relationship.name}'`,
@@ -38,8 +38,8 @@ export class RelationshipValidator extends BaseIssueHandler {
         });
       }
 
-      const fromColumn = fromTable?.columns.get(relationship.fromColumn || "");
-      const toColumn = toTable?.columns.get(relationship.toColumn || "");
+      const fromColumn = fromTable?.columns.get(relationship.fromColumn);
+      const toColumn = toTable?.columns.get(relationship.toColumn);
       if (!fromColumn || !toColumn) {
         context.addIssue({
           message: `Column(s) does not exist in relationship '${relationship.name}'`,

@@ -1,7 +1,7 @@
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
-import type { RelationshipExporter } from "./types/relationship-exporter";
-import type { TableExporter } from "./types/table-exporter";
+import type { RelationshipExporter } from "../../models/relationship-exporter";
+import type { TableExporter } from "../../models/table-exporter";
 
 export abstract class Exporter {
   protected tables: Map<string, TableExporter>;
