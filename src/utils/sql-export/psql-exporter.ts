@@ -31,7 +31,7 @@ export class PSQLExporter extends Exporter {
     } else {
       let isConst = true;
       if (
-        !/^(CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|LOCALTIME|LOCALTIMESTAMP|CURRENT_USER|SESSION_USER|USER|TODAY|YESTERDAY|TOMORROW)$/i.test(
+        !/^(CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|LOCALTIME|LOCALTIMESTAMP|CURRENT_USER|SESSION_USER|USER)$/i.test(
           value
         )
       ) {

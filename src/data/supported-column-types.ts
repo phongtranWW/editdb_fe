@@ -60,7 +60,6 @@ export const SUPPORTED_COLUMN_TYPES: Record<
       allowAutoIncrement: false,
       regexes: [
         /^\d{4}-\d{1,2}-\d{1,2}$/,
-        /^(today|tomorrow|yesterday)$/i,
         /^(?:\d{1,2}[-/ ])?(?:Jan|Feb|Mar|Apr|...|Dec)[a-z]*[-/ ]\d{1,2}[-/ ]\d{4}$/i,
         /^(current_date|now\(\)|current_timestamp|localtimestamp)$/i,
       ],
