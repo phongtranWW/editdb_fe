@@ -54,6 +54,7 @@ export abstract class Exporter {
     );
   }
 
+  abstract formatDefaultValue(value: string, type: string): string;
   abstract generateTable(table: TableExporter): string;
   abstract generateRelationship(relationship: RelationshipExporter): string;
 

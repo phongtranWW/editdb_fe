@@ -34,3 +34,5 @@ export const nodeTypes = {
 export const edgeTypes = {
   relationshipEdge: EditorEdge,
 };
+
+export const FUNCTION_REGEX = /^[a-zA-Z_][a-zA-Z0-9_]*(\s*\(.*\))$/;

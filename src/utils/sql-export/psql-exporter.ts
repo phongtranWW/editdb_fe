@@ -1,4 +1,4 @@
-import { Relationship } from "../../data/constants";
+import { FUNCTION_REGEX, Relationship } from "../../data/constants";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
 import { Exporter } from "./exporter";
@@ -8,6 +8,38 @@ import type { TableExporter } from "../../models/table-exporter";
 export class PSQLExporter extends Exporter {
   constructor(tables: DiagramTable[], relationships: DiagramRelationship[]) {
     super(tables, relationships);
+  }
+
+  formatDefaultValue(value: string, type: string) {
+    let isQuoted = true;
+    if (
+      [
+        "INT",
+        "SMALLINT",
+        "BIGINT",
+        "DECIMAL",
+        "NUMERIC",
+        "REAL",
+        "BOOLEAN",
+      ].includes(type)
+    ) {
+      isQuoted = false;
+    }
+
+    if (FUNCTION_REGEX.test(value)) {
+      return value;
+    } else {
+      let isConst = true;
+      if (
+        !/^(CURRENT_DATE|CURRENT_TIME|CURRENT_TIMESTAMP|LOCALTIME|LOCALTIMESTAMP|CURRENT_USER|SESSION_USER|USER|TODAY|YESTERDAY|TOMORROW)$/i.test(
+          value
+        )
+      ) {
+        isConst = false;
+      }
+
+      return isConst ? value : isQuoted ? `'${value}'` : value;
+    }
   }
 
   generateTable(table: TableExporter): string {
@@ -47,21 +79,10 @@ export class PSQLExporter extends Exporter {
       // ===== FORMAT DEFAULT VALUE ===== //
       let finalDefault = null;
       if (column.defaultValue) {
-        if (
-          [
-            "INT",
-            "BIGINT",
-            "SMALLINT",
-            "DECIMAL",
-            "NUMERIC",
-            "REAL",
-            "BOOLEAN",
-          ].includes(column.type)
-        ) {
-          finalDefault = `DEFAULT ${column.defaultValue}`;
-        } else {
-          finalDefault = `DEFAULT '${column.defaultValue}'`;
-        }
+        finalDefault = `DEFAULT ${this.formatDefaultValue(
+          column.defaultValue,
+          column.type
+        )}`;
       }
 
       // ===== FORMAT UNIQUE ===== //
