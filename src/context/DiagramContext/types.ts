@@ -44,7 +44,8 @@ export type DiagramAction =
       };
     }
   | { type: "DELETE_RELATIONSHIP"; payload: string }
-  | { type: "SET_TYPE"; payload: DatabaseType };
+  | { type: "SET_TYPE"; payload: DatabaseType }
+  | { type: "DUPLICATE_TABLE"; payload: string };
 
 export interface DiagramContextValue {
   state: DiagramState;

@@ -3,7 +3,7 @@ import { Button, Dropdown, type MenuProps } from "antd";
 import { useView } from "../../../hooks/useView";
 import { useMemo } from "react";
 
-export default function ViewDropDown() {
+export default function ViewDropdown() {
   // Hooks
   const { state, dispatch } = useView();
 

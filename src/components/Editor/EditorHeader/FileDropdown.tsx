@@ -13,8 +13,9 @@ import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
 import { useMessage } from "../../../hooks/useMessage";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
+import DropdownLabel from "../../UI/DropDownLabel";
 
-export default function FileDropDown() {
+export default function FileDropdown() {
   const { error } = useMessage();
   const navigator = useNavigate();
   const { exportImage } = useImageExporter();
@@ -102,12 +103,12 @@ export default function FileDropDown() {
   const fileMenuItems: MenuProps["items"] = useMemo(
     () => [
       {
-        label: "Save",
+        label: <DropdownLabel content="Save" shortcut="Ctrl + S" />,
         key: "save",
         onClick: () => saveAction(),
       },
       {
-        label: "Export as",
+        label: <DropdownLabel content="Export Image" />,
         key: "exportToImage",
         children: [
           {
@@ -128,17 +129,17 @@ export default function FileDropDown() {
         ],
       },
       {
-        label: "Export SQL",
+        label: <DropdownLabel content="Export SQL" />,
         key: "exportSQL",
         onClick: handleExportSQL,
       },
       {
-        label: "Delete (coming soon)",
+        label: <DropdownLabel content="Delete" />,
         key: "delete",
         disabled: true,
       },
       {
-        label: "Exit", // Removed "coming soon"
+        label: <DropdownLabel content="Exit" />,
         key: "exit",
         onClick: () => {
           navigator("/");

@@ -5,6 +5,7 @@ import WorkSpace from "../components/Editor/WorkSpace";
 import { IssuesProvider } from "../context/IssuesContext";
 import { ActionProvider } from "../context/ActionContext";
 import { useNavigate, useParams } from "react-router";
+import { DesignProvider } from "../context/DesignContext";
 
 export default function EditorPage() {
   const { id } = useParams();
@@ -21,7 +22,9 @@ export default function EditorPage() {
         <ActionProvider>
           <IssuesProvider>
             <ReactFlowProvider>
-              <WorkSpace />
+              <DesignProvider>
+                <WorkSpace />
+              </DesignProvider>
             </ReactFlowProvider>
           </IssuesProvider>
         </ActionProvider>

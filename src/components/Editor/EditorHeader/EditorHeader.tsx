@@ -1,11 +1,12 @@
 import { Button, Image, Layout } from "antd";
 import { ShareAltOutlined } from "@ant-design/icons";
 import { useDiagram } from "../../../hooks/useDiagram";
-import FileDropDown from "./FileDropDown";
-import ViewDropDown from "./ViewDropDown";
 import { SavedStatus } from "./SavedStatus";
 import { useNavigate } from "react-router";
 import DoubleClickInput from "../../UI/DoubleClickInput";
+import FileDropdown from "./FileDropDown";
+import ViewDropdown from "./ViewDropDown";
+import EditDropDown from "./EditDropdown";
 
 const { Header } = Layout;
 
@@ -39,8 +40,9 @@ export default function EditorHeader() {
             }}
           />
           <div className="flex">
-            <FileDropDown />
-            <ViewDropDown />
+            <FileDropdown />
+            <ViewDropdown />
+            <EditDropDown />
           </div>
         </div>
       </div>

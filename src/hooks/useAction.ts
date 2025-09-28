@@ -1,4 +1,4 @@
-import { useCallback, useContext, useLayoutEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import ActionContext from "../context/ActionContext";
 import { useDiagram } from "./useDiagram";
 import { deleteDiagram, updateDiagram } from "../api/diagrams/diagramApi";
@@ -16,7 +16,7 @@ export const useAction = () => {
     state: { tables, relationships, type, name, id },
   } = useDiagram();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setSaved(false);
   }, [tables, relationships, type, name, setSaved, id]);
 

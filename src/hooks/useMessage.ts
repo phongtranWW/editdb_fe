@@ -24,6 +24,15 @@ export const useMessage = () => {
     [context]
   );
 
+  const warning = useCallback(
+    (message: string) => {
+      context.warning({
+        content: message,
+      });
+    },
+    [context]
+  );
+
   const loading = useCallback(
     (msg: string, key = "loading") =>
       context.open({ type: "loading", content: msg, duration: 0, key }),
@@ -38,6 +47,7 @@ export const useMessage = () => {
   return {
     success,
     error,
+    warning,
     loading,
     closeLoading,
   };

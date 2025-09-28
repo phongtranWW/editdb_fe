@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import type { DiagramAction, DiagramState } from "./types";
 
 export const initialDiagramState: DiagramState = {
@@ -105,6 +106,21 @@ export function diagramReducer(
       };
     case "SET_TYPE":
       return { ...state, type: action.payload };
+    case "DUPLICATE_TABLE": {
+      const original = state.tables.find((t) => t.id === action.payload);
+      if (!original) return state;
+
+      const copy = {
+        ...original,
+        id: nanoid(6),
+        name: original.name + "_copy",
+      };
+      return {
+        ...state,
+        tables: [...state.tables, copy],
+      };
+    }
+
     default:
       return state;
   }

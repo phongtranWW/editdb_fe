@@ -1,31 +1,36 @@
 import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
-import type { DiagramColumn } from "../../models/diagram-column";
 import { KeyOutlined } from "@ant-design/icons";
+import clsx from "clsx";
+import type { DiagramTable } from "../../models/diagram-table";
 
 type TableNode = Node<
   {
-    name: string;
-    columns: DiagramColumn[];
+    table: DiagramTable;
   },
   "table"
 >;
 
-export default function EditorNode({ data }: NodeProps<TableNode>) {
-  const { name, columns } = data;
+export default function EditorNode({ data, selected }: NodeProps<TableNode>) {
+  const { table } = data;
 
   return (
-    <div className="w-60 flex flex-col rounded-lg shadow-lg overflow-hidden">
+    <div
+      className={clsx(
+        "w-60 flex flex-col rounded-lg shadow-lg overflow-hidden",
+        selected && "border-dashed border-3 border-blue-500"
+      )}
+    >
       {/* Table Header */}
       <div className="flex items-center justify-center py-3 px-4 bg-blue-500">
         <p className="w-2/3 text-sm text-center font-bold text-white truncate">
-          {name}
+          {table.name}
         </p>
       </div>
 
       {/* Table Body */}
       <div className="w-full flex flex-col">
-        {columns.length > 0 ? (
-          columns.map((column, index) => (
+        {table.columns.length > 0 ? (
+          table.columns.map((column, index) => (
             <div
               key={column.id}
               className={`
@@ -57,7 +62,7 @@ export default function EditorNode({ data }: NodeProps<TableNode>) {
         )}
       </div>
       <div className="px-3 py-2 bg-gray-200">
-        <p className="text-xs">{columns.length} column(s)</p>
+        <p className="text-xs">{table.columns.length} column(s)</p>
       </div>
     </div>
   );

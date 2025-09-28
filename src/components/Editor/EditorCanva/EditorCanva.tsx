@@ -7,15 +7,16 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
-  type Connection,
+  useOnSelectionChange,
   type Edge,
   type Node,
 } from "@xyflow/react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useDiagram } from "../../../hooks/useDiagram";
 import { useView } from "../../../hooks/useView";
 import { generateNodePosition } from "../../../utils/generateNodePosition";
 import { edgeTypes, nodeTypes } from "../../../data/constants";
+import { useDesign } from "../../../hooks/useDesign";
 
 export function EditorCanva() {
   const {
@@ -26,6 +27,7 @@ export function EditorCanva() {
   } = useDiagram();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const { setSelections } = useDesign();
 
   useEffect(() => {
     setNodes((currentNodes) => {
@@ -39,8 +41,7 @@ export function EditorCanva() {
           position:
             existingNode?.position || generateNodePosition(index, currentNodes),
           data: {
-            name: table.name,
-            columns: table.columns,
+            table,
           },
           ...(existingNode && {
             selected: existingNode.selected,
@@ -69,6 +70,24 @@ export function EditorCanva() {
     );
     setEdges(newEdges);
   }, [relationships, setEdges]);
+
+  useOnSelectionChange({
+    onChange: useCallback(
+      ({ nodes, edges }) => {
+        setSelections([
+          ...nodes.map((node) => ({
+            type: "table" as const,
+            id: node.id,
+          })),
+          ...edges.map((edge) => ({
+            type: "relationship" as const,
+            id: edge.id,
+          })),
+        ]);
+      },
+      [setSelections]
+    ),
+  });
 
   return (
     <>
@@ -99,9 +118,8 @@ export function EditorCanva() {
         connectionMode={ConnectionMode.Loose}
         connectionLineType={ConnectionLineType.Straight}
         fitView
-        onConnect={(connection: Connection) => {
-          console.log("connection", connection);
-        }}
+        selectionOnDrag={true}
+        panOnDrag={[1, 2]}
       >
         <Background />
         {showControls && <Controls />}
