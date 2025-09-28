@@ -1,27 +1,23 @@
-import { Button, Flex, Popover, Select, Space, Typography } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Flex, Select } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import { Relationship } from "../../../../data/constants";
-const { Text } = Typography;
 
 interface RelationshipDetailProps {
   relationship: DiagramRelationship;
-  children: React.ReactNode;
 }
 
-export default function RelationshipDetail({
+export default function RelationshipContent({
   relationship,
-  children,
 }: RelationshipDetailProps) {
   const {
     state: { tables },
     dispatch,
   } = useDiagram();
 
-  // State cục bộ cho columns để phản ứng ngay khi user đổi bảng
   const [fromColumns, setFromColumns] = useState<DiagramColumn[]>([]);
   const [toColumns, setToColumns] = useState<DiagramColumn[]>([]);
 
@@ -38,29 +34,24 @@ export default function RelationshipDetail({
   }, [tables, relationship.toTable]);
 
   return (
-    <Popover
-      placement="right"
-      trigger="click"
-      content={
-        <Space size="small" className="w-[300px]" direction="vertical">
-          {/* From */}
-          <Space direction="vertical" size="small" className="w-full">
-            <Text className="text-xs font-medium">From:</Text>
-            <Flex
-              align="center"
-              justify="space-between"
-              className="w-full"
-              gap={8}
-            >
+    <Flex vertical className="w-full !p-3" gap={16}>
+      <Flex vertical className="w-full" gap={8}>
+        <p className="text-center text-sm font-semibold text-green-950 bg-green-100 rounded-md border border-green-200 px-2 py-1">
+          Attributes:
+        </p>
+        <Flex vertical className="w-full" gap={8} justify="center">
+          <Flex className="w-full" vertical gap={4}>
+            <p className="text-sm font-medium text-start">From:</p>
+            <Flex className="w-full" gap={4} align="center" justify="center">
               <Select
-                className="!flex-2"
+                className="w-1/2"
                 size="small"
-                value={relationship.fromTable || ""}
-                options={tables.map((t) => ({
-                  value: t.id,
-                  label: t.name,
+                value={relationship.fromTable}
+                options={tables.map((c) => ({
+                  value: c.id,
+                  label: c.name,
                 }))}
-                onChange={(value: string) => {
+                onChange={(value) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -73,14 +64,14 @@ export default function RelationshipDetail({
                 }}
               />
               <Select
-                className="!flex-1"
+                className="w-1/2"
                 size="small"
-                value={relationship.fromColumn || ""}
+                value={relationship.fromColumn}
                 options={fromColumns.map((c) => ({
                   value: c.id,
                   label: c.name,
                 }))}
-                onChange={(value: string) => {
+                onChange={(value) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -93,26 +84,19 @@ export default function RelationshipDetail({
                 }}
               />
             </Flex>
-          </Space>
-
-          {/* To */}
-          <Space direction="vertical" size="small" className="w-full">
-            <Text className="text-xs font-medium">To:</Text>
-            <Flex
-              align="center"
-              justify="space-between"
-              className="w-full"
-              gap={8}
-            >
+          </Flex>
+          <Flex className="w-full" vertical gap={4}>
+            <p className="text-sm font-medium text-start">To:</p>
+            <Flex className="w-full" gap={4} align="center" justify="center">
               <Select
-                className="!flex-2"
+                className="w-1/2"
                 size="small"
-                value={relationship.toTable || ""}
-                options={tables.map((t) => ({
-                  value: t.id,
-                  label: t.name,
+                value={relationship.toTable}
+                options={tables.map((c) => ({
+                  value: c.id,
+                  label: c.name,
                 }))}
-                onChange={(value: string) => {
+                onChange={(value) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -125,11 +109,14 @@ export default function RelationshipDetail({
                 }}
               />
               <Select
-                className="!flex-1"
+                className="w-1/2"
                 size="small"
-                value={relationship.toColumn || ""}
-                options={toColumns.map((c) => ({ value: c.id, label: c.name }))}
-                onChange={(value: string) => {
+                value={relationship.toColumn}
+                options={toColumns.map((c) => ({
+                  value: c.id,
+                  label: c.name,
+                }))}
+                onChange={(value) => {
                   dispatch({
                     type: "UPDATE_RELATIONSHIP",
                     payload: {
@@ -142,20 +129,18 @@ export default function RelationshipDetail({
                 }}
               />
             </Flex>
-          </Space>
-
-          {/* Type */}
-          <Space direction="vertical" size="small" className="w-full">
-            <Text className="text-xs font-medium">Type:</Text>
+          </Flex>
+          <Flex className="w-full" vertical gap={4}>
+            <p className="text-sm font-medium text-start">Type:</p>
             <Select
-              className="!w-full"
+              className="w-full"
               size="small"
               value={relationship.type}
-              options={Object.values(Relationship).map((t) => ({
-                value: t,
-                label: t,
+              options={Object.values(Relationship).map((c) => ({
+                value: c,
+                label: c,
               }))}
-              onChange={(value: string) => {
+              onChange={(value) => {
                 dispatch({
                   type: "UPDATE_RELATIONSHIP",
                   payload: {
@@ -167,30 +152,39 @@ export default function RelationshipDetail({
                 });
               }}
             />
-          </Space>
-
-          {/* Action */}
-          <Space direction="vertical" size="small" className="w-full">
-            <Text className="text-xs font-medium">Action</Text>
-            <Button
-              color="danger"
-              icon={<DeleteOutlined />}
-              size="small"
-              variant="solid"
-              onClick={() => {
-                dispatch({
-                  type: "DELETE_RELATIONSHIP",
-                  payload: relationship.id,
-                });
-              }}
-            >
-              Delete
-            </Button>
-          </Space>
-        </Space>
-      }
-    >
-      {children}
-    </Popover>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Flex vertical className="w-full" gap={8}>
+        <p className="text-center text-sm font-semibold text-amber-950 bg-amber-100 rounded-md border border-amber-200 px-2 py-1">
+          Actions:
+        </p>
+        <Flex className="w-full" gap={8} justify="center" align="center">
+          <Button
+            className="w-full"
+            color="cyan"
+            icon={<SyncOutlined />}
+            size="small"
+            variant="solid"
+            onClick={() => {
+              dispatch({
+                type: "UPDATE_RELATIONSHIP",
+                payload: {
+                  id: relationship.id,
+                  partialRelationship: {
+                    fromTable: relationship.toTable,
+                    fromColumn: relationship.toColumn,
+                    toTable: relationship.fromTable,
+                    toColumn: relationship.fromColumn,
+                  },
+                },
+              });
+            }}
+          >
+            Swap
+          </Button>
+        </Flex>
+      </Flex>
+    </Flex>
   );
 }

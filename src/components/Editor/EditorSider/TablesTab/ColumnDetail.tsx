@@ -223,7 +223,7 @@ export default function ColumnDetail({
           </Flex>
           <Flex vertical className="w-full" gap={8}>
             <p className="text-center text-sm font-semibold text-amber-950 bg-amber-100 rounded-md border border-amber-200 px-2 py-1">
-              Action:
+              Actions:
             </p>
             <Flex className="w-full" gap={8} justify="end" align="center">
               <Button

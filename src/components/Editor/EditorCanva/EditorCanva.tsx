@@ -7,6 +7,7 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
+  type Connection,
   type Edge,
   type Node,
 } from "@xyflow/react";
@@ -98,6 +99,9 @@ export function EditorCanva() {
         connectionMode={ConnectionMode.Loose}
         connectionLineType={ConnectionLineType.Straight}
         fitView
+        onConnect={(connection: Connection) => {
+          console.log("connection", connection);
+        }}
       >
         <Background />
         {showControls && <Controls />}

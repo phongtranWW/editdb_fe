@@ -1,13 +1,10 @@
 import CollapsableTabItem from "../CollapsableTabItem";
 import TabContainer from "../TabContainer";
-import { Flex, Space, Tag, Typography } from "antd";
-import RelationshipDetail from "./RelationshipDetail";
 import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
 import { Relationship } from "../../../../data/constants";
-
-const { Text } = Typography;
+import RelationshipContent from "./RelationshipContent";
 
 export default function RelationshipsTabContent() {
   const { state, dispatch } = useDiagram();
@@ -35,38 +32,7 @@ export default function RelationshipsTabContent() {
             })
           }
         >
-          <RelationshipDetail relationship={relationship}>
-            <Space size="small" className="w-full p-3" direction="vertical">
-              <Space size="small" className="w-full" direction="vertical">
-                <Flex align="center" className="w-full" justify="space-between">
-                  <Text className="!text-sm !font-semibold">From:</Text>
-                  <Text className="!text-sm">
-                    {
-                      state.tables.find(
-                        (table) => table.id === relationship.fromTable
-                      )?.name
-                    }
-                  </Text>
-                </Flex>
-                <Flex align="center" className="w-full" justify="space-between">
-                  <Text className="!text-sm !font-semibold">To:</Text>
-                  <Text className="!text-sm">
-                    {
-                      state.tables.find(
-                        (table) => table.id === relationship.toTable
-                      )?.name
-                    }
-                  </Text>
-                </Flex>
-                <Flex align="center" className="w-full" justify="space-between">
-                  <Text className="!text-sm !font-semibold">Type:</Text>
-                  <Tag color="orange" className="!m-0">
-                    {relationship.type}
-                  </Tag>
-                </Flex>
-              </Space>
-            </Space>
-          </RelationshipDetail>
+          <RelationshipContent relationship={relationship} />
         </CollapsableTabItem>
       )}
       addItem={() => {

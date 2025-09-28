@@ -15,7 +15,12 @@ export default function TabContainer<T>({
   return (
     <div className="w-ful">
       <div className="flex justify-end px-4">
-        <Button type="primary" className="w-full mb-4" onClick={addItem}>
+        <Button
+          color="cyan"
+          variant="solid"
+          className="w-full mb-4"
+          onClick={addItem}
+        >
           <PlusSquareFilled /> Add
         </Button>
       </div>

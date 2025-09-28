@@ -34,7 +34,6 @@ export default function EditorNode({ data }: NodeProps<TableNode>) {
               `}
             >
               <Handle
-                isConnectable={false}
                 position={Position.Right}
                 type="source"
                 id={column.id}
