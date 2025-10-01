@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
 import { useMessage } from "../../../hooks/useMessage";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
-import DropdownLabel from "../../UI/DropDownLabel";
+import DropdownLabel from "../../UI/DropdownLabel";
 
 export default function FileDropdown() {
   const { error } = useMessage();

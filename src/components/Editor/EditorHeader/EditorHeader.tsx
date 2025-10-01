@@ -4,9 +4,9 @@ import { useDiagram } from "../../../hooks/useDiagram";
 import { SavedStatus } from "./SavedStatus";
 import { useNavigate } from "react-router";
 import DoubleClickInput from "../../UI/DoubleClickInput";
-import FileDropdown from "./FileDropDown";
-import ViewDropdown from "./ViewDropDown";
-import EditDropDown from "./EditDropdown";
+import FileDropdown from "./FileDropdown";
+import ViewDropdown from "./ViewDropdown";
+import EditDropdown from "./EditDropdown";
 
 const { Header } = Layout;
 
@@ -42,7 +42,7 @@ export default function EditorHeader() {
           <div className="flex">
             <FileDropdown />
             <ViewDropdown />
-            <EditDropDown />
+            <EditDropdown />
           </div>
         </div>
       </div>

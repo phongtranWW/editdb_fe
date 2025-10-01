@@ -1,12 +1,12 @@
 import { Button, Dropdown, type MenuProps } from "antd";
 import { useMemo } from "react";
 import { useDesign } from "../../../hooks/useDesign";
-import DropdownLabel from "../../UI/DropDownLabel";
 import { useDiagram } from "../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import { Relationship } from "../../../data/constants";
+import DropdownLabel from "../../UI/DropdownLabel";
 
-export default function EditDropDown() {
+export default function EditDropdown() {
   const { duplicate, remove } = useDesign();
   const { state, dispatch } = useDiagram();
 
