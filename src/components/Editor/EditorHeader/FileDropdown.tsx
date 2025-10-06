@@ -19,9 +19,7 @@ export default function FileDropdown() {
   const { error } = useMessage();
   const navigator = useNavigate();
   const { exportImage } = useImageExporter();
-  const {
-    state: { tables, relationships, type, name },
-  } = useDiagram();
+  const { state } = useDiagram();
   const { hasNoError } = useIssues();
   const { saved, saveAction } = useAction();
   useUnsavedChangesWarning(!saved);
@@ -65,15 +63,21 @@ export default function FileDropdown() {
     let exporter: Exporter;
 
     try {
-      switch (type) {
+      switch (state.data.type) {
         case Database.POSTGRESQL:
-          exporter = new PSQLExporter(tables, relationships);
+          exporter = new PSQLExporter(
+            state.data.tables,
+            state.data.relationships
+          );
           break;
         case Database.MYSQL:
-          exporter = new MySQLExporter(tables, relationships);
+          exporter = new MySQLExporter(
+            state.data.tables,
+            state.data.relationships
+          );
           break;
         default:
-          error(`Unsupported database type: ${type}`);
+          error(`Unsupported database type: ${state.data.type}`);
           return;
       }
     } catch (err: unknown) {
@@ -87,17 +91,23 @@ export default function FileDropdown() {
 
     const sql = exporter.export();
     setPreviewSQL({ show: true, sql });
-  }, [hasNoError, tables, relationships, type, error]);
+  }, [
+    hasNoError,
+    state.data.tables,
+    state.data.relationships,
+    state.data.type,
+    error,
+  ]);
 
   const handleDownloadSQL = useCallback(() => {
     const blob = new Blob([previewSQL.sql], { type: "text/sql" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${name || "diagram"}.sql`;
+    link.download = "diagram.sql";
     link.click();
     URL.revokeObjectURL(url);
-  }, [previewSQL.sql, name]);
+  }, [previewSQL.sql]);
 
   // ============= MENU ITEMS ============
   const fileMenuItems: MenuProps["items"] = useMemo(

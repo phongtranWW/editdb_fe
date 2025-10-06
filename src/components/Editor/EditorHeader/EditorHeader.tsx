@@ -12,10 +12,7 @@ const { Header } = Layout;
 
 export default function EditorHeader() {
   const navigator = useNavigate();
-  const {
-    state: { name },
-    dispatch,
-  } = useDiagram();
+  const { state, dispatch } = useDiagram();
 
   return (
     <Header className="flex justify-between items-center py-0 px-4 shadow-md z-10">
@@ -30,7 +27,7 @@ export default function EditorHeader() {
         />
         <div className="flex flex-col">
           <DoubleClickInput
-            initialValue={name}
+            initialValue={state.data.name}
             onFinish={(name) => {
               dispatch({ type: "SET_NAME", payload: name });
             }}

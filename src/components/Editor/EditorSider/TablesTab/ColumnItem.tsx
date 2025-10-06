@@ -53,10 +53,12 @@ export default function ColumnItem({
         suffixIcon={null}
         size="small"
         value={column.type}
-        options={Object.keys(SUPPORTED_COLUMN_TYPES[state.type]).map((key) => ({
-          value: key,
-          label: key,
-        }))}
+        options={Object.keys(SUPPORTED_COLUMN_TYPES[state.data.type]).map(
+          (key) => ({
+            value: key,
+            label: key,
+          })
+        )}
         onChange={(value) => {
           dispatch({
             type: "UPDATE_COLUMN",

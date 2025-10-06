@@ -35,7 +35,7 @@ export default function ShortcutListener() {
         type: "ADD_TABLE",
         payload: {
           id: nanoid(6),
-          name: `table_${state.tables.length + 1}`,
+          name: `table_${state.data.tables.length + 1}`,
           columns: [],
         },
       });
@@ -50,10 +50,26 @@ export default function ShortcutListener() {
         type: "ADD_RELATIONSHIP",
         payload: {
           id: nanoid(6),
-          name: `fk_relationship_${state.relationships.length + 1}`,
+          name: `fk_relationship_${state.data.relationships.length + 1}`,
           type: Relationship.ONE_TO_ONE,
         },
       });
+    },
+    { preventDefault: true }
+  );
+
+  useHotkeys(
+    "ctrl+z",
+    () => {
+      dispatch({ type: "UNDO" });
+    },
+    { preventDefault: true }
+  );
+
+  useHotkeys(
+    "ctrl+y",
+    () => {
+      dispatch({ type: "REDO" });
     },
     { preventDefault: true }
   );

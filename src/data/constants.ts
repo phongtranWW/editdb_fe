@@ -36,3 +36,5 @@ export const edgeTypes = {
 };
 
 export const FUNCTION_REGEX = /^[a-zA-Z_][a-zA-Z0-9_]*(\s*\(.*\))$/;
+
+export const MAX_HISTORY = 20;

@@ -1,3 +1,4 @@
+import type { Patch } from "immer";
 import type { Diagram } from "../../models/diagram";
 import type { DiagramColumn } from "../../models/diagram-column";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
@@ -5,11 +6,15 @@ import type { DiagramTable } from "../../models/diagram-table";
 import type { DatabaseType } from "../../types/database-type";
 
 export interface DiagramState {
-  id: string;
-  type: DatabaseType;
-  name: string;
-  tables: DiagramTable[];
-  relationships: DiagramRelationship[];
+  data: Diagram;
+  undo: {
+    patches: Patch[];
+    inversePatches: Patch[];
+  }[];
+  redo: {
+    patches: Patch[];
+    inversePatches: Patch[];
+  }[];
 }
 
 export type DiagramAction =
@@ -42,7 +47,9 @@ export type DiagramAction =
         partialRelationship: Partial<DiagramRelationship>;
       };
     }
-  | { type: "DUPLICATE_RELATIONSHIP"; payload: string };
+  | { type: "DUPLICATE_RELATIONSHIP"; payload: string }
+  | { type: "UNDO" }
+  | { type: "REDO" };
 
 export interface DiagramContextValue {
   state: DiagramState;

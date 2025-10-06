@@ -11,7 +11,7 @@ export default function RelationshipsTabContent() {
 
   return (
     <TabContainer
-      dataSource={state.relationships}
+      dataSource={state.data.relationships}
       renderItem={(relationship: DiagramRelationship) => (
         <CollapsableTabItem
           label={relationship.name}
@@ -40,7 +40,7 @@ export default function RelationshipsTabContent() {
           type: "ADD_RELATIONSHIP",
           payload: {
             id: nanoid(6),
-            name: `fk_relationship_${state.relationships.length + 1}`,
+            name: `fk_relationship_${state.data.relationships.length + 1}`,
             type: Relationship.ONE_TO_ONE,
           },
         });

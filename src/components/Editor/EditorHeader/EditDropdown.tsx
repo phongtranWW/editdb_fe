@@ -22,7 +22,7 @@ export default function EditDropdown() {
             type: "ADD_TABLE",
             payload: {
               id: nanoid(6),
-              name: `table_${state.tables.length + 1}`,
+              name: `table_${state.data.tables.length + 1}`,
               columns: [],
             },
           });
@@ -41,7 +41,7 @@ export default function EditDropdown() {
             type: "ADD_RELATIONSHIP",
             payload: {
               id: nanoid(6),
-              name: `relationship_${state.relationships.length + 1}`,
+              name: `relationship_${state.data.relationships.length + 1}`,
               type: Relationship.ONE_TO_ONE,
             },
           });
@@ -66,8 +66,8 @@ export default function EditDropdown() {
       duplicate,
       remove,
       dispatch,
-      state.tables.length,
-      state.relationships.length,
+      state.data.tables.length,
+      state.data.relationships.length,
     ]
   );
 

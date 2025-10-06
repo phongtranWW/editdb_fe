@@ -19,12 +19,8 @@ import { useDiagram } from "../../../context/DiagramContext/hooks";
 import { useView } from "../../../context/ViewContext/hooks";
 
 export function EditorCanva() {
-  const {
-    state: { showMiniMap, showControls },
-  } = useView();
-  const {
-    state: { tables, relationships },
-  } = useDiagram();
+  const { state: viewState } = useView();
+  const { state: diagramState } = useDiagram();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { setSelections } = useDesign();
@@ -32,7 +28,7 @@ export function EditorCanva() {
   useEffect(() => {
     setNodes((currentNodes) => {
       const nodeMap = new Map(currentNodes.map((node) => [node.id, node]));
-      return tables.map((table, index) => {
+      return diagramState.data.tables.map((table, index) => {
         const existingNode = nodeMap.get(table.id);
 
         return {
@@ -50,10 +46,10 @@ export function EditorCanva() {
         };
       });
     });
-  }, [tables, setNodes]);
+  }, [diagramState.data.tables, setNodes]);
 
   useEffect(() => {
-    const newEdges = relationships.map(
+    const newEdges = diagramState.data.relationships.map(
       (relationship) =>
         ({
           id: relationship.id,
@@ -69,7 +65,7 @@ export function EditorCanva() {
         } as Edge)
     );
     setEdges(newEdges);
-  }, [relationships, setEdges]);
+  }, [diagramState.data.relationships, setEdges]);
 
   useOnSelectionChange({
     onChange: useCallback(
@@ -122,8 +118,8 @@ export function EditorCanva() {
         panOnDrag={[1, 2]}
       >
         <Background />
-        {showControls && <Controls />}
-        {showMiniMap && <MiniMap />}
+        {viewState.showControls && <Controls />}
+        {viewState.showMiniMap && <MiniMap />}
       </ReactFlow>
     </>
   );

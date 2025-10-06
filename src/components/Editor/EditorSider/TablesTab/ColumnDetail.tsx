@@ -74,7 +74,7 @@ export default function ColumnDetail({
                 </p>
                 <Checkbox
                   disabled={
-                    !SUPPORTED_COLUMN_TYPES[state.type][type]
+                    !SUPPORTED_COLUMN_TYPES[state.data.type][type]
                       ?.allowAutoIncrement
                   }
                   checked={isAutoIncrement || false}
@@ -127,9 +127,9 @@ export default function ColumnDetail({
                 <Select
                   size="small"
                   className="!w-2/3"
-                  options={Object.keys(SUPPORTED_COLUMN_TYPES[state.type]).map(
-                    (key) => ({ label: key, value: key })
-                  )}
+                  options={Object.keys(
+                    SUPPORTED_COLUMN_TYPES[state.data.type]
+                  ).map((key) => ({ label: key, value: key }))}
                   value={type}
                   onChange={(type) => {
                     dispatch({

@@ -13,25 +13,26 @@ interface RelationshipDetailProps {
 export default function RelationshipContent({
   relationship,
 }: RelationshipDetailProps) {
-  const {
-    state: { tables },
-    dispatch,
-  } = useDiagram();
+  const { state, dispatch } = useDiagram();
 
   const [fromColumns, setFromColumns] = useState<DiagramColumn[]>([]);
   const [toColumns, setToColumns] = useState<DiagramColumn[]>([]);
 
   useEffect(() => {
     setFromColumns(
-      () => tables.find((t) => t.id === relationship.fromTable)?.columns || []
+      () =>
+        state.data.tables.find((t) => t.id === relationship.fromTable)
+          ?.columns || []
     );
-  }, [tables, relationship.fromTable]);
+  }, [state.data.tables, relationship.fromTable]);
 
   useEffect(() => {
     setToColumns(
-      () => tables.find((t) => t.id === relationship.toTable)?.columns || []
+      () =>
+        state.data.tables.find((t) => t.id === relationship.toTable)?.columns ||
+        []
     );
-  }, [tables, relationship.toTable]);
+  }, [state.data.tables, relationship.toTable]);
 
   return (
     <Flex vertical className="w-full !p-3" gap={16}>
@@ -47,7 +48,7 @@ export default function RelationshipContent({
                 className="w-1/2"
                 size="small"
                 value={relationship.fromTable}
-                options={tables.map((c) => ({
+                options={state.data.tables.map((c) => ({
                   value: c.id,
                   label: c.name,
                 }))}
@@ -92,7 +93,7 @@ export default function RelationshipContent({
                 className="w-1/2"
                 size="small"
                 value={relationship.toTable}
-                options={tables.map((c) => ({
+                options={state.data.tables.map((c) => ({
                   value: c.id,
                   label: c.name,
                 }))}

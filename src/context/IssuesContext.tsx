@@ -12,15 +12,17 @@ const IssuesContext = createContext<IssuesContextValue>({
 });
 
 export const IssuesProvider = ({ children }: { children: React.ReactNode }) => {
-  const {
-    state: { tables, relationships, type },
-  } = useDiagram();
+  const { state } = useDiagram();
   const [issues, setIssues] = useState<Issue[]>([]);
 
   useEffect(() => {
-    const initialIssues = getIssues(tables, relationships, type);
+    const initialIssues = getIssues(
+      state.data.tables,
+      state.data.relationships,
+      state.data.type
+    );
     setIssues(initialIssues);
-  }, [tables, relationships, type]);
+  }, [state.data.tables, state.data.relationships, state.data.type]);
 
   return (
     <IssuesContext.Provider value={{ issues }}>

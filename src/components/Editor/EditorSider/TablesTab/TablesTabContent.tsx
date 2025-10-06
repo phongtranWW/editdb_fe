@@ -11,9 +11,11 @@ import { useDiagram } from "../../../../context/DiagramContext/hooks";
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
 
+  console.log(state.undo);
+
   return (
     <TabContainer
-      dataSource={state.tables}
+      dataSource={state.data.tables}
       renderItem={(table) => (
         <CollapsableTabItem
           label={table.name}
@@ -77,7 +79,7 @@ export default function TablesTabContent() {
           type: "ADD_TABLE",
           payload: {
             id: nanoid(6),
-            name: `table_${state.tables.length + 1}`,
+            name: `table_${state.data.tables.length + 1}`,
             columns: [],
           },
         });
