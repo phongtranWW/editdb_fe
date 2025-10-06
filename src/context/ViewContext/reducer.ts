@@ -1,4 +1,5 @@
 import type { ViewAction, ViewState } from "./types";
+import { produce } from "immer";
 
 export const initialViewState: ViewState = {
   showSider: true,
@@ -7,17 +8,19 @@ export const initialViewState: ViewState = {
   showIssues: false,
 };
 
-export function viewReducer(state: ViewState, action: ViewAction): ViewState {
+export const viewReducer = produce((draft: ViewState, action: ViewAction) => {
   switch (action.type) {
     case "SET_SIDER":
-      return { ...state, showSider: action.payload };
+      draft.showSider = action.payload;
+      break;
     case "SET_MINIMAP":
-      return { ...state, showMiniMap: action.payload };
+      draft.showMiniMap = action.payload;
+      break;
     case "SET_CONTROLS":
-      return { ...state, showControls: action.payload };
+      draft.showControls = action.payload;
+      break;
     case "SET_ISSUES":
-      return { ...state, showIssues: action.payload };
-    default:
-      return state;
+      draft.showIssues = action.payload;
+      break;
   }
-}
+});

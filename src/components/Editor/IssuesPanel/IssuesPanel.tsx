@@ -1,7 +1,7 @@
-import { useView } from "../../../hooks/useView";
 import { Badge, Flex, Layout, List, Typography } from "antd";
 import { useIssues } from "../../../hooks/useIssues";
 import { IssueItem } from "./IssueItem";
+import { useView } from "../../../context/ViewContext/hooks";
 
 const { Sider } = Layout;
 const { Text } = Typography;

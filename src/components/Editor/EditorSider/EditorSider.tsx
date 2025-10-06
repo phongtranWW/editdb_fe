@@ -1,7 +1,7 @@
 import { Layout, Tabs } from "antd";
 import TablesTabContent from "./TablesTab/TablesTabContent";
 import RelationshipsTabContent from "./RelationshipsTab/RelationshipsTabContent";
-import { useView } from "../../../hooks/useView";
+import { useView } from "../../../context/ViewContext/hooks";
 const { Sider } = Layout;
 
 export default function EditorSider() {

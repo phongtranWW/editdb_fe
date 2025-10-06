@@ -1,7 +1,7 @@
 import { BorderOutlined, CheckSquareOutlined } from "@ant-design/icons";
 import { Button, Dropdown, type MenuProps } from "antd";
-import { useView } from "../../../hooks/useView";
 import { useMemo } from "react";
+import { useView } from "../../../context/ViewContext/hooks";
 
 export default function ViewDropdown() {
   const { state, dispatch } = useView();
