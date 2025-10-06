@@ -1,12 +1,12 @@
 import { Button, Image, Layout } from "antd";
 import { ShareAltOutlined } from "@ant-design/icons";
-import { useDiagram } from "../../../hooks/useDiagram";
 import { SavedStatus } from "./SavedStatus";
 import { useNavigate } from "react-router";
 import DoubleClickInput from "../../UI/DoubleClickInput";
 import FileDropdown from "./FileDropdown";
 import ViewDropdown from "./ViewDropdown";
 import EditDropdown from "./EditDropdown";
+import { useDiagram } from "../../../context/DiagramContext/hooks";
 
 const { Header } = Layout;
 

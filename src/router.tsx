@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import TemplatesPage from "./pages/TemplatesPage";
 import FormLayout from "./components/Form/FormLayout";
 import RegisterPage from "./pages/RegisterPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <div>404</div>,
+    element: <NotFoundPage />,
   },
 ]);

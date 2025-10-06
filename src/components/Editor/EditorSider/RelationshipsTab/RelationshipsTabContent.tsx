@@ -1,10 +1,10 @@
 import CollapsableTabItem from "../CollapsableTabItem";
 import TabContainer from "../TabContainer";
-import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
 import { Relationship } from "../../../../data/constants";
 import RelationshipContent from "./RelationshipContent";
+import { useDiagram } from "../../../../context/DiagramContext/hooks";
 
 export default function RelationshipsTabContent() {
   const { state, dispatch } = useDiagram();

@@ -1,7 +1,6 @@
 import { Button, Dropdown, Modal, type MenuProps } from "antd";
 import { useImageExporter } from "../../../hooks/useImageExporter";
 import { useMemo, useCallback, useState } from "react";
-import { useDiagram } from "../../../hooks/useDiagram";
 import { PSQLExporter } from "../../../utils/sql-export/psql-exporter";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
@@ -14,6 +13,7 @@ import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarnin
 import { useMessage } from "../../../hooks/useMessage";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 import DropdownLabel from "../../UI/DropdownLabel";
+import { useDiagram } from "../../../context/DiagramContext/hooks";
 
 export default function FileDropdown() {
   const { error } = useMessage();

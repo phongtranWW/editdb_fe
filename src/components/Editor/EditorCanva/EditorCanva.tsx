@@ -12,11 +12,11 @@ import {
   type Node,
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
-import { useDiagram } from "../../../hooks/useDiagram";
 import { useView } from "../../../hooks/useView";
 import { generateNodePosition } from "../../../utils/generateNodePosition";
 import { edgeTypes, nodeTypes } from "../../../data/constants";
 import { useDesign } from "../../../hooks/useDesign";
+import { useDiagram } from "../../../context/DiagramContext/hooks";
 
 export function EditorCanva() {
   const {

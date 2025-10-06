@@ -1,3 +1,4 @@
+import type { Diagram } from "../../models/diagram";
 import type { DiagramColumn } from "../../models/diagram-column";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
@@ -6,26 +7,24 @@ import type { DatabaseType } from "../../types/database-type";
 export interface DiagramState {
   id: string;
   type: DatabaseType;
-  loading: boolean;
   name: string;
   tables: DiagramTable[];
   relationships: DiagramRelationship[];
 }
 
 export type DiagramAction =
-  | { type: "SET_ID"; payload: string }
-  | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_NAME"; payload: string }
-  | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_TABLES"; payload: DiagramTable[] }
-  | { type: "SET_RELATIONSHIPS"; payload: DiagramRelationship[] }
+  | { type: "SET_TYPE"; payload: DatabaseType }
+  | { type: "SET_DIAGRAM"; payload: Diagram }
   | { type: "ADD_TABLE"; payload: DiagramTable }
+  | { type: "DELETE_TABLE"; payload: string }
   | {
       type: "UPDATE_TABLE";
       payload: { id: string; partialTable: Partial<DiagramTable> };
     }
-  | { type: "DELETE_TABLE"; payload: string }
+  | { type: "DUPLICATE_TABLE"; payload: string }
   | { type: "ADD_COLUMN"; payload: { id: string; column: DiagramColumn } }
+  | { type: "DELETE_COLUMN"; payload: { id: string; columnId: string } }
   | {
       type: "UPDATE_COLUMN";
       payload: {
@@ -34,8 +33,8 @@ export type DiagramAction =
         partialColumn: Partial<DiagramColumn>;
       };
     }
-  | { type: "DELETE_COLUMN"; payload: { id: string; columnId: string } }
   | { type: "ADD_RELATIONSHIP"; payload: DiagramRelationship }
+  | { type: "DELETE_RELATIONSHIP"; payload: string }
   | {
       type: "UPDATE_RELATIONSHIP";
       payload: {
@@ -43,9 +42,7 @@ export type DiagramAction =
         partialRelationship: Partial<DiagramRelationship>;
       };
     }
-  | { type: "DELETE_RELATIONSHIP"; payload: string }
-  | { type: "SET_TYPE"; payload: DatabaseType }
-  | { type: "DUPLICATE_TABLE"; payload: string };
+  | { type: "DUPLICATE_RELATIONSHIP"; payload: string };
 
 export interface DiagramContextValue {
   state: DiagramState;

@@ -1,10 +1,10 @@
 import { Button, Checkbox, Flex, Popover, Select } from "antd";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import EditableInput from "../../../UI/EditableInput";
-import { useDiagram } from "../../../../hooks/useDiagram";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import { nanoid } from "nanoid";
 import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
+import { useDiagram } from "../../../../context/DiagramContext/hooks";
 
 interface ColumnDetailProps {
   tableId: string;

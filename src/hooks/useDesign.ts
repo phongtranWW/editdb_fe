@@ -2,7 +2,7 @@ import { useCallback, useContext } from "react";
 import DesignContext from "../context/DesignContext";
 import { useAction } from "./useAction";
 import { useMessage } from "./useMessage";
-import { useDiagram } from "./useDiagram";
+import { useDiagram } from "../context/DiagramContext/hooks";
 
 export const useDesign = () => {
   const context = useContext(DesignContext);

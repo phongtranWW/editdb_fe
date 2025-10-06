@@ -1,8 +1,8 @@
 import { useDesign } from "../../hooks/useDesign";
 import { useHotkeys } from "react-hotkeys-hook";
-import { useDiagram } from "../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import { Relationship } from "../../data/constants";
+import { useDiagram } from "../../context/DiagramContext/hooks";
 
 export default function ShortcutListener() {
   const { state, dispatch } = useDiagram();

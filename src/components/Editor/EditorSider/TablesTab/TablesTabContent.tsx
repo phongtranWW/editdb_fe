@@ -2,11 +2,12 @@ import { Button, Flex, List } from "antd";
 import TabContainer from "../TabContainer";
 import CollapsableTabItem from "../CollapsableTabItem";
 import { PlusOutlined } from "@ant-design/icons";
-import { useDiagram } from "../../../../hooks/useDiagram";
 import { nanoid } from "nanoid";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import ColumnItem from "./ColumnItem";
 import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
+import { Database } from "../../../../data/constants";
+import { useDiagram } from "../../../../context/DiagramContext/hooks";
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
 
@@ -54,7 +55,7 @@ export default function TablesTabContent() {
                         id: nanoid(6),
                         name: `column_${table.columns.length + 1}`,
                         type: Object.keys(
-                          SUPPORTED_COLUMN_TYPES[state.type]
+                          SUPPORTED_COLUMN_TYPES[Database.MYSQL]
                         )[0],
                         isPrimary: false,
                         isUnique: false,

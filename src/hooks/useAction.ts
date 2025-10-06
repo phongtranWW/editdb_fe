@@ -1,9 +1,9 @@
 import { useCallback, useContext, useEffect } from "react";
 import ActionContext from "../context/ActionContext";
-import { useDiagram } from "./useDiagram";
 import { deleteDiagram, updateDiagram } from "../api/diagrams/diagramApi";
 import { useMessage } from "./useMessage";
 import { handleApiError } from "../utils/handleApiError";
+import { useDiagram } from "../context/DiagramContext/hooks";
 
 export const useAction = () => {
   const context = useContext(ActionContext);

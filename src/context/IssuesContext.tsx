@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { useDiagram } from "../hooks/useDiagram";
 import type { Issue } from "../models/issue";
 import { getIssues } from "../utils/issues/getIssues";
+import { useDiagram } from "./DiagramContext/hooks";
 
 interface IssuesContextValue {
   issues: Issue[];

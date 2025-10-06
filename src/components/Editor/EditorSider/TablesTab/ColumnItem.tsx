@@ -1,11 +1,11 @@
 import { Button, Flex, Select } from "antd";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import { KeyOutlined, MoreOutlined } from "@ant-design/icons";
-import { useDiagram } from "../../../../hooks/useDiagram";
 import DoubleClickInput from "../../../UI/DoubleClickInput";
 import ColumnDetail from "./ColumnDetail";
 import clsx from "clsx";
 import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
+import { useDiagram } from "../../../../context/DiagramContext/hooks";
 
 interface ColumnItemProps {
   index: number;

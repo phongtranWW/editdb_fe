@@ -4,7 +4,6 @@ import { useView } from "../../../hooks/useView";
 import { useMemo } from "react";
 
 export default function ViewDropdown() {
-  // Hooks
   const { state, dispatch } = useView();
 
   const viewMenuItems: MenuProps["items"] = useMemo(

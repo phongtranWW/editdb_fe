@@ -1,10 +1,10 @@
 import { Button, Flex, Select } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useDiagram } from "../../../../hooks/useDiagram";
 import type { DiagramRelationship } from "../../../../models/diagram-relationship";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import { Relationship } from "../../../../data/constants";
+import { useDiagram } from "../../../../context/DiagramContext/hooks";
 
 interface RelationshipDetailProps {
   relationship: DiagramRelationship;
