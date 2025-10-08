@@ -1,32 +1,30 @@
 import { Button, Dropdown, type MenuProps } from "antd";
 import { useMemo } from "react";
-import { useDesign } from "../../../hooks/useDesign";
-import { nanoid } from "nanoid";
-import { Relationship } from "../../../data/constants";
 import DropdownLabel from "../../UI/DropdownLabel";
-import { useDiagram } from "../../../context/DiagramContext/hooks";
+import { useEdit } from "../../../hooks/useEdit";
 
 export default function EditDropdown() {
-  const { duplicate, remove } = useDesign();
-  const { state, dispatch } = useDiagram();
+  const { duplicate, remove, undo, redo, createTable, createRelationship } =
+    useEdit();
 
   const editMenuItems: MenuProps["items"] = useMemo(
     () => [
+      {
+        label: <DropdownLabel content="Undo" shortcut="Ctrl + Z" />,
+        key: "undo",
+        onClick: () => undo(),
+      },
+      {
+        label: <DropdownLabel content="Redo" shortcut="Ctrl + Y" />,
+        key: "redo",
+        onClick: () => redo(),
+      },
       {
         label: (
           <DropdownLabel content="Create Table" shortcut="Ctrl + Alt + T" />
         ),
         key: "create-table",
-        onClick: () => {
-          dispatch({
-            type: "ADD_TABLE",
-            payload: {
-              id: nanoid(6),
-              name: `table_${state.data.tables.length + 1}`,
-              columns: [],
-            },
-          });
-        },
+        onClick: () => createTable(),
       },
       {
         label: (
@@ -36,39 +34,20 @@ export default function EditDropdown() {
           />
         ),
         key: "create-relationship",
-        onClick: () => {
-          dispatch({
-            type: "ADD_RELATIONSHIP",
-            payload: {
-              id: nanoid(6),
-              name: `relationship_${state.data.relationships.length + 1}`,
-              type: Relationship.ONE_TO_ONE,
-            },
-          });
-        },
+        onClick: () => createRelationship(),
       },
       {
         label: <DropdownLabel content="Duplicate" shortcut="Ctrl + D" />,
         key: "duplicate",
-        onClick: () => {
-          duplicate();
-        },
+        onClick: () => duplicate(),
       },
       {
         label: <DropdownLabel content="Delete" shortcut="Delete / Backspace" />,
         key: "delete",
-        onClick: () => {
-          remove();
-        },
+        onClick: () => remove(),
       },
     ],
-    [
-      duplicate,
-      remove,
-      dispatch,
-      state.data.tables.length,
-      state.data.relationships.length,
-    ]
+    [undo, redo, createTable, createRelationship, duplicate, remove]
   );
 
   return (

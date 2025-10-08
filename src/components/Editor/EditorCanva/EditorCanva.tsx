@@ -14,16 +14,16 @@ import {
 import { useCallback, useEffect } from "react";
 import { generateNodePosition } from "../../../utils/generateNodePosition";
 import { edgeTypes, nodeTypes } from "../../../data/constants";
-import { useDesign } from "../../../hooks/useDesign";
 import { useDiagram } from "../../../context/DiagramContext/hooks";
 import { useView } from "../../../context/ViewContext/hooks";
+import { useSelection } from "../../../context/SelectionContext/hooks";
 
 export function EditorCanva() {
   const { state: viewState } = useView();
   const { state: diagramState } = useDiagram();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { setSelections } = useDesign();
+  const { setData } = useSelection();
 
   useEffect(() => {
     setNodes((currentNodes) => {
@@ -70,18 +70,12 @@ export function EditorCanva() {
   useOnSelectionChange({
     onChange: useCallback(
       ({ nodes, edges }) => {
-        setSelections([
-          ...nodes.map((node) => ({
-            type: "table" as const,
-            id: node.id,
-          })),
-          ...edges.map((edge) => ({
-            type: "relationship" as const,
-            id: edge.id,
-          })),
-        ]);
+        setData({
+          tableIds: nodes.map((node) => node.id),
+          relationshipIds: edges.map((edge) => edge.id),
+        });
       },
-      [setSelections]
+      [setData]
     ),
   });
 

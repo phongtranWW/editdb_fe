@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ViewContext from "./context";
+import ViewContext from ".";
 
 export const useView = () => {
   const context = useContext(ViewContext);

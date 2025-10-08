@@ -1,13 +1,9 @@
-import { useDesign } from "../../hooks/useDesign";
 import { useHotkeys } from "react-hotkeys-hook";
-import { nanoid } from "nanoid";
-import { Relationship } from "../../data/constants";
-import { useDiagram } from "../../context/DiagramContext/hooks";
+import { useEdit } from "../../hooks/useEdit";
 
 export default function ShortcutListener() {
-  const { state, dispatch } = useDiagram();
-  const { remove, duplicate, save } = useDesign();
-
+  const { duplicate, remove, undo, redo, createTable, createRelationship } =
+    useEdit();
   useHotkeys(
     "ctrl+d",
     () => {
@@ -20,25 +16,18 @@ export default function ShortcutListener() {
     remove();
   });
 
-  useHotkeys(
-    "ctrl+s",
-    () => {
-      save();
-    },
-    { preventDefault: true }
-  );
+  // useHotkeys(
+  //   "ctrl+s",
+  //   () => {
+  //     save();
+  //   },
+  //   { preventDefault: true }
+  // );
 
   useHotkeys(
     "ctrl+alt+t",
     () => {
-      dispatch({
-        type: "ADD_TABLE",
-        payload: {
-          id: nanoid(6),
-          name: `table_${state.data.tables.length + 1}`,
-          columns: [],
-        },
-      });
+      createTable();
     },
     { preventDefault: true }
   );
@@ -46,14 +35,7 @@ export default function ShortcutListener() {
   useHotkeys(
     "ctrl+alt+r",
     () => {
-      dispatch({
-        type: "ADD_RELATIONSHIP",
-        payload: {
-          id: nanoid(6),
-          name: `fk_relationship_${state.data.relationships.length + 1}`,
-          type: Relationship.ONE_TO_ONE,
-        },
-      });
+      createRelationship();
     },
     { preventDefault: true }
   );
@@ -61,7 +43,7 @@ export default function ShortcutListener() {
   useHotkeys(
     "ctrl+z",
     () => {
-      dispatch({ type: "UNDO" });
+      undo();
     },
     { preventDefault: true }
   );
@@ -69,7 +51,7 @@ export default function ShortcutListener() {
   useHotkeys(
     "ctrl+y",
     () => {
-      dispatch({ type: "REDO" });
+      redo();
     },
     { preventDefault: true }
   );

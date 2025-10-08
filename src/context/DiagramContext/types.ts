@@ -27,7 +27,6 @@ export type DiagramAction =
       type: "UPDATE_TABLE";
       payload: { id: string; partialTable: Partial<DiagramTable> };
     }
-  | { type: "DUPLICATE_TABLE"; payload: string }
   | { type: "ADD_COLUMN"; payload: { id: string; column: DiagramColumn } }
   | { type: "DELETE_COLUMN"; payload: { id: string; columnId: string } }
   | {
@@ -47,7 +46,14 @@ export type DiagramAction =
         partialRelationship: Partial<DiagramRelationship>;
       };
     }
-  | { type: "DUPLICATE_RELATIONSHIP"; payload: string }
+  | {
+      type: "DUPLICATE_SELECTION";
+      payload: { tableIds: string[]; relationshipIds: string[] };
+    }
+  | {
+      type: "DELETE_SELECTION";
+      payload: { tableIds: string[]; relationshipIds: string[] };
+    }
   | { type: "UNDO" }
   | { type: "REDO" };
 

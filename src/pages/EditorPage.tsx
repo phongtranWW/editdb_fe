@@ -1,25 +1,25 @@
-import { DiagramProvider } from "../context/DiagramContext/context";
+import { DiagramProvider } from "../context/DiagramContext";
 import { ReactFlowProvider } from "@xyflow/react";
-import { ViewProvider } from "../context/ViewContext/context";
+import { ViewProvider } from "../context/ViewContext";
 import WorkSpace from "../components/Editor/WorkSpace";
 import { IssuesProvider } from "../context/IssuesContext";
 import { ActionProvider } from "../context/ActionContext";
-import { DesignProvider } from "../context/DesignContext";
+import { SelectionProvider } from "../context/SelectionContext";
 
 export default function EditorPage() {
   return (
     <ViewProvider>
-      <DiagramProvider>
-        <ActionProvider>
-          <IssuesProvider>
-            <ReactFlowProvider>
-              <DesignProvider>
+      <SelectionProvider>
+        <DiagramProvider>
+          <ActionProvider>
+            <IssuesProvider>
+              <ReactFlowProvider>
                 <WorkSpace />
-              </DesignProvider>
-            </ReactFlowProvider>
-          </IssuesProvider>
-        </ActionProvider>
-      </DiagramProvider>
+              </ReactFlowProvider>
+            </IssuesProvider>
+          </ActionProvider>
+        </DiagramProvider>
+      </SelectionProvider>
     </ViewProvider>
   );
 }

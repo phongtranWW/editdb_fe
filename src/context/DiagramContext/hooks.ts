@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import DiagramContext from "./context";
+import DiagramContext from ".";
 
 export function useDiagram() {
   const ctx = useContext(DiagramContext);

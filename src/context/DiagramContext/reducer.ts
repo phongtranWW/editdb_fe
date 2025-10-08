@@ -67,12 +67,6 @@ export const diagramReducer = (
           break;
         }
 
-        case "DUPLICATE_TABLE": {
-          const table = draft.tables.find((t) => t.id === action.payload);
-          if (table) draft.tables.push({ ...table, id: nanoid(6) });
-          break;
-        }
-
         case "ADD_RELATIONSHIP": {
           draft.relationships.push(action.payload);
           break;
@@ -90,15 +84,6 @@ export const diagramReducer = (
           const { id, partialRelationship } = action.payload;
           const relationship = draft.relationships.find((r) => r.id === id);
           if (relationship) Object.assign(relationship, partialRelationship);
-          break;
-        }
-
-        case "DUPLICATE_RELATIONSHIP": {
-          const relationship = draft.relationships.find(
-            (r) => r.id === action.payload
-          );
-          if (relationship)
-            draft.relationships.push({ ...relationship, id: nanoid(6) });
           break;
         }
 
@@ -126,6 +111,45 @@ export const diagramReducer = (
             const column = table.columns.find((c) => c.id === columnId);
             if (column) Object.assign(column, partialColumn);
           }
+          break;
+        }
+
+        case "DUPLICATE_SELECTION": {
+          const { tableIds, relationshipIds } = action.payload;
+
+          const tableIdMap = new Map<string, string>();
+          for (const id of tableIds) {
+            tableIdMap.set(id, nanoid(6));
+          }
+
+          const copiedTables = draft.tables
+            .filter((t) => tableIds.includes(t.id))
+            .map((t) => {
+              const newId = tableIdMap.get(t.id)!;
+              return { ...t, id: newId, name: `${t.name}_copy` };
+            });
+
+          const copiedRelationships = draft.relationships
+            .filter((r) => relationshipIds.includes(r.id))
+            .map((r) => ({
+              ...r,
+              id: nanoid(6),
+              name: `${r.name}_copy`,
+              fromTable: r.fromTable ? tableIdMap.get(r.fromTable)! : undefined,
+              toTable: r.toTable ? tableIdMap.get(r.toTable)! : undefined,
+            }));
+
+          draft.tables.push(...copiedTables);
+          draft.relationships.push(...copiedRelationships);
+          break;
+        }
+
+        case "DELETE_SELECTION": {
+          const { tableIds, relationshipIds } = action.payload;
+          draft.tables = draft.tables.filter((t) => !tableIds.includes(t.id));
+          draft.relationships = draft.relationships.filter(
+            (r) => !relationshipIds.includes(r.id)
+          );
           break;
         }
       }
