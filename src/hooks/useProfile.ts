@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Profile } from "../models/profile";
 import { getProfile } from "../api/users/userApi";
-import { useMessage } from "./useMessage";
 import { handleApiError } from "../utils/handleApiError";
 
 export const useProfile = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { error } = useMessage();
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -16,7 +15,7 @@ export const useProfile = () => {
         const profile = await getProfile();
         setProfile(profile);
       } catch (err: unknown) {
-        error(handleApiError(err, "Profile"));
+        setError(handleApiError(err, "Profile"));
       } finally {
         setLoading(false);
       }

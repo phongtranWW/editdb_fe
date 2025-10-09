@@ -10,15 +10,15 @@ import PreviewDiagramModal from "./PreviewDiagramModal";
 import Meta from "antd/es/card/Meta";
 import { createDiagram } from "../../../api/diagrams/diagramApi";
 import { useNavigate } from "react-router";
-import { useMessage } from "../../../hooks/useMessage";
 import axios from "axios";
 import { SearchOutlined, SortAscendingOutlined } from "@ant-design/icons";
+import { useAppMessage } from "../../../context/AppMessageContext/hooks";
 
 const { Title } = Typography;
 
 export const TemplatesContainer = () => {
+  const { messageApi } = useAppMessage();
   const navigator = useNavigate();
-  const { error, loading, closeLoading, success } = useMessage();
   const [data, setData] = useState<ApiResponse<Template>>({
     data: [],
     total: 0,
@@ -63,10 +63,9 @@ export const TemplatesContainer = () => {
 
   const handleConfirm = useCallback(async () => {
     if (!previewDiagram.diagram) {
-      error("No diagram selected");
+      messageApi.error("No diagram selected");
       return;
     }
-    loading("Creating diagram...");
     try {
       const diagram = await createDiagram({
         name: previewDiagram.diagram.name,
@@ -74,34 +73,25 @@ export const TemplatesContainer = () => {
         tables: previewDiagram.diagram.tables,
         relationships: previewDiagram.diagram.relationships,
       });
-      success("Diagram created successfully.");
+      messageApi.success("Diagram created successfully.");
       setPreviewDiagram({ show: false, diagram: undefined });
       navigator(`/diagrams/${diagram.id}`);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         const status = err.response?.status;
         if (status === 400) {
-          error("Invalid data. Please check your diagram details.");
+          messageApi.error("Invalid data. Please check your diagram details.");
         } else if (status === 401) {
-          error("You are not authorized. Please log in.");
+          messageApi.error("You are not authorized. Please log in.");
           navigator("/login");
         } else {
-          error("Something went wrong. Please try again.");
+          messageApi.error("Something went wrong. Please try again.");
         }
       } else {
-        error("Unexpected error occurred.");
+        messageApi.error("Unexpected error occurred.");
       }
-    } finally {
-      closeLoading();
     }
-  }, [
-    previewDiagram.diagram,
-    navigator,
-    error,
-    loading,
-    closeLoading,
-    success,
-  ]);
+  }, [messageApi, navigator, previewDiagram.diagram, setPreviewDiagram]);
 
   return (
     <Flex

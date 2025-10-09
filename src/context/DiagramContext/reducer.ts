@@ -6,6 +6,8 @@ import {
   produce,
   produceWithPatches,
 } from "immer";
+import { MAX_HISTORY } from "../../data/constants";
+import { getIssues } from "../../utils/issues/getIssues";
 enablePatches();
 
 export const initialDiagramState: DiagramState = {
@@ -16,6 +18,7 @@ export const initialDiagramState: DiagramState = {
     tables: [],
     relationships: [],
   },
+  issuses: [],
   undo: [],
   redo: [],
 };
@@ -152,6 +155,17 @@ export const diagramReducer = (
           );
           break;
         }
+
+        case "CLEAR": {
+          draft.tables = [];
+          draft.relationships = [];
+          break;
+        }
+
+        case "RESET": {
+          Object.assign(draft, state.originalData);
+          break;
+        }
       }
     }
   );
@@ -160,6 +174,7 @@ export const diagramReducer = (
     case "SET_DIAGRAM":
       state = produce(state, (draft) => {
         draft.data = nextState;
+        draft.originalData = nextState;
         draft.undo = [];
         draft.redo = [];
       });
@@ -168,9 +183,10 @@ export const diagramReducer = (
     case "UNDO": {
       if (state.undo.length > 0) {
         state = produce(state, (draft) => {
-          const enty = draft.undo.pop()!;
-          draft.data = applyPatches(draft.data, enty.inversePatches);
-          draft.redo.push(enty);
+          const historyEntry = draft.undo.pop()!;
+          draft.data = applyPatches(draft.data, historyEntry.inversePatches);
+          if (draft.redo.length > MAX_HISTORY) draft.redo.shift();
+          draft.redo.push(historyEntry);
         });
       }
       break;
@@ -178,11 +194,11 @@ export const diagramReducer = (
 
     case "REDO": {
       if (state.redo.length > 0) {
-        console.log("redo", state.redo);
         state = produce(state, (draft) => {
-          const enty = draft.redo.pop()!;
-          draft.data = applyPatches(draft.data, enty.patches);
-          draft.undo.push(enty);
+          const historyEntry = draft.redo.pop()!;
+          draft.data = applyPatches(draft.data, historyEntry.patches);
+          if (draft.undo.length > MAX_HISTORY) draft.undo.shift();
+          draft.undo.push(historyEntry);
         });
       }
       break;
@@ -191,10 +207,18 @@ export const diagramReducer = (
     default:
       state = produce(state, (draft) => {
         draft.data = nextState;
+        if (draft.undo.length > MAX_HISTORY) draft.undo.shift();
         draft.undo.push({ patches, inversePatches });
         draft.redo = [];
       });
       break;
   }
+  state = produce(state, (draft) => {
+    draft.issuses = getIssues(
+      draft.data.tables,
+      draft.data.relationships,
+      draft.data.type
+    );
+  });
   return state;
 };

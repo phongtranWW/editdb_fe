@@ -1,19 +1,17 @@
 import { Badge, Flex, Layout, List, Typography } from "antd";
-import { useIssues } from "../../../hooks/useIssues";
 import { IssueItem } from "./IssueItem";
 import { useView } from "../../../context/ViewContext/hooks";
+import { useDiagram } from "../../../context/DiagramContext/hooks";
 
 const { Sider } = Layout;
 const { Text } = Typography;
 
 export default function IssuesPanel() {
-  const {
-    state: { showIssues },
-  } = useView();
-  const { issues } = useIssues();
+  const { state: viewState } = useView();
+  const { state: diagramState } = useDiagram();
 
   return (
-    showIssues && (
+    viewState.showIssues && (
       <Sider
         className="overflow-y-auto border-l border-gray-200 bg-white"
         width="18%"
@@ -27,15 +25,15 @@ export default function IssuesPanel() {
             className="!p-2 border-b border-gray-200"
           >
             <Text className="text-md font-semibold">
-              {issues.length > 0 ? "Issues" : "No issues found"}
+              {diagramState.issuses.length > 0 ? "Issues" : "No issues found"}
             </Text>
-            <Badge count={issues.length} size="small" />
+            <Badge count={diagramState.issuses.length} size="small" />
           </Flex>
 
           {/* List */}
           <List
             className="flex-1 overflow-y-auto"
-            dataSource={issues}
+            dataSource={diagramState.issuses}
             renderItem={(issue) => (
               <List.Item className="!px-2">
                 <IssueItem issue={issue} />

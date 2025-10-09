@@ -2,19 +2,17 @@ import { useCallback, useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { decodeJWT, isTokenValid } from "../utils/jwt";
 import type { LoginDto } from "../api/auth/dtos/login-dto";
-import { useMessage } from "./useMessage";
 import { handleApiError } from "../utils/handleApiError";
 import { localLogin, localRegister } from "../api/auth/authApi";
 import type { RegisterDto } from "../api/auth/dtos/register-dto";
 
 const useAuth = () => {
-  const { loading, error, closeLoading } = useMessage();
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within AuthProvider");
   }
 
-  const { user, setUser } = context;
+  const { setUser, setIsLoading, setError } = context;
 
   const checkAuth = useCallback(() => {
     const savedToken = localStorage.getItem("access_token");
@@ -28,39 +26,39 @@ const useAuth = () => {
 
   const login = useCallback(
     async (dto: LoginDto): Promise<boolean> => {
-      loading("Logging in...");
+      setIsLoading(true);
       try {
         const { accessToken } = await localLogin(dto);
         localStorage.setItem("access_token", accessToken);
         setUser(decodeJWT(accessToken));
         return true;
       } catch (err: unknown) {
-        error(handleApiError(err, "Login"));
+        setError(handleApiError(err, "Login"));
         return false;
       } finally {
-        closeLoading();
+        setIsLoading(false);
       }
     },
-    [loading, error, closeLoading, setUser]
+    [setIsLoading, setError, setUser]
   );
 
   const register = useCallback(
     async (dto: RegisterDto): Promise<boolean> => {
-      loading("Registering...");
+      setIsLoading(true);
       try {
         await localRegister(dto);
         return true;
       } catch (err: unknown) {
-        error(handleApiError(err, "Register"));
+        setError(handleApiError(err, "Register"));
         return false;
       } finally {
-        closeLoading();
+        setIsLoading(false);
       }
     },
-    [loading, error, closeLoading]
+    [setIsLoading, setError]
   );
 
-  return { checkAuth, logout, user, login, register };
+  return { ...context, checkAuth, logout, login, register };
 };
 
 export default useAuth;

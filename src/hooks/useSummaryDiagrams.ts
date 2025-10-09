@@ -8,12 +8,11 @@ import {
 } from "../api/diagrams/diagramApi";
 import type { ApiResponse } from "../api/base/api-response";
 import { handleApiError } from "../utils/handleApiError";
-import { useMessage } from "./useMessage";
 import type { CreateDiagramDto } from "../api/diagrams/dtos/create-diagram-dto";
 
 export const useSummaryDiagrams = () => {
-  const { error } = useMessage();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [params, setParams] = useState<Params>({
     page: 1,
     limit: 5,
@@ -29,11 +28,11 @@ export const useSummaryDiagrams = () => {
       const response = await getSummaryDiagrams(params);
       setData(response);
     } catch (err: unknown) {
-      error(handleApiError(err, "Diagrams"));
+      setError(handleApiError(err, "Diagrams"));
     } finally {
       setLoading(false);
     }
-  }, [params, error]);
+  }, [params]);
 
   const createSDiagram = useCallback(
     async (dto: CreateDiagramDto) => {
@@ -42,12 +41,12 @@ export const useSummaryDiagrams = () => {
         await createDiagram(dto);
         await fetchSummaryDiagrams();
       } catch (err: unknown) {
-        error(handleApiError(err, "Diagrams"));
+        setError(handleApiError(err, "Diagrams"));
       } finally {
         setLoading(false);
       }
     },
-    [fetchSummaryDiagrams, error]
+    [fetchSummaryDiagrams]
   );
 
   const deleteSDiagram = useCallback(
@@ -57,12 +56,12 @@ export const useSummaryDiagrams = () => {
         await deleteDiagramApi(id);
         await fetchSummaryDiagrams();
       } catch (err: unknown) {
-        error(handleApiError(err, "Diagrams"));
+        setError(handleApiError(err, "Diagrams"));
       } finally {
         setLoading(false);
       }
     },
-    [fetchSummaryDiagrams, error]
+    [fetchSummaryDiagrams]
   );
 
   useEffect(() => {

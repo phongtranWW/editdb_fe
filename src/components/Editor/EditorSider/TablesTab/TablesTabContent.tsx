@@ -11,8 +11,6 @@ import { useDiagram } from "../../../../context/DiagramContext/hooks";
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
 
-  console.log(state.undo);
-
   return (
     <TabContainer
       dataSource={state.data.tables}

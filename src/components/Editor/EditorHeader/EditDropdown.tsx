@@ -1,30 +1,51 @@
 import { Button, Dropdown, type MenuProps } from "antd";
 import { useMemo } from "react";
 import DropdownLabel from "../../UI/DropdownLabel";
-import { useEdit } from "../../../hooks/useEdit";
+import { useDiagram } from "../../../context/DiagramContext/hooks";
+import { nanoid } from "nanoid";
+import { Relationship } from "../../../data/constants";
 
 export default function EditDropdown() {
-  const { duplicate, remove, undo, redo, createTable, createRelationship } =
-    useEdit();
+  const { dispatch } = useDiagram();
 
   const editMenuItems: MenuProps["items"] = useMemo(
     () => [
       {
         label: <DropdownLabel content="Undo" shortcut="Ctrl + Z" />,
         key: "undo",
-        onClick: () => undo(),
+        onClick: () => dispatch({ type: "UNDO" }),
       },
       {
         label: <DropdownLabel content="Redo" shortcut="Ctrl + Y" />,
         key: "redo",
-        onClick: () => redo(),
+        onClick: () => dispatch({ type: "REDO" }),
+      },
+      {
+        label: <DropdownLabel content="Clear" />,
+        key: "clear",
+        onClick: () => dispatch({ type: "CLEAR" }),
+      },
+      {
+        label: <DropdownLabel content="Reset" />,
+        key: "reset",
+        onClick: () => dispatch({ type: "RESET" }),
       },
       {
         label: (
           <DropdownLabel content="Create Table" shortcut="Ctrl + Alt + T" />
         ),
         key: "create-table",
-        onClick: () => createTable(),
+        onClick: () => {
+          const id = nanoid(6);
+          dispatch({
+            type: "ADD_TABLE",
+            payload: {
+              id,
+              name: `table_${id}`,
+              columns: [],
+            },
+          });
+        },
       },
       {
         label: (
@@ -34,20 +55,20 @@ export default function EditDropdown() {
           />
         ),
         key: "create-relationship",
-        onClick: () => createRelationship(),
-      },
-      {
-        label: <DropdownLabel content="Duplicate" shortcut="Ctrl + D" />,
-        key: "duplicate",
-        onClick: () => duplicate(),
-      },
-      {
-        label: <DropdownLabel content="Delete" shortcut="Delete / Backspace" />,
-        key: "delete",
-        onClick: () => remove(),
+        onClick: () => {
+          const id = nanoid(6);
+          dispatch({
+            type: "ADD_RELATIONSHIP",
+            payload: {
+              id,
+              name: `relationship_${id}`,
+              type: Relationship.ONE_TO_ONE,
+            },
+          });
+        },
       },
     ],
-    [undo, redo, createTable, createRelationship, duplicate, remove]
+    [dispatch]
   );
 
   return (

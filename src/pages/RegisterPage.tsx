@@ -1,31 +1,34 @@
-import { Form, Input, Button, Typography, Image, Flex } from "antd";
+import { Form, Input, Button, Typography, Image, Flex, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
-import { useCallback } from "react";
 import type { RegisterDto } from "../api/auth/dtos/register-dto";
-import { useMessage } from "../hooks/useMessage";
+import { useEffect } from "react";
 
 const { Text } = Typography;
 
 export default function RegisterPage() {
+  const [messageApi, contextHolder] = message.useMessage();
   const navigator = useNavigate();
-  const { success } = useMessage();
-  const { register } = useAuth();
+  const { register, error, setError, success, setSuccess } = useAuth();
 
-  const handleRegister = useCallback(
-    async (values: RegisterDto) => {
-      const suc = await register(values);
-      if (suc) {
-        success("Registration successful!");
-        navigator("/login");
-      }
-    },
-    [register, navigator, success]
-  );
+  useEffect(() => {
+    if (error) {
+      messageApi.error(error);
+      setError(undefined);
+    }
+  }, [error, setError, messageApi]);
+
+  useEffect(() => {
+    if (success) {
+      messageApi.success(success);
+      setSuccess(undefined);
+    }
+  }, [success, setSuccess, messageApi]);
 
   return (
     <Flex vertical align="center" justify="center" className="!p-2" gap={16}>
+      {contextHolder}
       <Flex vertical align="center" justify="center" gap={8}>
         {/* Header */}
         <Image
@@ -49,7 +52,7 @@ export default function RegisterPage() {
         onFinish={(values) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { confirm, ...payload } = values;
-          handleRegister(payload);
+          register(payload as RegisterDto);
         }}
       >
         <Form.Item

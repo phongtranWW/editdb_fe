@@ -7,23 +7,61 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
-  useOnSelectionChange,
   type Edge,
   type Node,
 } from "@xyflow/react";
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { generateNodePosition } from "../../../utils/generateNodePosition";
 import { edgeTypes, nodeTypes } from "../../../data/constants";
 import { useDiagram } from "../../../context/DiagramContext/hooks";
 import { useView } from "../../../context/ViewContext/hooks";
-import { useSelection } from "../../../context/SelectionContext/hooks";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function EditorCanva() {
   const { state: viewState } = useView();
-  const { state: diagramState } = useDiagram();
+  const { state: diagramState, dispatch } = useDiagram();
+  const selectedNodeIdsRef = useRef<string[]>([]);
+  const selectedEdgeIdsRef = useRef<string[]>([]);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const { setData } = useSelection();
+
+  useHotkeys(
+    ["delete", "backspace"],
+    () => {
+      const nodeIds = selectedNodeIdsRef.current;
+      const edgeIds = selectedEdgeIdsRef.current;
+
+      if (nodeIds.length === 0 && edgeIds.length === 0) return;
+
+      dispatch({
+        type: "DELETE_SELECTION",
+        payload: {
+          tableIds: nodeIds,
+          relationshipIds: edgeIds,
+        },
+      });
+    },
+    { preventDefault: true }
+  );
+
+  useHotkeys(
+    "ctrl+d",
+    () => {
+      const nodeIds = selectedNodeIdsRef.current;
+      const edgeIds = selectedEdgeIdsRef.current;
+
+      if (nodeIds.length === 0 && edgeIds.length === 0) return;
+
+      dispatch({
+        type: "DUPLICATE_SELECTION",
+        payload: {
+          tableIds: nodeIds,
+          relationshipIds: edgeIds,
+        },
+      });
+    },
+    { preventDefault: true }
+  );
 
   useEffect(() => {
     setNodes((currentNodes) => {
@@ -67,18 +105,6 @@ export function EditorCanva() {
     setEdges(newEdges);
   }, [diagramState.data.relationships, setEdges]);
 
-  useOnSelectionChange({
-    onChange: useCallback(
-      ({ nodes, edges }) => {
-        setData({
-          tableIds: nodes.map((node) => node.id),
-          relationshipIds: edges.map((edge) => edge.id),
-        });
-      },
-      [setData]
-    ),
-  });
-
   return (
     <>
       <svg style={{ position: "absolute", width: 0, height: 0, zIndex: -1 }}>
@@ -110,6 +136,10 @@ export function EditorCanva() {
         fitView
         selectionOnDrag={true}
         panOnDrag={[1, 2]}
+        onSelectionChange={({ nodes, edges }) => {
+          selectedNodeIdsRef.current = nodes.map((node) => node.id);
+          selectedEdgeIdsRef.current = edges.map((edge) => edge.id);
+        }}
       >
         <Background />
         {viewState.showControls && <Controls />}

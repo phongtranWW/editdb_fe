@@ -4,17 +4,19 @@ import type { DiagramColumn } from "../../models/diagram-column";
 import type { DiagramRelationship } from "../../models/diagram-relationship";
 import type { DiagramTable } from "../../models/diagram-table";
 import type { DatabaseType } from "../../types/database-type";
+import type { Issue } from "../../models/issue";
+
+interface HisotyEntry {
+  patches: Patch[];
+  inversePatches: Patch[];
+}
 
 export interface DiagramState {
   data: Diagram;
-  undo: {
-    patches: Patch[];
-    inversePatches: Patch[];
-  }[];
-  redo: {
-    patches: Patch[];
-    inversePatches: Patch[];
-  }[];
+  issuses: Issue[];
+  undo: HisotyEntry[];
+  redo: HisotyEntry[];
+  originalData?: Diagram;
 }
 
 export type DiagramAction =
@@ -54,6 +56,8 @@ export type DiagramAction =
       type: "DELETE_SELECTION";
       payload: { tableIds: string[]; relationshipIds: string[] };
     }
+  | { type: "CLEAR" }
+  | { type: "RESET" }
   | { type: "UNDO" }
   | { type: "REDO" };
 

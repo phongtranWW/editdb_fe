@@ -6,25 +6,22 @@ import ReactCodeMirror from "@uiw/react-codemirror";
 import { sql } from "@codemirror/lang-sql";
 import type { Exporter } from "../../../utils/sql-export/exporter";
 import { Database } from "../../../data/constants";
-import { useIssues } from "../../../hooks/useIssues";
-import { useAction } from "../../../hooks/useAction";
 import { useNavigate } from "react-router";
 import { useUnsavedChangesWarning } from "../../../hooks/useUnsavedChangesWarning";
-import { useMessage } from "../../../hooks/useMessage";
 import { MySQLExporter } from "../../../utils/sql-export/mysql-exporter";
 import DropdownLabel from "../../UI/DropdownLabel";
 import { useDiagram } from "../../../context/DiagramContext/hooks";
+import { useSave } from "../../../context/SaveContext/hooks";
+import { useAppMessage } from "../../../context/AppMessageContext/hooks";
 
 export default function FileDropdown() {
-  const { error } = useMessage();
   const navigator = useNavigate();
+  const { messageApi } = useAppMessage();
   const { exportImage } = useImageExporter();
-  const { state } = useDiagram();
-  const { hasNoError } = useIssues();
-  const { saved, saveAction } = useAction();
-  useUnsavedChangesWarning(!saved);
+  const { state, canExport } = useDiagram();
+  const { saving, save } = useSave();
+  useUnsavedChangesWarning(saving !== "idle");
 
-  // State
   const [previewSQL, setPreviewSQL] = useState<{
     show: boolean;
     sql: string;
@@ -55,8 +52,8 @@ export default function FileDropdown() {
 
   // ============= SQL EXPORT ============
   const handleExportSQL = useCallback(() => {
-    if (!hasNoError()) {
-      error("There are errors in the diagram");
+    if (!canExport()) {
+      messageApi.error("Please fix all issues before exporting SQL.");
       return;
     }
 
@@ -77,14 +74,14 @@ export default function FileDropdown() {
           );
           break;
         default:
-          error(`Unsupported database type: ${state.data.type}`);
+          messageApi.error(`Unsupported database type: ${state.data.type}`);
           return;
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        error(err.message);
+        messageApi.error(err.message);
       } else {
-        error("Unexpected error occurred.");
+        messageApi.error("Unexpected error occurred.");
       }
       return;
     }
@@ -92,11 +89,11 @@ export default function FileDropdown() {
     const sql = exporter.export();
     setPreviewSQL({ show: true, sql });
   }, [
-    hasNoError,
-    state.data.tables,
+    canExport,
+    messageApi,
     state.data.relationships,
+    state.data.tables,
     state.data.type,
-    error,
   ]);
 
   const handleDownloadSQL = useCallback(() => {
@@ -115,7 +112,7 @@ export default function FileDropdown() {
       {
         label: <DropdownLabel content="Save" shortcut="Ctrl + S" />,
         key: "save",
-        onClick: () => saveAction(),
+        onClick: () => save(),
       },
       {
         label: <DropdownLabel content="Export Image" />,
@@ -156,7 +153,7 @@ export default function FileDropdown() {
         },
       },
     ],
-    [handleExportImage, handleExportSQL, saveAction, navigator]
+    [handleExportImage, handleExportSQL, navigator, save]
   );
 
   // ============= RENDER ============
