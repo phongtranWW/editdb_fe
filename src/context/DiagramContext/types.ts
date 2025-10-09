@@ -13,7 +13,7 @@ interface HisotyEntry {
 
 export interface DiagramState {
   data: Diagram;
-  issuses: Issue[];
+  issues: Issue[];
   undo: HisotyEntry[];
   redo: HisotyEntry[];
   originalData?: Diagram;

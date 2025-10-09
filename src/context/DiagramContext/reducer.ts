@@ -18,7 +18,7 @@ export const initialDiagramState: DiagramState = {
     tables: [],
     relationships: [],
   },
-  issuses: [],
+  issues: [],
   undo: [],
   redo: [],
 };
@@ -214,7 +214,7 @@ export const diagramReducer = (
       break;
   }
   state = produce(state, (draft) => {
-    draft.issuses = getIssues(
+    draft.issues = getIssues(
       draft.data.tables,
       draft.data.relationships,
       draft.data.type
