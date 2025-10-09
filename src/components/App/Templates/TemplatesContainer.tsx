@@ -10,8 +10,10 @@ import { SearchOutlined, SortAscendingOutlined } from "@ant-design/icons";
 import { useAppMessage } from "../../../context/AppMessageContext/hooks";
 import TemplateCard from "./TemplateCard";
 import { useTemplates } from "../../../hooks/useTemplates";
+import LoaderModal from "../../UI/LoaderModal";
 
 export const TemplatesContainer = () => {
+  const [isCreating, setIsCreating] = useState(false);
   const { messageApi } = useAppMessage();
   const navigator = useNavigate();
   const { data, params, setParams } = useTemplates();
@@ -27,6 +29,7 @@ export const TemplatesContainer = () => {
       messageApi.error("No diagram selected");
       return;
     }
+    setIsCreating(true);
     try {
       const diagram = await createDiagram({
         name: previewDiagram.diagram.name,
@@ -51,6 +54,8 @@ export const TemplatesContainer = () => {
       } else {
         messageApi.error("Unexpected error occurred.");
       }
+    } finally {
+      setIsCreating(false);
     }
   }, [messageApi, navigator, previewDiagram.diagram, setPreviewDiagram]);
 
@@ -135,6 +140,8 @@ export const TemplatesContainer = () => {
         onClose={() => setPreviewDiagram({ show: false, diagram: undefined })}
         onConfirm={handleConfirm}
       />
+
+      <LoaderModal isVisible={isCreating} message="Creating diagram..." />
     </Flex>
   );
 };
