@@ -12,7 +12,7 @@ const useAuth = () => {
     throw new Error("useAuth must be used within AuthProvider");
   }
 
-  const { setUser, setIsLoading, setError } = context;
+  const { setUser, setIsLoading, setError, setSuccess } = context;
 
   const checkAuth = useCallback(() => {
     const savedToken = localStorage.getItem("access_token");
@@ -47,6 +47,7 @@ const useAuth = () => {
       setIsLoading(true);
       try {
         await localRegister(dto);
+        setSuccess("Registered successfully");
         return true;
       } catch (err: unknown) {
         setError(handleApiError(err, "Register"));
@@ -55,7 +56,7 @@ const useAuth = () => {
         setIsLoading(false);
       }
     },
-    [setIsLoading, setError]
+    [setIsLoading, setError, setSuccess]
   );
 
   return { ...context, checkAuth, logout, login, register };

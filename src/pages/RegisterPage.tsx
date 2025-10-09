@@ -1,34 +1,17 @@
-import { Form, Input, Button, Typography, Image, Flex, message } from "antd";
+import { Form, Input, Button, Typography, Image, Flex } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 import type { RegisterDto } from "../api/auth/dtos/register-dto";
-import { useEffect } from "react";
 
 const { Text } = Typography;
 
 export default function RegisterPage() {
-  const [messageApi, contextHolder] = message.useMessage();
   const navigator = useNavigate();
-  const { register, error, setError, success, setSuccess } = useAuth();
-
-  useEffect(() => {
-    if (error) {
-      messageApi.error(error);
-      setError(undefined);
-    }
-  }, [error, setError, messageApi]);
-
-  useEffect(() => {
-    if (success) {
-      messageApi.success(success);
-      setSuccess(undefined);
-    }
-  }, [success, setSuccess, messageApi]);
+  const { register, isLoading } = useAuth();
 
   return (
     <Flex vertical align="center" justify="center" className="!p-2" gap={16}>
-      {contextHolder}
       <Flex vertical align="center" justify="center" gap={8}>
         {/* Header */}
         <Image
@@ -49,10 +32,11 @@ export default function RegisterPage() {
         autoComplete="off"
         size="large"
         className="w-full"
-        onFinish={(values) => {
+        onFinish={async (values) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { confirm, ...payload } = values;
-          register(payload as RegisterDto);
+          const isValid = await register(payload as RegisterDto);
+          if (isValid) navigator("/login");
         }}
       >
         <Form.Item
@@ -177,6 +161,7 @@ export default function RegisterPage() {
         </Form.Item>
         <Form.Item>
           <Button
+            loading={isLoading}
             type="primary"
             htmlType="submit"
             className="w-full"

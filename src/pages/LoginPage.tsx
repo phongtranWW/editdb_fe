@@ -3,25 +3,13 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import GoogleLoginButton from "../components/Form/Login/GoogleLoginButton";
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
-import { useCallback } from "react";
 import type { LoginDto } from "../api/auth/dtos/login-dto";
 
 const { Text } = Typography;
 
 export default function LoginPage() {
   const navigator = useNavigate();
-
-  const { login } = useAuth();
-
-  const handleLocalLogin = useCallback(
-    async (values: LoginDto) => {
-      const success = await login(values);
-      if (success) {
-        navigator("/");
-      }
-    },
-    [login, navigator]
-  );
+  const { login, isLoading } = useAuth();
 
   return (
     <Flex vertical align="center" justify="center" className="!p-2" gap={16}>
@@ -47,7 +35,10 @@ export default function LoginPage() {
         autoComplete="off"
         size="large"
         className="w-full"
-        onFinish={handleLocalLogin}
+        onFinish={async (values: LoginDto) => {
+          const isValid = await login(values);
+          if (isValid) navigator("/");
+        }}
       >
         <Form.Item
           label="Email"
@@ -87,6 +78,7 @@ export default function LoginPage() {
         </Form.Item>
         <Form.Item>
           <Button
+            loading={isLoading}
             type="primary"
             htmlType="submit"
             className="w-full"
