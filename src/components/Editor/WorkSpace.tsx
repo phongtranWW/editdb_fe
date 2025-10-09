@@ -1,4 +1,4 @@
-import { Layout, Modal } from "antd";
+import { Layout } from "antd";
 import EditorHeader from "./EditorHeader/EditorHeader";
 import { Content } from "antd/es/layout/layout";
 import EditorSider from "./EditorSider/EditorSider";
@@ -11,27 +11,28 @@ import { useParams } from "react-router";
 import { handleApiError } from "../../utils/handleApiError";
 import Shortcut from "./Shortcut";
 import { useAppMessage } from "../../context/AppMessageContext/hooks";
+import LoaderModal from "../UI/LoaderModal";
 
 export default function WorkSpace() {
   const { id } = useParams();
   const { messageApi } = useAppMessage();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { dispatch } = useDiagram();
 
   useEffect(() => {
     const fetch = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         const diagram = await getDiagram(id!);
         dispatch({ type: "SET_DIAGRAM", payload: diagram });
       } catch (err: unknown) {
         messageApi.error(handleApiError(err, "Diagram"));
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     fetch();
-  }, [id, dispatch, messageApi, setLoading]);
+  }, [id, dispatch, messageApi, setIsLoading]);
 
   return (
     <Layout className="!h-screen flex flex-col">
@@ -44,13 +45,7 @@ export default function WorkSpace() {
         <IssuesPanel />
       </Layout>
       <Shortcut />
-      <Modal
-        open={loading}
-        footer={null}
-        closable={false}
-        centered
-        closeIcon={null}
-      />
+      <LoaderModal isVisible={isLoading} message="Loading diagram..." />
     </Layout>
   );
 }
