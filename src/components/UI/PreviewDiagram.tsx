@@ -30,8 +30,7 @@ export function PreviewDiagram({ tables, relationships }: PrviewDiagramProps) {
       type: "tableNode",
       position: generateNodePosition(index, []),
       data: {
-        name: table.name,
-        columns: table.columns,
+        table,
       },
       selected: false,
       dragging: false,

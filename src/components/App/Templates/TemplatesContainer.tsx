@@ -1,65 +1,26 @@
-import { useCallback, useEffect, useState } from "react";
-import type { ApiResponse } from "../../../api/base/api-response";
-import type { Template } from "../../../models/template";
-import type { Params } from "../../../api/base/params";
-import { Card, Flex, Input, List, Select, Typography } from "antd";
+import { useCallback, useState } from "react";
+import { Flex, Input, List, Select } from "antd";
 import { Sort } from "../../../data/constants";
 import type { Diagram } from "../../../models/diagram";
-import { TEMPLATES } from "../../../data/templates/templates";
 import PreviewDiagramModal from "./PreviewDiagramModal";
-import Meta from "antd/es/card/Meta";
 import { createDiagram } from "../../../api/diagrams/diagramApi";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { SearchOutlined, SortAscendingOutlined } from "@ant-design/icons";
 import { useAppMessage } from "../../../context/AppMessageContext/hooks";
-
-const { Title } = Typography;
+import TemplateCard from "./TemplateCard";
+import { useTemplates } from "../../../hooks/useTemplates";
 
 export const TemplatesContainer = () => {
   const { messageApi } = useAppMessage();
   const navigator = useNavigate();
-  const [data, setData] = useState<ApiResponse<Template>>({
-    data: [],
-    total: 0,
-  });
-  const [params, setParams] = useState<Params>({
-    page: 1,
-    limit: 8,
-    sort: Sort.ASC,
-  });
+  const { data, params, setParams } = useTemplates();
   const [previewDiagram, setPreviewDiagram] = useState<{
     show: boolean;
     diagram?: Diagram;
   }>({
     show: false,
   });
-
-  useEffect(() => {
-    let result = [...TEMPLATES];
-
-    if (params.search && params.search.trim() !== "") {
-      const keyword = params.search.toLowerCase();
-      result = result.filter((t) => t.name.toLowerCase().includes(keyword));
-    }
-
-    if (params.sort === Sort.ASC) {
-      result.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (params.sort === Sort.DESC) {
-      result.sort((a, b) => b.name.localeCompare(a.name));
-    }
-
-    const total = result.length;
-
-    const start = (params.page - 1) * params.limit;
-    const end = start + params.limit;
-    result = result.slice(start, end);
-
-    setData({
-      data: result,
-      total,
-    });
-  }, [params]);
 
   const handleConfirm = useCallback(async () => {
     if (!previewDiagram.diagram) {
@@ -145,57 +106,12 @@ export const TemplatesContainer = () => {
           dataSource={data.data}
           renderItem={(template) => (
             <List.Item>
-              <Card
-                className="!h-full !border-none !shadow-lg hover:!shadow-2xl !transition-all !duration-300 !transform hover:!scale-105 !bg-white/90 !backdrop-blur-sm !rounded-xl !overflow-hidden group"
-                cover={
-                  <div className="relative overflow-hidden">
-                    <img
-                      alt={template.name}
-                      src={template.image}
-                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-medium text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      Click to preview
-                    </div>
-                  </div>
+              <TemplateCard
+                template={template}
+                onClick={() =>
+                  setPreviewDiagram({ show: true, diagram: template.diagram })
                 }
-                onClick={() => {
-                  setPreviewDiagram({
-                    show: true,
-                    diagram: template.diagram,
-                  });
-                }}
-                hoverable
-                styles={{ body: { padding: "20px" } }}
-              >
-                <Meta
-                  title={
-                    <Title
-                      level={5}
-                      className="!mb-2 !text-gray-800 !font-semibold line-clamp-1"
-                    >
-                      {template.name}
-                    </Title>
-                  }
-                  description={
-                    <p className="!text-gray-600 !text-sm line-clamp-3 !leading-relaxed min-h-[4.5em]">
-                      {template.description}
-                    </p>
-                  }
-                />
-                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-gray-500 font-medium">
-                      Ready to use
-                    </span>
-                  </div>
-                  <div className="text-xs text-blue-600 font-medium hover:text-blue-700 transition-colors">
-                    Preview →
-                  </div>
-                </div>
-              </Card>
+              />
             </List.Item>
           )}
           pagination={{
