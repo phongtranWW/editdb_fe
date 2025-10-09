@@ -1,7 +1,8 @@
-import { BorderOutlined, CheckSquareOutlined } from "@ant-design/icons";
+import { CheckOutlined } from "@ant-design/icons";
 import { Button, Dropdown, type MenuProps } from "antd";
 import { useMemo } from "react";
 import { useView } from "../../../context/ViewContext/hooks";
+import DropdownLabel from "../../UI/DropdownLabel";
 
 export default function ViewDropdown() {
   const { state, dispatch } = useView();
@@ -9,36 +10,56 @@ export default function ViewDropdown() {
   const viewMenuItems: MenuProps["items"] = useMemo(
     () => [
       {
-        label: "Sider",
+        label: (
+          <DropdownLabel
+            vaiant="checkbox"
+            content="Sider"
+            icons={<CheckOutlined />}
+            isSelected={state.showSider}
+          />
+        ),
         key: "sider",
-        icon: state.showSider ? <CheckSquareOutlined /> : <BorderOutlined />,
-        onClick: () => {
-          dispatch({ type: "SET_SIDER", payload: !state.showSider });
-        },
+        onClick: () =>
+          dispatch({ type: "SET_SIDER", payload: !state.showSider }),
       },
       {
-        label: "Mini Map",
+        label: (
+          <DropdownLabel
+            vaiant="checkbox"
+            content="Mini Map"
+            icons={<CheckOutlined />}
+            isSelected={state.showMiniMap}
+          />
+        ),
         key: "minimap",
-        icon: state.showMiniMap ? <CheckSquareOutlined /> : <BorderOutlined />,
-        onClick: () => {
-          dispatch({ type: "SET_MINIMAP", payload: !state.showMiniMap });
-        },
+        onClick: () =>
+          dispatch({ type: "SET_MINIMAP", payload: !state.showMiniMap }),
       },
       {
-        label: "Controls",
+        label: (
+          <DropdownLabel
+            vaiant="checkbox"
+            content="Controls"
+            icons={<CheckOutlined />}
+            isSelected={state.showControls}
+          />
+        ),
         key: "controls",
-        icon: state.showControls ? <CheckSquareOutlined /> : <BorderOutlined />,
-        onClick: () => {
-          dispatch({ type: "SET_CONTROLS", payload: !state.showControls });
-        },
+        onClick: () =>
+          dispatch({ type: "SET_CONTROLS", payload: !state.showControls }),
       },
       {
-        label: "Issues",
+        label: (
+          <DropdownLabel
+            vaiant="checkbox"
+            content="Issues"
+            icons={<CheckOutlined />}
+            isSelected={state.showIssues}
+          />
+        ),
         key: "issues",
-        icon: state.showIssues ? <CheckSquareOutlined /> : <BorderOutlined />,
-        onClick: () => {
-          dispatch({ type: "SET_ISSUES", payload: !state.showIssues });
-        },
+        onClick: () =>
+          dispatch({ type: "SET_ISSUES", payload: !state.showIssues }),
       },
     ],
     [

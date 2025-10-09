@@ -28,7 +28,7 @@ export default function EditorNode({ data, selected }: NodeProps<TableNode>) {
       </div>
 
       {/* Table Body */}
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col bg-white">
         {table.columns.length > 0 ? (
           table.columns.map((column, index) => (
             <div

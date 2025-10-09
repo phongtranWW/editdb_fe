@@ -141,11 +141,6 @@ export default function FileDropdown() {
         onClick: handleExportSQL,
       },
       {
-        label: <DropdownLabel content="Delete" />,
-        key: "delete",
-        disabled: true,
-      },
-      {
         label: <DropdownLabel content="Exit" />,
         key: "exit",
         onClick: () => {
