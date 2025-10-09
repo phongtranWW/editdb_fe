@@ -10,17 +10,17 @@ export const initialViewState: ViewState = {
 
 export const viewReducer = produce((draft: ViewState, action: ViewAction) => {
   switch (action.type) {
-    case "SET_SIDER":
-      draft.showSider = action.payload;
+    case "TOGGLE_SIDER":
+      draft.showSider = !draft.showSider;
       break;
-    case "SET_MINIMAP":
-      draft.showMiniMap = action.payload;
+    case "TOGGLE_MINIMAP":
+      draft.showMiniMap = !draft.showMiniMap;
       break;
-    case "SET_CONTROLS":
-      draft.showControls = action.payload;
+    case "TOGGLE_CONTROLS":
+      draft.showControls = !draft.showControls;
       break;
-    case "SET_ISSUES":
-      draft.showIssues = action.payload;
+    case "TOGGLE_ISSUES":
+      draft.showIssues = !draft.showIssues;
       break;
   }
 });

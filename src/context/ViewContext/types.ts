@@ -6,10 +6,10 @@ export interface ViewState {
 }
 
 export type ViewAction =
-  | { type: "SET_SIDER"; payload: boolean }
-  | { type: "SET_MINIMAP"; payload: boolean }
-  | { type: "SET_CONTROLS"; payload: boolean }
-  | { type: "SET_ISSUES"; payload: boolean };
+  | { type: "TOGGLE_SIDER" }
+  | { type: "TOGGLE_MINIMAP" }
+  | { type: "TOGGLE_CONTROLS" }
+  | { type: "TOGGLE_ISSUES" };
 
 export interface ViewContextValue {
   state: ViewState;

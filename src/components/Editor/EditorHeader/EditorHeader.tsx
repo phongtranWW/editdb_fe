@@ -7,6 +7,7 @@ import FileDropdown from "./FileDropdown";
 import ViewDropdown from "./ViewDropdown";
 import EditDropdown from "./EditDropdown";
 import { useDiagram } from "../../../context/DiagramContext/hooks";
+import HelpDropdown from "./HelpDropdown";
 
 const { Header } = Layout;
 
@@ -40,6 +41,7 @@ export default function EditorHeader() {
             <FileDropdown />
             <ViewDropdown />
             <EditDropdown />
+            <HelpDropdown />
           </div>
         </div>
       </div>

@@ -19,8 +19,7 @@ export default function ViewDropdown() {
           />
         ),
         key: "sider",
-        onClick: () =>
-          dispatch({ type: "SET_SIDER", payload: !state.showSider }),
+        onClick: () => dispatch({ type: "TOGGLE_SIDER" }),
       },
       {
         label: (
@@ -32,8 +31,7 @@ export default function ViewDropdown() {
           />
         ),
         key: "minimap",
-        onClick: () =>
-          dispatch({ type: "SET_MINIMAP", payload: !state.showMiniMap }),
+        onClick: () => dispatch({ type: "TOGGLE_MINIMAP" }),
       },
       {
         label: (
@@ -45,21 +43,20 @@ export default function ViewDropdown() {
           />
         ),
         key: "controls",
-        onClick: () =>
-          dispatch({ type: "SET_CONTROLS", payload: !state.showControls }),
+        onClick: () => dispatch({ type: "TOGGLE_CONTROLS" }),
       },
       {
         label: (
           <DropdownLabel
             vaiant="checkbox"
             content="Issues"
+            shortcut="Ctrl + Shift + I"
             icons={<CheckOutlined />}
             isSelected={state.showIssues}
           />
         ),
         key: "issues",
-        onClick: () =>
-          dispatch({ type: "SET_ISSUES", payload: !state.showIssues }),
+        onClick: () => dispatch({ type: "TOGGLE_ISSUES" }),
       },
     ],
     [

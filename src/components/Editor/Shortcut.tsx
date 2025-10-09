@@ -3,38 +3,41 @@ import { useDiagram } from "../../context/DiagramContext/hooks";
 import { useSave } from "../../context/SaveContext/hooks";
 import { nanoid } from "nanoid";
 import { Relationship } from "../../data/constants";
+import { useView } from "../../context/ViewContext/hooks";
 
 export default function Shortcut() {
-  const { dispatch } = useDiagram();
+  const { dispatch: diagramDispatch } = useDiagram();
+  const { dispatch: viewDispatch } = useView();
+
   const { save } = useSave();
 
   useHotkeys(
     ["ctrl+z"],
     () => {
-      dispatch({ type: "UNDO" });
+      diagramDispatch({ type: "UNDO" });
     },
     {
       preventDefault: true,
     },
-    [dispatch]
+    [diagramDispatch]
   );
 
   useHotkeys(
     ["ctrl+y"],
     () => {
-      dispatch({ type: "REDO" });
+      diagramDispatch({ type: "REDO" });
     },
     {
       preventDefault: true,
     },
-    [dispatch]
+    [diagramDispatch]
   );
 
   useHotkeys(
     ["ctrl+alt+t"],
     () => {
       const id = nanoid(6);
-      dispatch({
+      diagramDispatch({
         type: "ADD_TABLE",
         payload: {
           id,
@@ -46,14 +49,14 @@ export default function Shortcut() {
     {
       preventDefault: true,
     },
-    [dispatch]
+    [diagramDispatch]
   );
 
   useHotkeys(
     ["ctrl+alt+r"],
     () => {
       const id = nanoid(6);
-      dispatch({
+      diagramDispatch({
         type: "ADD_RELATIONSHIP",
         payload: {
           id,
@@ -65,7 +68,7 @@ export default function Shortcut() {
     {
       preventDefault: true,
     },
-    [dispatch]
+    [diagramDispatch]
   );
 
   useHotkeys(
@@ -77,6 +80,17 @@ export default function Shortcut() {
       preventDefault: true,
     },
     [save]
+  );
+
+  useHotkeys(
+    ["ctrl+shift+i"],
+    () => {
+      viewDispatch({ type: "TOGGLE_ISSUES" });
+    },
+    {
+      preventDefault: true,
+    },
+    [viewDispatch]
   );
 
   return null;
