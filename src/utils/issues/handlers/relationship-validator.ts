@@ -99,7 +99,9 @@ export class RelationshipValidator extends BaseIssueHandler {
             stack.push({ table: next, index: 0 });
           } else if (inStack.has(next)) {
             context.addIssue({
-              message: `Cycle detected involving table '${next}'`,
+              message: `Cycle detected involving table '${
+                context.tables.get(next)?.name
+              }'`,
               type: "ERROR",
             });
           }
