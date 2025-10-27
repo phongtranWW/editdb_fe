@@ -19,7 +19,7 @@ export default function CollapsableTabItem({
     <Collapse
       collapsible="icon"
       bordered={false}
-      className="!rounded-none !shadow-none !border-b !border-b-gray-200 !border-l-4 !border-l-blue-500"
+      className="!rounded-none !shadow-none !border-b !border-b-gray-200 !border-l-4 !border-l-blue-500 !w-full"
       items={[
         {
           key: label,
@@ -27,7 +27,10 @@ export default function CollapsableTabItem({
             <DoubleClickInput
               initialValue={label}
               placeholder="Table Name"
-              classes={{ root: "text-base font-bold !max-w-full`" }}
+              classes={{
+                root: "text-base font-bold max-w-full",
+                title: "max-w-full",
+              }}
               onFinish={changeLabel}
             />
           ),

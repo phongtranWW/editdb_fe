@@ -36,11 +36,12 @@ export default function RelationshipsTabContent() {
         </CollapsableTabItem>
       )}
       addItem={() => {
+        const id = nanoid(6);
         dispatch({
           type: "ADD_RELATIONSHIP",
           payload: {
-            id: nanoid(6),
-            name: `fk_relationship_${state.data.relationships.length + 1}`,
+            id,
+            name: `fk_relationship_${id}`,
             type: Relationship.ONE_TO_ONE,
           },
         });

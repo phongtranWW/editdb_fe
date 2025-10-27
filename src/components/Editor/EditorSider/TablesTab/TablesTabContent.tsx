@@ -6,7 +6,6 @@ import { nanoid } from "nanoid";
 import type { DiagramColumn } from "../../../../models/diagram-column";
 import ColumnItem from "./ColumnItem";
 import { SUPPORTED_COLUMN_TYPES } from "../../../../data/supported-column-types";
-import { Database } from "../../../../data/constants";
 import { useDiagram } from "../../../../context/DiagramContext/hooks";
 export default function TablesTabContent() {
   const { state, dispatch } = useDiagram();
@@ -46,16 +45,17 @@ export default function TablesTabContent() {
                 color="cyan"
                 icon={<PlusOutlined />}
                 variant="filled"
-                onClick={() =>
+                onClick={() => {
+                  const id = nanoid(6);
                   dispatch({
                     type: "ADD_COLUMN",
                     payload: {
                       id: table.id,
                       column: {
-                        id: nanoid(6),
-                        name: `column_${table.columns.length + 1}`,
+                        id,
+                        name: `column_${id}`,
                         type: Object.keys(
-                          SUPPORTED_COLUMN_TYPES[Database.MYSQL]
+                          SUPPORTED_COLUMN_TYPES[state.data.type]
                         )[0],
                         isPrimary: false,
                         isUnique: false,
@@ -63,8 +63,8 @@ export default function TablesTabContent() {
                         isAutoIncrement: false,
                       },
                     },
-                  })
-                }
+                  });
+                }}
               >
                 Add Column
               </Button>
@@ -73,11 +73,12 @@ export default function TablesTabContent() {
         </CollapsableTabItem>
       )}
       addItem={() => {
+        const id = nanoid(6);
         dispatch({
           type: "ADD_TABLE",
           payload: {
-            id: nanoid(6),
-            name: `table_${state.data.tables.length + 1}`,
+            id,
+            name: `table_${id}`,
             columns: [],
           },
         });
